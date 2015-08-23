@@ -14,10 +14,17 @@ int main(int argc, char **argv) {
     sf::IpAddress serverAddress = sf::IpAddress::LocalHost;
     IcyClient::Port serverPort = 25564;
     
+    std::cout << "Starting connection to server..." << std::endl;
     client.initializeConnection(serverAddress, serverPort);
-    client.startConnectionSustainingLoop();
-    //std::thread clientThread(&IcyClient::startConnectionSustainingLoop, client);
-    client.terminateConnection();
+    const IcyClient::Status& status = client.getStatus();
+    if(!status.connected) {
+        if(!status.serverContacted) {
+            std::cout << "Could not contact server!" << std::endl;
+            return 0;
+        }
+    }
+    std::thread clientThread(&IcyClient::startConnectionSustainingLoop, &client);
+    //client.terminateConnection();
     
     sf::Clock clock;
     sf::Time time = sf::seconds(0.5f);
