@@ -1,6 +1,12 @@
 .codelite/*
 .clang/*
-client/Debug/client.exe
-*.o
-*.d
-*.mk
+server/Debug/sfml-*.dll
+server/Debug/sfml-license.txt
+server/Debug/*.o
+server/Debug/*.d
+server/Debug/*.exe
+server/*.mk
+client/Debug/*.o
+client/Debug/*.d
+client/Debug/*.exe
+client/*.mk

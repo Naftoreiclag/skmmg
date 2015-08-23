@@ -1,6 +1,5 @@
 #include <iostream>
 #include <thread>
-#include <mutex>
 
 #include "SFML/Network.hpp"
 
