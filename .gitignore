@@ -1,0 +1,6 @@
+.codelite/*
+.clang/*
+client/Debug/client.exe
+*.o
+*.d
+*.mk
