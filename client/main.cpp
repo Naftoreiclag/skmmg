@@ -4,11 +4,20 @@
 
 #include "SFML/Network.hpp"
 
+#include "IcyClient.hpp"
+
+using namespace skm;
+
 int main(int argc, char **argv) {
-    sf::UdpSocket socket;
-    std::mutex test;
+    IcyClient client;
     
-    std::cout << "hello world" << std::endl;
+    sf::IpAddress serverAddress = sf::IpAddress::LocalHost;
+    IcyClient::Port serverPort = 25564;
+    
+    client.initializeConnection(serverAddress, serverPort);
+    client.startConnectionSustainingLoop();
+    //std::thread clientThread(&IcyClient::startConnectionSustainingLoop, client);
+    client.terminateConnection();
     
     sf::Clock clock;
     sf::Time time = sf::seconds(0.5f);

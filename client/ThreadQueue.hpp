@@ -12,9 +12,9 @@ namespace skm {
         std::mutex mutex;
     public:
 
-        void push_back(T data) {
+        void push_back(T item) {
             mutex.lock();
-            data.push_back(data);
+            data.push_back(item);
             mutex.unlock();
         }
         

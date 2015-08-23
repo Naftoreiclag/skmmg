@@ -9,7 +9,7 @@ IcyPacketHeartbeat::IcyPacketHeartbeat() {
 IcyPacketHeartbeat::~IcyPacketHeartbeat() {
 }
 
-ProtocolId IcyPacketHeartbeat::getId() const {
+IcyPacket::ProtocolId IcyPacketHeartbeat::getId() const {
     return IcyPacket::s_protocol_heartbeat;
 }
 bool IcyPacketHeartbeat::isContinuous() const {
@@ -17,7 +17,7 @@ bool IcyPacketHeartbeat::isContinuous() const {
 }
 
 bool IcyPacketHeartbeat::read(sf::Packet& data) {
-    
+    return true;
 }
 void IcyPacketHeartbeat::write(sf::Packet& data) {
     

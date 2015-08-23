@@ -91,7 +91,6 @@ void IcyClient::initializeConnection(sf::IpAddress address, Port port) {
     m_status.serverContacted = true;
     
     m_localSequence = 0;
-    m_remoteSequence = 0;
     m_ack = 0;
     m_ackBits = 0;
     
@@ -225,7 +224,7 @@ void IcyClient::terminateConnection() {
     m_sentPackets.clear();
 }
 
-Status IcyClient::getStatus() {
+IcyClient::Status IcyClient::getStatus() {
     m_status_mutex.lock();
     Status copy = m_status;
     m_status_mutex.unlock();
@@ -271,9 +270,9 @@ void IcyClient::processRawIncoming(sf::Packet& packet) {
             SequenceNumber shift = remoteSeq - m_ack;
             
             // Shift the bits, setting bit -1 to be 1 (This way, the ack represented by the full 64 bit number is properly remembered)
-            m_ackBits << 1;
+            m_ackBits <<= 1;
             m_ackBits |= 1;
-            m_ackBits << shift - 1;
+            m_ackBits <<= shift - 1;
             
             // This packet is now the most recent packet
             m_ack = remoteSeq;
@@ -339,9 +338,9 @@ void IcyClient::processRawIncoming(sf::Packet& packet) {
             SequenceNumber bitPos = (firstAck - sentPacket.sequence) - 1;
             
             // Packet is within the last [ackBitfieldSize] sent
-            if(bitPos < ackBitfieldSize) {
+            if(bitPos < s_ackBitfieldSize) {
                 // Packet is acked in the bitfield
-                if(prevAcks & (1 << bitPos) != 0) {
+                if((prevAcks & (1 << bitPos)) != 0) {
                     // Delete the packet data (since there is no need to ever resend it)
                     delete sentPacket.data;
                 

@@ -18,7 +18,7 @@ public:
     typedef sf::Uint32 MagicNumber;
     typedef sf::Uint32 SequenceNumber;
     typedef sf::Uint64 AckBitfield;
-    static const SequenceNumber ackBitfieldSize = 64;
+    static const SequenceNumber s_ackBitfieldSize = 64;
     
     typedef sf::Uint32 SessionId;
 

@@ -2,6 +2,10 @@
 
 namespace skm
 {
+    
+IcyPacket* IcyPacket::newPacketFromRaw(sf::Packet& packet) {
+    return nullptr;
+}
 
 IcyPacket::IcyPacket() {
 }
