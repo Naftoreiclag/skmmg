@@ -30,6 +30,11 @@
   <Dependencies/>
   <VirtualDirectory Name="src">
     <File Name="main.cpp"/>
+    <File Name="IcyClient.hpp"/>
+    <File Name="IcyClient.cpp"/>
+    <File Name="ThreadQueue.hpp"/>
+    <File Name="IcyPacket.hpp"/>
+    <File Name="IcyPacket.cpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
