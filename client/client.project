@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="client" InternalType="Console">
   <Plugins>
+    <Plugin Name="qmake">
+      <![CDATA[00010001N0005Debug000000000000]]>
+    </Plugin>
     <Plugin Name="CMakePlugin">
       <![CDATA[[{
   "name": "Debug",
@@ -22,9 +25,6 @@
   "parentProject": ""
  }]]]>
     </Plugin>
-    <Plugin Name="qmake">
-      <![CDATA[00010001N0005Debug000000000000]]>
-    </Plugin>
   </Plugins>
   <Description/>
   <Dependencies/>
@@ -35,6 +35,8 @@
     <File Name="ThreadQueue.hpp"/>
     <File Name="IcyPacket.hpp"/>
     <File Name="IcyPacket.cpp"/>
+    <File Name="IcyPacketHeartbeat.hpp"/>
+    <File Name="IcyPacketHeartbeat.cpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>

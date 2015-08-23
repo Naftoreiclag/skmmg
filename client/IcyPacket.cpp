@@ -3,12 +3,10 @@
 namespace skm
 {
 
-IcyPacket::IcyPacket()
-{
+IcyPacket::IcyPacket() {
 }
 
-IcyPacket::~IcyPacket()
-{
+IcyPacket::~IcyPacket() {
 }
 
 
