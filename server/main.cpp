@@ -2,6 +2,7 @@
 #include <thread>
 
 #include "SFML/Network.hpp"
+#include "IcyServer.hpp"
 
 int main(int argc, char **argv) {
 	

@@ -23,6 +23,7 @@ public:
     typedef sf::Uint32 SessionId;
 
     static const MagicNumber s_magicNumber = 0xDAFF0D11; // Magic number that make up the first bytes of every packet sent and received
+    static const MagicNumber s_magicHandshake = 0xD1AB011C // Magic number used only for initial handshakes
     
     static const sf::Int32 s_requestDelayMs = 750; // Time between connection requests
     static const sf::Int32 s_requestTimeoutMs = 15000; // If the server does not supply the session within this time, terminate connection
@@ -31,6 +32,9 @@ public:
     
     static const sf::Int32 s_heartbeatDelayMs = 500; // Time between sent heartbeats
     static const sf::Int32 s_serverTimeoutMs = 15000; // If we do not receive any packets for this long, terminate connection
+    
+    static const SessionId s_sessionRequestId = 0xFFFFFFFF;
+    
     
     struct Status {
         bool serverContacted = false;
@@ -87,7 +91,8 @@ public:
     Status getStatus();
     
 private:
-    void processRawIncoming(sf::Packet& packet);
+    // Process raw packet data received from socket.receive; returns true if packet was handled correctly
+    bool processRawIncoming(sf::Packet& packet);
     void sendOutgoing(IcyPacket* packet);
 };
 

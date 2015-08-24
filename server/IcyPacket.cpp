@@ -1,5 +1,4 @@
 #include "IcyPacket.hpp"
-
 #include "IcyPacketHeartbeat.hpp"
 
 namespace skm

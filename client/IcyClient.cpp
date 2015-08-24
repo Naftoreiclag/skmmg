@@ -15,8 +15,6 @@ void IcyClient::initializeConnection(sf::IpAddress address, Port port) {
     m_serverAddress = address;
     m_serverPort = port;
     
-    m_sessionId = 0xFFFFFFFF;
-    
     m_socket.setBlocking(false);
     m_socket.bind(m_socket.getLocalPort());
     
@@ -31,9 +29,8 @@ void IcyClient::initializeConnection(sf::IpAddress address, Port port) {
                 
                 sf::Packet verifySessionId;
                 
-                verifySessionId << s_magicNumber;
-                verifySessionId << IcyPacket::s_protocol_session;
-                verifySessionId << m_sessionId;
+                verifySessionId << s_magicHandshake;
+                verifySessionId << s_sessionRequestId;
                 
                 m_socket.send(verifySessionId, m_serverAddress, m_serverPort);
                 
@@ -49,22 +46,15 @@ void IcyClient::initializeConnection(sf::IpAddress address, Port port) {
                 if(senderPort == m_serverPort && senderAddress == m_serverAddress) {
                     
                     MagicNumber magicNum;
-                    IcyPacket::ProtocolId protocolId;
                     SessionId sessionId;
                     
                     receivedPacket >> magicNum;
-                    receivedPacket >> protocolId;
                     receivedPacket >> sessionId;
                     
-                    if(magicNum == s_magicNumber) {
-                        if(protocolId == IcyPacket::s_protocol_session) {
-                            m_sessionId = sessionId;
-                            requestTimedOut = false;
-                            break;
-                        }
-                        else {
-                            // Wrong protocol id??
-                        }
+                    if(magicNum == s_magicHandshake) {
+                        m_sessionId = sessionId;
+                        requestTimedOut = false;
+                        break;
                     }
                     else {
                         // Wrong magic number??
@@ -105,8 +95,7 @@ void IcyClient::initializeConnection(sf::IpAddress address, Port port) {
                 
                 sf::Packet verifySessionId;
                 
-                verifySessionId << s_magicNumber;
-                verifySessionId << IcyPacket::s_protocol_session;
+                verifySessionId << s_magicHandshake;
                 verifySessionId << m_sessionId;
                 
                 m_socket.send(verifySessionId, m_serverAddress, m_serverPort);
@@ -121,8 +110,9 @@ void IcyClient::initializeConnection(sf::IpAddress address, Port port) {
             
             if(receiveStatus == sf::UdpSocket::Status::Done) {
                 if(senderPort == m_serverPort && senderAddress == m_serverAddress) {
-                    processRawIncoming(receivedPacket);
-                    break;
+                    if(processRawIncoming(receivedPacket)) {
+                        break;
+                    }
                 }
                 
                 else {
@@ -231,7 +221,7 @@ IcyClient::Status IcyClient::getStatus() {
     return copy;
 }
 
-void IcyClient::processRawIncoming(sf::Packet& packet) {
+bool IcyClient::processRawIncoming(sf::Packet& packet) {
     // Check magic number
     {
         MagicNumber magicCheck;
@@ -240,7 +230,7 @@ void IcyClient::processRawIncoming(sf::Packet& packet) {
         
         if(magicCheck != s_magicNumber) {
             // Wrong magic number!
-            return;
+            return false;
         }
     }
     
@@ -304,13 +294,13 @@ void IcyClient::processRawIncoming(sf::Packet& packet) {
             
             // We have already receieved this exact packet because the sequence number was set in the bitfield, so do nothing
             else {
-                return;
+                return false;
             }
         }
         
         // We have already receieved this exact packet because the sequence number is the same, so do nothing
         else {
-            return;
+            return false;
         }
     }
     
@@ -370,7 +360,7 @@ void IcyClient::processRawIncoming(sf::Packet& packet) {
         IcyPacket* newPacket = IcyPacket::newPacketFromRaw(packet);
         
         if(newPacket == nullptr) {
-            return;
+            return false;
         }
         
         // This packet is a heartbeat
@@ -384,6 +374,8 @@ void IcyClient::processRawIncoming(sf::Packet& packet) {
             m_incomingPackets.push_back(newPacket);
         }
     }
+    
+    return true;
 }
 
 void IcyClient::sendOutgoing(IcyPacket* packet) {
