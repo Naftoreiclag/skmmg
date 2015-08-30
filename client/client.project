@@ -28,7 +28,7 @@
   </Plugins>
   <Description/>
   <Dependencies/>
-  <VirtualDirectory Name="src">
+  <VirtualDirectory Name="src-client">
     <File Name="main.cpp"/>
     <File Name="IcyClient.hpp"/>
     <File Name="IcyClient.cpp"/>
@@ -51,6 +51,7 @@
     <Configuration Name="Debug" CompilerType="MinGW ( TDM-GCC-32 )" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
       <Compiler Options="-g;-O0;-Wall;-std=c++11" C_Options="-g;-O0;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
         <IncludePath Value="."/>
+        <IncludePath Value="../common"/>
         <IncludePath Value="../library/SFML-2.3.1/include"/>
       </Compiler>
       <Linker Options="" Required="yes">
@@ -131,4 +132,8 @@
       </Completion>
     </Configuration>
   </Settings>
+  <VirtualDirectory Name="src-common">
+    <File Name="../common/IcySession.cpp"/>
+    <File Name="../common/IcySession.hpp"/>
+  </VirtualDirectory>
 </CodeLite_Project>

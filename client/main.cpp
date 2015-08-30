@@ -4,11 +4,14 @@
 #include "SFML/Network.hpp"
 
 #include "IcyClient.hpp"
+#include "IcySession.hpp"
 
 using namespace skm;
 
 int main(int argc, char **argv) {
     IcyClient client;
+    
+    IcySession session;
     
     sf::IpAddress serverAddress = sf::IpAddress::LocalHost;
     IcyClient::Port serverPort = 25564;

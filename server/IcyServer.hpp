@@ -23,7 +23,7 @@ public:
     typedef sf::Uint32 SessionId;
 
     static const MagicNumber s_magicNumber = 0xDAFF0D11; // Magic number that make up the first bytes of every packet sent and received
-    static const MagicNumber s_magicHandshake = 0xD1AB011C // Magic number used only for initial handshakes
+    static const MagicNumber s_magicHandshake = 0xD1AB011C; // Magic number used only for initial handshakes
     
     static const sf::Int32 s_verifyDelayMs = 750; // Time between verification requests
     static const sf::Int32 s_verifyTimeoutMs = 15000; // If the client does not verify the session within this time, terminate connection
@@ -56,6 +56,7 @@ public:
             IcyPacket* data;
         };
         
+        
         ThreadQueue<IcyPacket*> m_outgoingPackets;
         ThreadQueue<IcyPacket*> m_incomingPackets;
         
@@ -83,7 +84,9 @@ public:
     
     ThreadQueue<IcyPacket*> m_outgoingGlobalPackets;
     
+private:
     void sendOutgoing(Session& session, IcyPacket* packet);
+    void processRaw(Session& session, sf::Packet& packet);
     
 private:
     SessionId nextAvailableSessionId();

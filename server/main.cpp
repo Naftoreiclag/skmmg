@@ -4,9 +4,14 @@
 #include "SFML/Network.hpp"
 #include "IcyServer.hpp"
 
+#include "IcySession.hpp"
+
+using namespace skm;
+
 int main(int argc, char **argv) {
 	
     std::cout << "server" << std::endl;
+    IcySession sessionl;
     
     sf::Clock test;
     while(true) {
