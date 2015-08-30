@@ -51,7 +51,6 @@ void IcyServer::startConnectionSustainingLoop() {
                     
                     // This packet relates to an incoming new connection
                     if(magicNum == IcyProtocol::s_magicHandshake) {
-                        std::cout << "Handshake packet receieved." << std::endl;
                         // Get session id from client
                         IcyProtocol::SessionId sessionId;
                         receivedPacket >> sessionId;
@@ -69,11 +68,11 @@ void IcyServer::startConnectionSustainingLoop() {
                         
                         // This is a request
                         if(sessionId == IcyProtocol::s_sessionRequestId) {
-                            std::cout << "Client requesting connection." << std::endl;
                             // Match found, client already registered
                             if(sessionSearch != nullptr) {
                                 continue;
                             }
+                            std::cout << "New client is requesting connection..." << std::endl;
                             
                             // Register new client
                             Session* newSession = new Session();
@@ -85,7 +84,7 @@ void IcyServer::startConnectionSustainingLoop() {
                             newSession->m_verificationTimer.restart();
                             m_sessions.push_back(newSession);
                             
-                            std::cout << "New session created." << std::endl;
+                            std::cout << "New session created for client." << std::endl;
                             
                             continue;
                         }
@@ -180,6 +179,7 @@ void IcyServer::startConnectionSustainingLoop() {
                         continue;
                     }
                     
+                    ++ it;
                     continue;
                 }
                 
@@ -230,10 +230,12 @@ void IcyServer::startConnectionSustainingLoop() {
                     // Manage outgoing packets specific to this session
                     IcyPacket** outgoingPacketPtr = session->m_outgoingPackets.pop_front();
                     while(outgoingPacketPtr != nullptr) {
+                        std::cout << "Sending packet to client " << session->m_session.m_sessionId << std::endl;
                         IcyPacket* outgoingPacket = *outgoingPacketPtr;
-                        session->m_session.sendOutgoing(outgoingPacket);
+                        //session->m_session.sendOutgoing(outgoingPacket);
                         
                         outgoingPacketPtr = session->m_outgoingPackets.pop_front();
+                        session->m_heartbeatTimer.restart();
                     }
                     
                     // If we have not sent this client any packets within a certain time, send a dummy (heartbeat) packet to keep the connection alive

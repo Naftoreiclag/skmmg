@@ -154,7 +154,7 @@ bool IcySession::processRawIncoming(sf::Packet& packet) {
 }
 
 void IcySession::sendOutgoing(IcyPacket* packet) {
-    
+    std::cout << "Sending packet" << std::endl;
     sf::Packet rawPacket;
     
     // Magic number
