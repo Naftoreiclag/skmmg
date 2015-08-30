@@ -4,22 +4,16 @@
 #include "SFML/Network.hpp"
 #include "IcyServer.hpp"
 
-#include "IcySession.hpp"
-
 using namespace skm;
 
 int main(int argc, char **argv) {
 	
-    std::cout << "server" << std::endl;
-    IcySession sessionl;
+    std::cout << "Server." << std::endl;
     
-    sf::Clock test;
-    while(true) {
-        if(test.getElapsedTime().asMilliseconds() >= 500) {
-            std::cout << test.getElapsedTime().asMicroseconds() << std::endl;
-            test.restart();
-        }
-    }
+    IcyServer server;
+    server.initialize(25564);
+    server.startConnectionSustainingLoop();
+    server.terminate();
     
 	return 0;
 }

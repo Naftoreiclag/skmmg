@@ -28,7 +28,7 @@
   </Plugins>
   <Description/>
   <Dependencies/>
-  <VirtualDirectory Name="src-client">
+  <VirtualDirectory Name="src">
     <File Name="main.cpp"/>
     <File Name="IcyClient.hpp"/>
     <File Name="IcyClient.cpp"/>

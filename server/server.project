@@ -28,8 +28,6 @@
     <File Name="ThreadQueue.hpp"/>
     <File Name="IcyServer.cpp"/>
     <File Name="IcyServer.hpp"/>
-    <File Name="../common/IcySession.hpp"/>
-    <File Name="../common/IcySession.cpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
@@ -125,4 +123,9 @@
       </Completion>
     </Configuration>
   </Settings>
+  <VirtualDirectory Name="src-common">
+    <File Name="../common/IcyProtocol.hpp"/>
+    <File Name="../common/IcySession.cpp"/>
+    <File Name="../common/IcySession.hpp"/>
+  </VirtualDirectory>
 </CodeLite_Project>

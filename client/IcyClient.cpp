@@ -125,7 +125,6 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
                     if(magicNum == IcyProtocol::s_magicNumber) {
                     
                         m_session->processRawIncoming(receivedPacket);
-                        serverTimeout.restart();
                         
                     }
                     
@@ -238,11 +237,20 @@ void IcyClient::startConnectionSustainingLoop() {
     }
 }
 
-IcyClient::Status IcyClient::getStatus() {
-    Status status;
-    m_session_mutex.lock();
-    status = m_session->m_status;
-    m_session_mutex.unlock();
+IcyClient::SessionStatus IcyClient::getStatus() {
+    SessionStatus status;
+    if(m_session == nullptr) {
+        status.connected = false;
+        status.serverContacted = false;
+        status.sessionVerified = false;
+        status.sessionId = 0;
+    }
+    else {
+        status.connected = m_session->m_status.connected;
+        status.serverContacted = m_session->m_status.serverContacted;
+        status.sessionVerified = m_session->m_status.sessionVerified;
+        status.sessionId = m_session->m_sessionId;
+    }
     return status;
 }
     

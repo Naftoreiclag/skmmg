@@ -9,21 +9,25 @@
 using namespace skm;
 
 int main(int argc, char **argv) {
-    IcyClient client;
+    std::cout << "Client." << std::endl;
     
-    IcySession session;
+    IcyClient client;
     
     sf::IpAddress serverAddress = sf::IpAddress::LocalHost;
     IcyProtocol::Port serverPort = 25564;
     
     std::cout << "Starting connection to server..." << std::endl;
     client.initializeConnection(serverAddress, serverPort);
-    const IcyClient::Status status = client.getStatus();
+    IcyClient::SessionStatus status = client.getStatus();
     if(!status.connected) {
         if(!status.serverContacted) {
             std::cout << "Could not contact server!" << std::endl;
             return 0;
         }
+    }
+    else {
+        std::cout << "Connected to server successfully." << std::endl;
+        std::cout << "Session id is " << status.sessionId << std::endl;
     }
     std::thread clientThread(&IcyClient::startConnectionSustainingLoop, &client);
     //client.terminateConnection();

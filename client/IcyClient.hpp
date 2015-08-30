@@ -13,13 +13,17 @@ namespace skm {
 
 class IcyClient {
 public:
-    typedef IcySession::Status Status;
+    struct SessionStatus {
+        bool serverContacted = false;
+        bool sessionVerified = false;
+        bool connected = false;
+        
+        IcyProtocol::SessionId sessionId;
+    };
 private:
-
     sf::UdpSocket m_socket;
     
     IcySession* m_session;
-    std::mutex m_session_mutex;
 public:
     IcyClient();
     ~IcyClient();
@@ -39,7 +43,8 @@ public:
     // Ends the loop called by startConnectionSustainingLoop; thread-safe
     void terminateConnection();
     
-    Status getStatus();
+    SessionStatus getStatus();
+    
 };
 
 }
