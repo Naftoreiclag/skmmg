@@ -22,7 +22,7 @@ public:
         bool connected = false;
     };
     
-private:
+public:
     IcyProtocol::SessionId m_sessionId;
     sf::UdpSocket* m_socket;
     
@@ -47,10 +47,10 @@ public:
     ~IcySession();
     
     // Add packets to this queue to have them sent to the remote; IcySession will handle their deletion
-    ThreadQueue<IcyPacket*> m_outgoingPackets;
+    ThreadQueue<IcyPacket*>* m_outgoingPackets;
     
     // Packets receieved from the remote will be added here; User is responsible for proper deletion
-    ThreadQueue<IcyPacket*> m_incomingPackets;
+    ThreadQueue<IcyPacket*>* m_incomingPackets;
     
     bool processRawIncoming(sf::Packet& packet);
     void sendOutgoing(IcyPacket* packet);

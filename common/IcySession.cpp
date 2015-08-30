@@ -9,20 +9,6 @@ IcySession::IcySession() {}
 IcySession::~IcySession() {}
 
 bool IcySession::processRawIncoming(sf::Packet& packet) {
-    /*
-    // Check magic number
-    {
-        MagicNumber magicCheck;
-        
-        packet >> magicCheck;
-        
-        if(magicCheck != s_magicNumber) {
-            // Wrong magic number!
-            return false;
-        }
-    }
-    */
-    
     // Update remote sequence number and ack field
     {
         // Get when this packet was sent by the server
@@ -132,7 +118,7 @@ bool IcySession::processRawIncoming(sf::Packet& packet) {
             // Packet is too old to be in the bitfield
             else {
                 // Resend packet with new id
-                m_outgoingPackets.push_back(sentPacket.data);
+                m_outgoingPackets->push_back(sentPacket.data);
                 
                 // Remove this packet from the list
                 it = m_sentPackets.erase(it);
@@ -160,7 +146,7 @@ bool IcySession::processRawIncoming(sf::Packet& packet) {
         
         // This packet is not a heartbeat; someone else will need it
         else {
-            m_incomingPackets.push_back(newPacket);
+            m_incomingPackets->push_back(newPacket);
         }
     }
     

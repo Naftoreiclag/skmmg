@@ -14,11 +14,11 @@ int main(int argc, char **argv) {
     IcySession session;
     
     sf::IpAddress serverAddress = sf::IpAddress::LocalHost;
-    IcyClient::Port serverPort = 25564;
+    IcyProtocol::Port serverPort = 25564;
     
     std::cout << "Starting connection to server..." << std::endl;
     client.initializeConnection(serverAddress, serverPort);
-    const IcyClient::Status& status = client.getStatus();
+    const IcyClient::Status status = client.getStatus();
     if(!status.connected) {
         if(!status.serverContacted) {
             std::cout << "Could not contact server!" << std::endl;
