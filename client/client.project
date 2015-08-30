@@ -135,5 +135,6 @@
   <VirtualDirectory Name="src-common">
     <File Name="../common/IcySession.cpp"/>
     <File Name="../common/IcySession.hpp"/>
+    <File Name="../common/IcyProtocol.hpp"/>
   </VirtualDirectory>
 </CodeLite_Project>
