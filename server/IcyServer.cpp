@@ -78,7 +78,10 @@ void IcyServer::startConnectionSustainingLoop() {
                             Session* newSession = new Session();
                             newSession->m_address = senderAddress;
                             newSession->m_port = senderPort;
+                            newSession->m_session.m_serverAddress = senderAddress;
+                            newSession->m_session.m_serverPort = senderPort;
                             newSession->m_session.m_sessionId = nextAvailableSessionId();
+                            newSession->m_session.m_socket = &m_socket;
                             newSession->m_verifiedId = false;
                             newSession->m_verificationTimeout.restart();
                             newSession->m_verificationTimer.restart();
@@ -232,7 +235,7 @@ void IcyServer::startConnectionSustainingLoop() {
                     while(outgoingPacketPtr != nullptr) {
                         std::cout << "Sending packet to client " << session->m_session.m_sessionId << std::endl;
                         IcyPacket* outgoingPacket = *outgoingPacketPtr;
-                        //session->m_session.sendOutgoing(outgoingPacket);
+                        session->m_session.sendOutgoing(outgoingPacket);
                         
                         outgoingPacketPtr = session->m_outgoingPackets.pop_front();
                         session->m_heartbeatTimer.restart();

@@ -154,7 +154,7 @@ bool IcySession::processRawIncoming(sf::Packet& packet) {
 }
 
 void IcySession::sendOutgoing(IcyPacket* packet) {
-    std::cout << "Sending packet" << std::endl;
+    std::cout << "  Sending packet " << packet->getId() << std::endl;
     sf::Packet rawPacket;
     
     // Magic number
@@ -173,8 +173,12 @@ void IcySession::sendOutgoing(IcyPacket* packet) {
     rawPacket << packet->getId();
     packet->write(rawPacket);
     
+    std::cout << "  Sending to " << m_serverAddress << ":" << m_serverPort << "..." << std::endl;
+    std::cout << m_socket << std::endl;
     m_socket->send(rawPacket, m_serverAddress, m_serverPort);
+    std::cout << "  Sending completed" << std::endl;
     
+    /*
     // Remove unverified continuous packets
     if(packet->isContinuous()) {
         std::list<SentPacket>::iterator it = m_sentPackets.begin();
@@ -195,6 +199,7 @@ void IcySession::sendOutgoing(IcyPacket* packet) {
             ++ it;
         }
     }
+    */
     
     SentPacket metadata;
     metadata.data = packet;

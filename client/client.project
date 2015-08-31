@@ -32,11 +32,6 @@
     <File Name="main.cpp"/>
     <File Name="IcyClient.hpp"/>
     <File Name="IcyClient.cpp"/>
-    <File Name="ThreadQueue.hpp"/>
-    <File Name="IcyPacket.hpp"/>
-    <File Name="IcyPacket.cpp"/>
-    <File Name="IcyPacketHeartbeat.hpp"/>
-    <File Name="IcyPacketHeartbeat.cpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
@@ -136,5 +131,10 @@
     <File Name="../common/IcySession.cpp"/>
     <File Name="../common/IcySession.hpp"/>
     <File Name="../common/IcyProtocol.hpp"/>
+    <File Name="../common/IcyPacket.cpp"/>
+    <File Name="../common/IcyPacket.hpp"/>
+    <File Name="../common/IcyPacketHeartbeat.cpp"/>
+    <File Name="../common/IcyPacketHeartbeat.hpp"/>
+    <File Name="../common/ThreadQueue.hpp"/>
   </VirtualDirectory>
 </CodeLite_Project>

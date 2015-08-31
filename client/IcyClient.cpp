@@ -1,6 +1,9 @@
 #include "IcyClient.hpp"
 
+#include <iostream>
+
 #include "IcyPacketHeartbeat.hpp"
+
 
 namespace skm {
         
@@ -8,6 +11,7 @@ namespace skm {
 IcyClient::IcyClient() {
     m_session = nullptr;
     m_socket.setBlocking(false);
+    std::cout << "Binding to port " << m_socket.getLocalPort() << std::endl;
     m_socket.bind(m_socket.getLocalPort());
 }
 

@@ -21,11 +21,6 @@
   <Dependencies/>
   <VirtualDirectory Name="src">
     <File Name="main.cpp"/>
-    <File Name="IcyPacket.cpp"/>
-    <File Name="IcyPacket.hpp"/>
-    <File Name="IcyPacketHeartbeat.cpp"/>
-    <File Name="IcyPacketHeartbeat.hpp"/>
-    <File Name="ThreadQueue.hpp"/>
     <File Name="IcyServer.cpp"/>
     <File Name="IcyServer.hpp"/>
   </VirtualDirectory>
@@ -127,5 +122,10 @@
     <File Name="../common/IcyProtocol.hpp"/>
     <File Name="../common/IcySession.cpp"/>
     <File Name="../common/IcySession.hpp"/>
+    <File Name="../common/IcyPacket.cpp"/>
+    <File Name="../common/IcyPacket.hpp"/>
+    <File Name="../common/IcyPacketHeartbeat.cpp"/>
+    <File Name="../common/IcyPacketHeartbeat.hpp"/>
+    <File Name="../common/ThreadQueue.hpp"/>
   </VirtualDirectory>
 </CodeLite_Project>
