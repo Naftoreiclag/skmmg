@@ -12,8 +12,14 @@ int main(int argc, char **argv) {
     
     IcyServer server;
     server.initialize(25564);
-    server.startConnectionSustainingLoop();
-    server.terminate();
+    std::thread clientThread(&IcyServer::startConnectionSustainingLoop, &server);
+    
+    sf::Clock clock;
+    sf::Time time = sf::seconds(0.5f);
+    while(true) {
+        
+        // Something
+    }
     
 	return 0;
 }

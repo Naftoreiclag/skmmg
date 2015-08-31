@@ -1,6 +1,8 @@
 #include "IcyClient.hpp"
 
-#ifndef NDEBUG
+#include "DebugAwareness.hpp"
+
+#ifndef NICYDEBUG
 #include <iostream>
 #endif
 
@@ -13,7 +15,7 @@ namespace skm {
 IcyClient::IcyClient() {
     m_session = nullptr;
     m_socket.setBlocking(false);
-    #ifndef NDEBUG
+    #ifndef NICYDEBUG
     std::cout << "Binding to port " << m_socket.getLocalPort() << std::endl;
     #endif
     m_socket.bind(m_socket.getLocalPort());
@@ -28,7 +30,6 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
     m_session->m_serverAddress = address;
     m_session->m_serverPort = port;
     m_session->m_socket = &m_socket;
-    m_session->m_incomingPackets = &m_incomingPackets;
     m_session->m_outgoingPackets = &m_outgoingPackets;
     
     bool requestTimedOut = false;
@@ -46,7 +47,7 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
                 verifySessionId << IcyProtocol::s_sessionRequestId;
                 
                 m_socket.send(verifySessionId, m_session->m_serverAddress, m_session->m_serverPort);
-                #ifndef NDEBUG
+                #ifndef NICYDEBUG
                 std::cout << "Requesting connection..." << std::endl;
                 #endif
                 
@@ -67,7 +68,7 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
                     receivedPacket >> magicNum;
                     receivedPacket >> sessionId;
                     
-                    #ifndef NDEBUG
+                    #ifndef NICYDEBUG
                     std::cout << "Session id: " << sessionId << std::endl;
                     #endif
                     
@@ -121,7 +122,7 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
                 verifySessionId << m_session->m_sessionId;
                 
                 m_socket.send(verifySessionId, m_session->m_serverAddress, m_session->m_serverPort);
-                #ifndef NDEBUG
+                #ifndef NICYDEBUG
                 std::cout << "Verifying id..." << std::endl;
                 #endif
                 
@@ -141,10 +142,15 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
                     
                     // Magic number is correct
                     if(magicNum == IcyProtocol::s_magicNumber) {
-                        #ifndef NDEBUG
+                        #ifndef NICYDEBUG
                         std::cout << "Id verified. Now processing incoming non-handshake packets..." << std::endl;
                         #endif
-                        m_session->processRawIncoming(receivedPacket);
+                        IcyPacket* receievedPacket = m_session->processRawIncoming(receivedPacket);
+                        
+                        if(receievedPacket != nullptr) {
+                            m_incomingPackets.push_back(receievedPacket);
+                        }
+                        
                         break;
                     }
                     
@@ -226,7 +232,12 @@ void IcyClient::startConnectionSustainingLoop() {
                     // Magic number is correct
                     if(magicNum == IcyProtocol::s_magicNumber) {
                     
-                        m_session->processRawIncoming(receivedPacket);
+                        IcyPacket* receievedPacket = m_session->processRawIncoming(receivedPacket);
+                        
+                        if(receievedPacket != nullptr) {
+                            m_incomingPackets.push_back(receievedPacket);
+                        }
+                        
                         serverTimeout.restart();
                         
                     }

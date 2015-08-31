@@ -12,6 +12,7 @@ public:
     
     static const ProtocolId s_protocol_session = 0;
     static const ProtocolId s_protocol_heartbeat = 1;
+    static const ProtocolId s_protocol_chat = 2;
     
 public:
     static IcyPacket* newPacketFromRaw(sf::Packet& packet);

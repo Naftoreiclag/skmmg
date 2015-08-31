@@ -3,6 +3,7 @@
 
 #include <mutex>
 #include <list>
+#include <utility>
 
 #include "SFML/Network.hpp"
 
@@ -40,6 +41,7 @@ private:
     bool m_running;
     IcyProtocol::Port m_port;
     std::list<Session*> m_sessions;
+    IcyProtocol::SessionId m_lastSessionId;
 
 public:
     IcyServer();
@@ -53,7 +55,11 @@ public:
     
     void terminate();
     
+    typedef std::pair<IcyProtocol::SessionId, IcyPacket*> SpecificPacketPair;
+    
     ThreadQueue<IcyPacket*> m_outgoingGlobalPackets;
+    ThreadQueue<SpecificPacketPair> m_outgoingPackets;
+    ThreadQueue<SpecificPacketPair> m_incomingPackets;
     
 private:
     IcyProtocol::SessionId nextAvailableSessionId();

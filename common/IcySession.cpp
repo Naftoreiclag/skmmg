@@ -1,6 +1,8 @@
 #include "IcySession.hpp"
 
-#ifndef NDEBUG
+#include "DebugAwareness.hpp"
+
+#ifndef NICYDEBUG
 #include <iostream>
 #endif
 
@@ -10,13 +12,13 @@ namespace skm
 IcySession::IcySession() {}
 IcySession::~IcySession() {}
 
-bool IcySession::processRawIncoming(sf::Packet& packet) {
+IcyPacket* IcySession::processRawIncoming(sf::Packet& packet) {
     // Update remote sequence number and ack field
     {
         // Get when this packet was sent by the server
         IcyProtocol::SequenceNumber remoteSeq;
         packet >> remoteSeq;
-        #ifndef NDEBUG
+        #ifndef NICYDEBUG
         std::cout << "Received #" << remoteSeq << std::endl;
         #endif
         
@@ -74,13 +76,13 @@ bool IcySession::processRawIncoming(sf::Packet& packet) {
             
             // We have already receieved this exact packet because the sequence number was set in the bitfield, so do nothing
             else {
-                return false;
+                return nullptr;
             }
         }
         
         // We have already receieved this exact packet because the sequence number is the same, so do nothing
         else {
-            return false;
+            return nullptr;
         }
     }
     
@@ -90,7 +92,7 @@ bool IcySession::processRawIncoming(sf::Packet& packet) {
         IcyProtocol::AckBitfield prevAcks;
         packet >> firstAck;
         packet >> prevAcks;
-        #ifndef NDEBUG
+        #ifndef NICYDEBUG
         std::cout << "Ack #" << firstAck << std::endl;
         #endif
         std::list<SentPacket>::iterator it = m_sentPackets.begin();
@@ -99,7 +101,7 @@ bool IcySession::processRawIncoming(sf::Packet& packet) {
             
             // This is the packet referenced by the fully referenced ack
             if(sentPacket.sequence == firstAck) {
-                #ifndef NDEBUG
+                #ifndef NICYDEBUG
                 std::cout << "DELETEa #" << sentPacket.sequence << std::endl;
                 #endif
                 // Delete the packet data (since there is no need to ever resend it)
@@ -125,7 +127,7 @@ bool IcySession::processRawIncoming(sf::Packet& packet) {
                 // Packet is acked in the bitfield
                 if((prevAcks & (1 << bitPos)) != 0) {
                     // Delete the packet data (since there is no need to ever resend it)
-                    #ifndef NDEBUG
+                    #ifndef NICYDEBUG
                     std::cout << "DELETEb #" << sentPacket.sequence << std::endl;
                     #endif
                     delete sentPacket.data;
@@ -138,7 +140,7 @@ bool IcySession::processRawIncoming(sf::Packet& packet) {
             
             // Packet is too old to be in the bitfield
             else {
-                #ifndef NDEBUG
+                #ifndef NICYDEBUG
                 std::cout << "RESEND #" << sentPacket.sequence << std::endl;
                 #endif
                 // Resend packet with new id
@@ -159,26 +161,25 @@ bool IcySession::processRawIncoming(sf::Packet& packet) {
         IcyPacket* newPacket = IcyPacket::newPacketFromRaw(packet);
         
         if(newPacket == nullptr) {
-            return false;
+            return nullptr;
         }
         
         // This packet is a heartbeat
         if(newPacket->getId() == IcyPacket::s_protocol_heartbeat) {
             // Since heartbeats are only sent in the absense of data, just delete it
             delete newPacket;
+            return nullptr;
         }
         
         // This packet is not a heartbeat; someone else will need it
         else {
-            m_incomingPackets->push_back(newPacket);
+            return newPacket;
         }
     }
-    
-    return true;
 }
 
 void IcySession::sendOutgoing(IcyPacket* packet) {
-#ifndef NDEBUG
+    #ifndef NICYDEBUG
     std::cout << "Sending #" << m_localSequence << std::endl;
     #endif
     sf::Packet rawPacket;

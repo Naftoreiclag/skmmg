@@ -32,6 +32,9 @@
     <File Name="main.cpp"/>
     <File Name="IcyServer.cpp"/>
     <File Name="IcyServer.hpp"/>
+    <File Name="DebugAwareness.hpp"/>
+    <File Name="IcyClientPacket.hpp"/>
+    <File Name="IcyClientPacket.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="src-common">
     <File Name="../common/IcyProtocol.hpp"/>
@@ -42,6 +45,8 @@
     <File Name="../common/IcyPacketHeartbeat.cpp"/>
     <File Name="../common/IcyPacketHeartbeat.hpp"/>
     <File Name="../common/ThreadQueue.hpp"/>
+    <File Name="../common/IcyPacketChat.cpp"/>
+    <File Name="../common/IcyPacketChat.hpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
@@ -58,6 +63,7 @@
         <IncludePath Value="."/>
         <IncludePath Value="../common"/>
         <IncludePath Value="../library/SFML-2.3.1/include"/>
+        <Preprocessor Value="NICYDEBUG"/>
       </Compiler>
       <Linker Options="" Required="yes">
         <LibraryPath Value="../library/SFML-2.3.1/lib"/>

@@ -49,10 +49,9 @@ public:
     // Add packets to this queue to have them sent to the remote; IcySession will handle their deletion
     ThreadQueue<IcyPacket*>* m_outgoingPackets;
     
-    // Packets receieved from the remote will be added here; User is responsible for proper deletion
-    ThreadQueue<IcyPacket*>* m_incomingPackets;
+    IcyPacket* processRawIncoming(sf::Packet& packet);
     
-    bool processRawIncoming(sf::Packet& packet);
+    // This should only be called while iterating through m_outgoingPackets
     void sendOutgoing(IcyPacket* packet);
 };
 

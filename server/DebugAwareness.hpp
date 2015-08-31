@@ -1,0 +1,8 @@
+#ifndef DEBUGAWARENESS_HPP
+#define DEBUGAWARENESS_HPP
+
+#ifdef NDEBUG
+#define NICYDEBUG
+#endif
+
+#endif // DEBUGAWARENESS_HPP
