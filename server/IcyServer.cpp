@@ -164,8 +164,8 @@ void IcyServer::startConnectionSustainingLoop() {
                         
                         if(receievedPacket != nullptr) {
                             SpecificPacketPair incomingPacket;
-                            incomingPacket.first = sessionSearch->m_session.m_sessionId;
-                            incomingPacket.second = receievedPacket;
+                            incomingPacket.sessionId = sessionSearch->m_session.m_sessionId;
+                            incomingPacket.packet = receievedPacket;
                             m_incomingPackets.push_back(incomingPacket);
                         }
                     }
@@ -241,8 +241,8 @@ void IcyServer::startConnectionSustainingLoop() {
             // Iterate through all addressed packets
             SpecificPacketPair* pairPtr = m_outgoingPackets.pop_front();
             while(pairPtr != nullptr) {
-                IcyProtocol::SessionId sessionId = pairPtr->first;
-                IcyPacket* outgoingPacket = pairPtr->second;
+                IcyProtocol::SessionId sessionId = pairPtr->sessionId;
+                IcyPacket* outgoingPacket = pairPtr->packet;
                 
                 //TODO optimize with a map
                 for(std::list<Session*>::iterator it = m_sessions.begin(); it != m_sessions.end(); ++ it) {

@@ -35,16 +35,18 @@
     <File Name="DebugAwareness.hpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="src-common">
-    <File Name="../common/IcyProtocol.hpp"/>
-    <File Name="../common/IcySession.cpp"/>
-    <File Name="../common/IcySession.hpp"/>
-    <File Name="../common/IcyPacket.cpp"/>
-    <File Name="../common/IcyPacket.hpp"/>
-    <File Name="../common/IcyPacketHeartbeat.cpp"/>
-    <File Name="../common/IcyPacketHeartbeat.hpp"/>
     <File Name="../common/ThreadQueue.hpp"/>
-    <File Name="../common/IcyPacketChat.cpp"/>
-    <File Name="../common/IcyPacketChat.hpp"/>
+    <VirtualDirectory Name="networking">
+      <File Name="../common/IcyPacket.cpp"/>
+      <File Name="../common/IcyPacket.hpp"/>
+      <File Name="../common/IcyPacketChat.cpp"/>
+      <File Name="../common/IcyPacketChat.hpp"/>
+      <File Name="../common/IcyPacketHeartbeat.cpp"/>
+      <File Name="../common/IcyPacketHeartbeat.hpp"/>
+      <File Name="../common/IcyProtocol.hpp"/>
+      <File Name="../common/IcySession.cpp"/>
+      <File Name="../common/IcySession.hpp"/>
+    </VirtualDirectory>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>

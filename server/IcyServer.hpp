@@ -3,7 +3,6 @@
 
 #include <mutex>
 #include <list>
-#include <utility>
 
 #include "SFML/Network.hpp"
 
@@ -55,7 +54,10 @@ public:
     
     void terminate();
     
-    typedef std::pair<IcyProtocol::SessionId, IcyPacket*> SpecificPacketPair;
+    struct SpecificPacketPair {
+        IcyProtocol::SessionId sessionId;
+        IcyPacket* packet;
+    };
     
     ThreadQueue<IcyPacket*> m_outgoingGlobalPackets;
     ThreadQueue<SpecificPacketPair> m_outgoingPackets;

@@ -5,6 +5,7 @@
 
 #include "IcyClient.hpp"
 #include "IcySession.hpp"
+#include "IcyPacketChat.hpp"
 
 using namespace skm;
 
@@ -37,6 +38,8 @@ int main(int argc, char **argv) {
     while(true) {
         std::cout << clock.getElapsedTime().asMilliseconds() << std::endl;
         sf::sleep(time);
+        
+        client.m_outgoingPackets.push_back(new IcyPacketChat("foobar"));
         
         IcyClient::SessionStatus status = client.getStatus();
         if(!status.connected) {

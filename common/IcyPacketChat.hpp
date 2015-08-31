@@ -13,6 +13,7 @@ public:
     std::string m_message;
 
     IcyPacketChat();
+    IcyPacketChat(std::string m_message);
     ~IcyPacketChat();
     
     virtual ProtocolId getId() const;

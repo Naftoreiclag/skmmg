@@ -5,6 +5,9 @@ namespace skm
 
 IcyPacketChat::IcyPacketChat() {
 }
+IcyPacketChat::IcyPacketChat(std::string message)
+: m_message(message) {
+}
 
 IcyPacketChat::~IcyPacketChat() {
 }
