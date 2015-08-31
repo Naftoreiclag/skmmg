@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Workspace Name="skmmg" Database="">
-  <Project Name="client" Path="client/client.project" Active="No"/>
-  <Project Name="server" Path="server/server.project" Active="Yes"/>
+  <Project Name="client" Path="client/client.project" Active="Yes"/>
+  <Project Name="server" Path="server/server.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="no">
       <Project Name="client" ConfigName="Debug"/>

@@ -1,8 +1,8 @@
 .PHONY: clean All
 
 All:
-	@echo "----------Building project:[ server - Release ]----------"
-	@cd "server" && "$(MAKE)" -f  "server.mk"
+	@echo "----------Building project:[ client - Release ]----------"
+	@cd "client" && "$(MAKE)" -f  "client.mk"
 clean:
-	@echo "----------Cleaning project:[ server - Release ]----------"
-	@cd "server" && "$(MAKE)" -f  "server.mk" clean
+	@echo "----------Cleaning project:[ client - Release ]----------"
+	@cd "client" && "$(MAKE)" -f  "client.mk" clean

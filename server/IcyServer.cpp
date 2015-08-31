@@ -1,6 +1,9 @@
 #include "IcyServer.hpp"
 
+#ifndef NDEBUG
 #include <iostream>
+#endif
+
 #include "IcyPacketHeartbeat.hpp"
 
 namespace skm {
@@ -43,7 +46,9 @@ void IcyServer::startConnectionSustainingLoop() {
                 
                 // Packet to receive
                 if(receiveStatus == sf::UdpSocket::Status::Done) {
+                    #ifndef NDEBUG
                     std::cout << "Packet receieved." << std::endl;
+                    #endif
                     
                     // Magic number
                     IcyProtocol::MagicNumber magicNum;
@@ -72,7 +77,9 @@ void IcyServer::startConnectionSustainingLoop() {
                             if(sessionSearch != nullptr) {
                                 continue;
                             }
+                            #ifndef NDEBUG
                             std::cout << "New client is requesting connection..." << std::endl;
+                            #endif
                             
                             // Register new client
                             Session* newSession = new Session();
@@ -87,23 +94,31 @@ void IcyServer::startConnectionSustainingLoop() {
                             newSession->m_verificationTimer.restart();
                             m_sessions.push_back(newSession);
                             
+                            #ifndef NDEBUG
                             std::cout << "New session created for client." << std::endl;
+                            #endif
                             
                             continue;
                         }
                         
                         // This is a verification
                         else {
+                            #ifndef NDEBUG
                             std::cout << "Client verifying session id." << std::endl;
+                            #endif
                             // Client has not been registered yet
                             if(sessionSearch == nullptr) {
+                                #ifndef NDEBUG
                                 std::cout << "No matching session could be found." << std::endl;
+                                #endif
                                 continue;
                             }
                             
                             // Client sent correct id
                             if(sessionSearch->m_session.m_sessionId == sessionId) {
+                                #ifndef NDEBUG
                                 std::cout << "Correct session id receieved." << std::endl;
+                                #endif
                                 // Connection now verified
                                 sessionSearch->m_verifiedId = true;
                                 
@@ -132,7 +147,9 @@ void IcyServer::startConnectionSustainingLoop() {
                         }
                         
                         // Process normal packet!
+                        #ifndef NDEBUG
                         std::cout << "Processing normal packet..." << std::endl;
+                        #endif
                         sessionSearch->m_clientTimeout.restart();
                         sessionSearch->m_session.processRawIncoming(receivedPacket);
                     }
@@ -176,7 +193,9 @@ void IcyServer::startConnectionSustainingLoop() {
                 // Session is unverified
                 if(!session->m_verifiedId) {
                     if(session->m_verificationTimeout.getElapsedTime().asMilliseconds() > IcyProtocol::s_verifyTimeoutMs) {
+                        #ifndef NDEBUG
                         std::cout << "Client " << session->m_session.m_sessionId << " did not verify session id in time. Ending session..." << std::endl;
+                        #endif
                         
                         // Remove this client from the session list
                         it = m_sessions.erase(it);
@@ -190,7 +209,9 @@ void IcyServer::startConnectionSustainingLoop() {
                 
                 // Session is verified, but too quiet
                 if(session->m_clientTimeout.getElapsedTime().asMilliseconds() > IcyProtocol::s_serverTimeoutMs) {
+                    #ifndef NDEBUG
                     std::cout << "Connection of client " << session->m_session.m_sessionId << " has been lost. Ending session..." << std::endl;
+                    #endif
                     
                     // Remove this client from the session list
                     it = m_sessions.erase(it);
@@ -212,7 +233,9 @@ void IcyServer::startConnectionSustainingLoop() {
                 if(!session->m_verifiedId) {
                     // Send verification requests
                     if(session->m_verificationTimer.getElapsedTime().asMilliseconds() > IcyProtocol::s_verifyDelayMs || !session->m_firstVerificationSent) {
+                        #ifndef NDEBUG
                         std::cout << "Sending client session id..." << std::endl;
+                        #endif
                         session->m_verificationTimer.restart();
                         
                         // Send verification
@@ -235,7 +258,9 @@ void IcyServer::startConnectionSustainingLoop() {
                     // Manage outgoing packets specific to this session
                     IcyPacket** outgoingPacketPtr = session->m_outgoingPackets.pop_front();
                     while(outgoingPacketPtr != nullptr) {
+                        #ifndef NDEBUG
                         std::cout << "Sending packet to client " << session->m_session.m_sessionId << std::endl;
+                        #endif
                         IcyPacket* outgoingPacket = *outgoingPacketPtr;
                         session->m_session.sendOutgoing(outgoingPacket);
                         
