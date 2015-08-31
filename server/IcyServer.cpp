@@ -132,6 +132,8 @@ void IcyServer::startConnectionSustainingLoop() {
                         }
                         
                         // Process normal packet!
+                        std::cout << "Processing normal packet..." << std::endl;
+                        sessionSearch->m_clientTimeout.restart();
                         sessionSearch->m_session.processRawIncoming(receivedPacket);
                     }
                     

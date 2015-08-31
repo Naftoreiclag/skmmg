@@ -42,6 +42,7 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
                 verifySessionId << IcyProtocol::s_sessionRequestId;
                 
                 m_socket.send(verifySessionId, m_session->m_serverAddress, m_session->m_serverPort);
+                std::cout << "Requesting connection..." << std::endl;
                 
                 firstRequest = false;
             }
@@ -59,6 +60,8 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
                     
                     receivedPacket >> magicNum;
                     receivedPacket >> sessionId;
+                    
+                    std::cout << "Session id: " << sessionId << std::endl;
                     
                     if(magicNum == IcyProtocol::s_magicHandshake) {
                         m_session->m_sessionId = sessionId;
@@ -110,6 +113,7 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
                 verifySessionId << m_session->m_sessionId;
                 
                 m_socket.send(verifySessionId, m_session->m_serverAddress, m_session->m_serverPort);
+                std::cout << "Verifying id..." << std::endl;
                 
                 firstVerify = false;
             }
@@ -127,9 +131,9 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
                     
                     // Magic number is correct
                     if(magicNum == IcyProtocol::s_magicNumber) {
-                    
+                        std::cout << "Id verified. Now processing incoming non-handshake packets..." << std::endl;
                         m_session->processRawIncoming(receivedPacket);
-                        
+                        break;
                     }
                     
                     // Magic number unknown
@@ -236,9 +240,13 @@ void IcyClient::startConnectionSustainingLoop() {
         // Check the time passed since the last receieved packet
         if(serverTimeout.getElapsedTime().asMilliseconds() > IcyProtocol::s_serverTimeoutMs) {
             // Too long; terminate connection
-            //terminateConnection();
+            terminateConnection();
         }
     }
+}
+
+void IcyClient::terminateConnection() {
+    m_session->m_status.connected = false;
 }
 
 IcyClient::SessionStatus IcyClient::getStatus() {

@@ -37,6 +37,13 @@ int main(int argc, char **argv) {
     while(true) {
         std::cout << clock.getElapsedTime().asMilliseconds() << std::endl;
         sf::sleep(time);
+        
+        IcyClient::SessionStatus status = client.getStatus();
+        if(!status.connected) {
+            std::cout << "Connection lost!" << std::endl;
+            break;
+        }
     }
+    
 	return 0;
 }

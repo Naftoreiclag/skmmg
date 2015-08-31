@@ -14,6 +14,7 @@ bool IcySession::processRawIncoming(sf::Packet& packet) {
         // Get when this packet was sent by the server
         IcyProtocol::SequenceNumber remoteSeq;
         packet >> remoteSeq;
+        std::cout << "Received #" << remoteSeq << std::endl;
         
         // This packet is more recent than the previous most recent packet
         if(remoteSeq > m_ack) {
@@ -85,12 +86,14 @@ bool IcySession::processRawIncoming(sf::Packet& packet) {
         IcyProtocol::AckBitfield prevAcks;
         packet >> firstAck;
         packet >> prevAcks;
+        std::cout << "Ack #" << firstAck << std::endl;
         std::list<SentPacket>::iterator it = m_sentPackets.begin();
         while(it != m_sentPackets.end()) {
             SentPacket& sentPacket = *it;
             
             // This is the packet referenced by the fully referenced ack
             if(sentPacket.sequence == firstAck) {
+                std::cout << "DELETEa #" << sentPacket.sequence << std::endl;
                 // Delete the packet data (since there is no need to ever resend it)
                 delete sentPacket.data;
                 
@@ -99,7 +102,14 @@ bool IcySession::processRawIncoming(sf::Packet& packet) {
                 continue;
             }
             
+            // Packet is in the remote computer's future, and therefore could not have been acked
+            if(sentPacket.sequence >= firstAck) {
+                ++ it;
+                continue;
+            }
+            
             // Get packet age (position in bitfield)
+            // Careful of negative numbers here! IcyProtocol::SequenceNumber is unsigned!
             IcyProtocol::SequenceNumber bitPos = (firstAck - sentPacket.sequence) - 1;
             
             // Packet is within the last [ackBitfieldSize] sent
@@ -107,6 +117,7 @@ bool IcySession::processRawIncoming(sf::Packet& packet) {
                 // Packet is acked in the bitfield
                 if((prevAcks & (1 << bitPos)) != 0) {
                     // Delete the packet data (since there is no need to ever resend it)
+                    std::cout << "DELETEb #" << sentPacket.sequence << std::endl;
                     delete sentPacket.data;
                 
                     // Remove this packet from the list
@@ -117,6 +128,7 @@ bool IcySession::processRawIncoming(sf::Packet& packet) {
             
             // Packet is too old to be in the bitfield
             else {
+                std::cout << "RESEND #" << sentPacket.sequence << std::endl;
                 // Resend packet with new id
                 m_outgoingPackets->push_back(sentPacket.data);
                 
@@ -140,6 +152,7 @@ bool IcySession::processRawIncoming(sf::Packet& packet) {
         
         // This packet is a heartbeat
         if(newPacket->getId() == IcyPacket::s_protocol_heartbeat) {
+            std::cout << "CLIENT BEAT" << std::endl;
             // Since heartbeats are only sent in the absense of data, just delete it
             delete newPacket;
         }
@@ -154,7 +167,7 @@ bool IcySession::processRawIncoming(sf::Packet& packet) {
 }
 
 void IcySession::sendOutgoing(IcyPacket* packet) {
-    std::cout << "  Sending packet " << packet->getId() << std::endl;
+    std::cout << "Sending #" << m_localSequence << std::endl;
     sf::Packet rawPacket;
     
     // Magic number
@@ -173,12 +186,8 @@ void IcySession::sendOutgoing(IcyPacket* packet) {
     rawPacket << packet->getId();
     packet->write(rawPacket);
     
-    std::cout << "  Sending to " << m_serverAddress << ":" << m_serverPort << "..." << std::endl;
-    std::cout << m_socket << std::endl;
     m_socket->send(rawPacket, m_serverAddress, m_serverPort);
-    std::cout << "  Sending completed" << std::endl;
     
-    /*
     // Remove unverified continuous packets
     if(packet->isContinuous()) {
         std::list<SentPacket>::iterator it = m_sentPackets.begin();
@@ -199,7 +208,6 @@ void IcySession::sendOutgoing(IcyPacket* packet) {
             ++ it;
         }
     }
-    */
     
     SentPacket metadata;
     metadata.data = packet;
