@@ -33,8 +33,6 @@
     <File Name="IcyServer.cpp"/>
     <File Name="IcyServer.hpp"/>
     <File Name="DebugAwareness.hpp"/>
-    <File Name="IcyClientPacket.hpp"/>
-    <File Name="IcyClientPacket.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="src-common">
     <File Name="../common/IcyProtocol.hpp"/>

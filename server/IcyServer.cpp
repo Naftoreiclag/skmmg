@@ -224,9 +224,7 @@ void IcyServer::startConnectionSustainingLoop() {
                 
                 // Session is verified, but too quiet
                 if(session->m_clientTimeout.getElapsedTime().asMilliseconds() > IcyProtocol::s_serverTimeoutMs) {
-                    #ifndef NICYDEBUG
-                    std::cout << "Connection of client " << session->m_session.m_sessionId << " has been lost. Ending session..." << std::endl;
-                    #endif
+                    std::cout << "Lost connection to client " << session->m_session.m_sessionId << std::endl;
                     
                     // Remove this client from the session list
                     it = m_sessions.erase(it);
