@@ -2,7 +2,7 @@
 <CodeLite_Project Name="client" InternalType="Console">
   <Plugins>
     <Plugin Name="qmake">
-      <![CDATA[00010001N0005Debug000000000000]]>
+      <![CDATA[00020001N0005Debug0000000000000001N0007Release000000000000]]>
     </Plugin>
     <Plugin Name="CMakePlugin">
       <![CDATA[[{
@@ -32,6 +32,16 @@
     <File Name="main.cpp"/>
     <File Name="IcyClient.hpp"/>
     <File Name="IcyClient.cpp"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="src-common">
+    <File Name="../common/IcySession.cpp"/>
+    <File Name="../common/IcySession.hpp"/>
+    <File Name="../common/IcyProtocol.hpp"/>
+    <File Name="../common/IcyPacket.cpp"/>
+    <File Name="../common/IcyPacket.hpp"/>
+    <File Name="../common/IcyPacketHeartbeat.cpp"/>
+    <File Name="../common/IcyPacketHeartbeat.hpp"/>
+    <File Name="../common/ThreadQueue.hpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
@@ -127,14 +137,4 @@
       </Completion>
     </Configuration>
   </Settings>
-  <VirtualDirectory Name="src-common">
-    <File Name="../common/IcySession.cpp"/>
-    <File Name="../common/IcySession.hpp"/>
-    <File Name="../common/IcyProtocol.hpp"/>
-    <File Name="../common/IcyPacket.cpp"/>
-    <File Name="../common/IcyPacket.hpp"/>
-    <File Name="../common/IcyPacketHeartbeat.cpp"/>
-    <File Name="../common/IcyPacketHeartbeat.hpp"/>
-    <File Name="../common/ThreadQueue.hpp"/>
-  </VirtualDirectory>
 </CodeLite_Project>
