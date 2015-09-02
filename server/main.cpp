@@ -18,6 +18,7 @@ int main(int argc, char **argv) {
     sf::Clock clock;
     sf::Time time = sf::seconds(0.5f);
     while(true) {
+        std::cout << "About to check incoming data" << std::endl;
         IcyServer::SpecificPacketPair* data = server.m_incomingPackets.pop_front();
         while(data != nullptr) {
             

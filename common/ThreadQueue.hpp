@@ -13,29 +13,25 @@ namespace skm {
     public:
 
         void push_back(T item) {
-            mutex.lock();
+            std::lock_guard<std::mutex> lock(mutex);
             data.push_back(item);
-            mutex.unlock();
         }
         
         void clear() {
-            mutex.lock();
+            std::lock_guard<std::mutex> lock(mutex);
             data.clear();
-            mutex.unlock();
         }
 
         std::size_t size() {
-            std::size_t size;
-            mutex.lock();
-            size = data.size();
-            mutex.unlock();
+            std::lock_guard<std::mutex> lock(mutex);
+            std::size_t size = data.size();
             return size;
         }
 
         T* pop_front() {
+            std::lock_guard<std::mutex> lock(mutex);
             T* ptr;
 
-            mutex.lock();
             if(data.size() > 0) {
                 ptr = &data.front();
                 data.pop_front();
@@ -43,9 +39,7 @@ namespace skm {
             else {
                 ptr = nullptr;
             }
-
-            mutex.unlock();
-
+            
             return ptr;
         }
         
