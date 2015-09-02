@@ -16,13 +16,21 @@ public:
     
 public:
     static IcyPacket* newPacketFromRaw(sf::Packet& packet);
-    
+
+private:
+    sf::Uint32 m_numGrabbers;
+
 public:
     virtual ProtocolId getId() const = 0;
     virtual bool isContinuous() const = 0;
     
     IcyPacket();
     virtual ~IcyPacket();
+    
+    void grab();
+    void grab(sf::Uint32 numGrabbers);
+    void drop();
+    void dropNoDelete();
     
     // Populate member variables based on this data (icy protocol headers stripped)
     virtual bool read(sf::Packet& data) = 0;

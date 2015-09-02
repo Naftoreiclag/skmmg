@@ -102,10 +102,10 @@ IcyPacket* IcySession::processRawIncoming(sf::Packet& packet) {
             // This is the packet referenced by the fully referenced ack
             if(sentPacket.sequence == firstAck) {
                 #ifndef NICYDEBUG
-                std::cout << "DELETEa #" << sentPacket.sequence << std::endl;
+                std::cout << "DELETEa #" << sentPacket.sequence << " ptr:" << sentPacket.data << std::endl;
                 #endif
                 // Delete the packet data (since there is no need to ever resend it)
-                delete sentPacket.data;
+                sentPacket.data->drop();
                 
                 // Remove this packet from the list
                 it = m_sentPackets.erase(it);
@@ -130,7 +130,7 @@ IcyPacket* IcySession::processRawIncoming(sf::Packet& packet) {
                     #ifndef NICYDEBUG
                     std::cout << "DELETEb #" << sentPacket.sequence << std::endl;
                     #endif
-                    delete sentPacket.data;
+                    sentPacket.data->drop();
                 
                     // Remove this packet from the list
                     it = m_sentPackets.erase(it);
@@ -144,6 +144,7 @@ IcyPacket* IcySession::processRawIncoming(sf::Packet& packet) {
                 std::cout << "RESEND #" << sentPacket.sequence << std::endl;
                 #endif
                 // Resend packet with new id
+                sentPacket.data->dropNoDelete();
                 m_outgoingPackets->push_back(sentPacket.data);
                 
                 // Remove this packet from the list
@@ -196,11 +197,27 @@ void IcySession::sendOutgoing(IcyPacket* packet) {
     // Ack bitfield
     rawPacket << m_ackBits;
     
+    #ifndef NICYDEBUG
+    std::cout << "Writing id" << std::endl;
+    std::cout << packet << std::endl;
+    unsigned int i = packet->getId();
+    std::cout << i << std::endl;
+    #endif
     // Actual data
     rawPacket << packet->getId();
+    
+    #ifndef NICYDEBUG
+    std::cout << "Writing data" << std::endl;
+    #endif
     packet->write(rawPacket);
     
+    #ifndef NICYDEBUG
+    std::cout << "Sending" << std::endl;
+    #endif
     m_socket->send(rawPacket, m_serverAddress, m_serverPort);
+    #ifndef NICYDEBUG
+    std::cout << "Complete" << std::endl;
+    #endif
     
     // Remove unverified continuous packets
     if(packet->isContinuous()) {
@@ -211,7 +228,7 @@ void IcySession::sendOutgoing(IcyPacket* packet) {
             // The previous packet should not be resent
             if(sentPacket.data->getId() == packet->getId()) {
                 // Delete the packet data (since there is no need to ever resend it)
-                delete sentPacket.data;
+                sentPacket.data->drop();
             
                 // Remove this packet from the list
                 it = m_sentPackets.erase(it);
@@ -227,6 +244,7 @@ void IcySession::sendOutgoing(IcyPacket* packet) {
     metadata.data = packet;
     metadata.sequence = m_localSequence;
     m_sentPackets.push_back(metadata);
+    packet->grab();
     
     ++ m_localSequence;
 }

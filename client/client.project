@@ -63,7 +63,6 @@
         <IncludePath Value="."/>
         <IncludePath Value="../common"/>
         <IncludePath Value="../library/SFML-2.3.1/include"/>
-        <Preprocessor Value="NICYDEBUG"/>
       </Compiler>
       <Linker Options="" Required="yes">
         <LibraryPath Value="../library/SFML-2.3.1/lib"/>

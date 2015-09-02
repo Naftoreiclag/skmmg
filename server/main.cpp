@@ -22,15 +22,18 @@ int main(int argc, char **argv) {
         while(data != nullptr) {
             
             if(data->packet->getId() == IcyPacket::s_protocol_chat) {
+                std::cout << "Chat packet" << std::endl;
                 IcyPacketChat* chatPack = (IcyPacketChat*) data->packet;
                 
                 std::cout << data->sessionId << ":" << chatPack->m_message << std::endl;
+                
+                //server.m_outgoingGlobalPackets.push_back(new IcyPacketChat(chatPack->m_message));
             }
             
+            delete data->packet;
             data = server.m_incomingPackets.pop_front();
         }
-        std::cout << clock.getElapsedTime().asMilliseconds() << std::endl;
-        sf::sleep(time);
+        //sf::sleep(time);
     }
     
 	return 0;

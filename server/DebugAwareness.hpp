@@ -2,7 +2,9 @@
 #define DEBUGAWARENESS_HPP
 
 #ifdef NDEBUG
-#define NICYDEBUG
+    #ifndef NICYDEBUG
+    #define NICYDEBUG
+    #endif
 #endif
 
 #endif // DEBUGAWARENESS_HPP

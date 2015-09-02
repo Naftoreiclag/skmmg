@@ -9,7 +9,7 @@ namespace skm
 class IcyPacketHeartbeat : public IcyPacket {
 public:
     IcyPacketHeartbeat();
-    ~IcyPacketHeartbeat();
+    virtual ~IcyPacketHeartbeat();
     
     virtual ProtocolId getId() const;
     virtual bool isContinuous() const;

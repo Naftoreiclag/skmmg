@@ -36,10 +36,25 @@ int main(int argc, char **argv) {
     sf::Clock clock;
     sf::Time time = sf::seconds(0.5f);
     while(true) {
-        std::cout << clock.getElapsedTime().asMilliseconds() << std::endl;
-        sf::sleep(time);
         
-        client.m_outgoingPackets.push_back(new IcyPacketChat("foobar"));
+        std::string message;
+        std::cin >> message;
+        
+        client.m_outgoingPackets.push_back(new IcyPacketChat(message));
+        
+        IcyPacket** dataptr = client.m_incomingPackets.pop_front();
+        while(dataptr != nullptr) {
+            IcyPacket* data = *dataptr;
+            
+            if(data->getId() == IcyPacket::s_protocol_chat) {
+                IcyPacketChat* chatPack = (IcyPacketChat*) data;
+                
+                std::cout << "null" << ":" << chatPack->m_message << std::endl;
+            }
+            
+            delete data;
+            dataptr = client.m_incomingPackets.pop_front();
+        }
         
         IcyClient::SessionStatus status = client.getStatus();
         if(!status.connected) {

@@ -93,6 +93,9 @@ void IcyServer::startConnectionSustainingLoop() {
                             newSession->m_session.m_serverPort = senderPort;
                             newSession->m_session.m_sessionId = nextAvailableSessionId();
                             newSession->m_session.m_socket = &m_socket;
+                            newSession->m_session.m_localSequence = 0;
+                            newSession->m_session.m_ack = 0;
+                            newSession->m_session.m_ackBits = 0;
                             newSession->m_verifiedId = false;
                             newSession->m_verificationTimeout.restart();
                             newSession->m_verificationTimer.restart();
@@ -166,7 +169,7 @@ void IcyServer::startConnectionSustainingLoop() {
                             SpecificPacketPair incomingPacket;
                             incomingPacket.sessionId = sessionSearch->m_session.m_sessionId;
                             incomingPacket.packet = receievedPacket;
-                            m_incomingPackets.push_back(incomingPacket);
+                            //m_incomingPackets.push_back(incomingPacket);
                         }
                     }
                     
@@ -181,21 +184,6 @@ void IcyServer::startConnectionSustainingLoop() {
                     packetsToReceive = false;
                     break;
                 }
-            }
-        }
-        
-        // Send global outgoing packets
-        {
-            IcyPacket** outgoingPacketPtr = m_outgoingGlobalPackets.pop_front();
-            while(outgoingPacketPtr != nullptr) {
-                IcyPacket* outgoingPacket = *outgoingPacketPtr;
-                
-                for(std::list<Session*>::iterator it = m_sessions.begin(); it != m_sessions.end(); ++ it) {
-                    Session* session = *it;
-                    session->m_outgoingPackets.push_back(outgoingPacket);
-                }
-                
-                outgoingPacketPtr = m_outgoingGlobalPackets.pop_front();
             }
         }
         
@@ -233,6 +221,21 @@ void IcyServer::startConnectionSustainingLoop() {
                 }
                 
                 ++ it;
+            }
+        }
+        
+        // Send global outgoing packets
+        {
+            IcyPacket** outgoingPacketPtr = m_outgoingGlobalPackets.pop_front();
+            while(outgoingPacketPtr != nullptr) {
+                IcyPacket* outgoingPacket = *outgoingPacketPtr;
+                
+                for(std::list<Session*>::iterator it = m_sessions.begin(); it != m_sessions.end(); ++ it) {
+                    Session* session = *it;
+                    session->m_outgoingPackets.push_back(outgoingPacket);
+                }
+                
+                outgoingPacketPtr = m_outgoingGlobalPackets.pop_front();
             }
         }
         
@@ -295,9 +298,9 @@ void IcyServer::startConnectionSustainingLoop() {
                         #endif
                         IcyPacket* outgoingPacket = *outgoingPacketPtr;
                         session->m_session.sendOutgoing(outgoingPacket); // This is called appropriately
+                        session->m_heartbeatTimer.restart();
                         
                         outgoingPacketPtr = session->m_outgoingPackets.pop_front();
-                        session->m_heartbeatTimer.restart();
                     }
                     
                     // If we have not sent this client any packets within a certain time, send a dummy (heartbeat) packet to keep the connection alive

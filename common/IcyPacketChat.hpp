@@ -14,7 +14,7 @@ public:
 
     IcyPacketChat();
     IcyPacketChat(std::string m_message);
-    ~IcyPacketChat();
+    virtual ~IcyPacketChat();
     
     virtual ProtocolId getId() const;
     virtual bool isContinuous() const;
