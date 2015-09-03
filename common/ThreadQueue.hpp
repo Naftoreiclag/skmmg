@@ -1,20 +1,20 @@
 #ifndef THREADQUEUE_H
 #define THREADQUEUE_H
 
-#include <list>
+#include <queue>
 #include <mutex>
 
 namespace skm {
 
     template <typename T> class ThreadQueue {
     private:
-        std::list<T> data;
+        std::queue<T> data;
         std::mutex mutex;
     public:
 
         void push_back(T item) {
             std::lock_guard<std::mutex> lock(mutex);
-            data.push_back(item);
+            data.push(item);
         }
         
         void clear() {
@@ -24,8 +24,7 @@ namespace skm {
 
         std::size_t size() {
             std::lock_guard<std::mutex> lock(mutex);
-            std::size_t size = data.size();
-            return size;
+            return data.size();
         }
 
         T* pop_front() {
@@ -34,7 +33,7 @@ namespace skm {
 
             if(data.size() > 0) {
                 ptr = &data.front();
-                data.pop_front();
+                data.pop();
             }
             else {
                 ptr = nullptr;
@@ -46,7 +45,7 @@ namespace skm {
 
         ThreadQueue() {
         }
-        virtual ~ThreadQueue() {
+        ~ThreadQueue() {
         }
     };
 
