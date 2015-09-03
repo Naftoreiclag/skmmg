@@ -226,26 +226,27 @@ void IcyServer::startConnectionSustainingLoop() {
         
         // Send global outgoing packets
         {
-            IcyPacket** outgoingPacketPtr = m_outgoingGlobalPackets.pop_front();
-            while(outgoingPacketPtr != nullptr) {
-                IcyPacket* outgoingPacket = *outgoingPacketPtr;
+            IcyPacket* outgoingPacket;
+            bool isOutgoingPacket = m_outgoingGlobalPackets.pop_front(outgoingPacket);
+            while(isOutgoingPacket) {
                 
                 for(std::list<Session*>::iterator it = m_sessions.begin(); it != m_sessions.end(); ++ it) {
                     Session* session = *it;
                     session->m_outgoingPackets.push_back(outgoingPacket);
                 }
                 
-                outgoingPacketPtr = m_outgoingGlobalPackets.pop_front();
+                isOutgoingPacket = m_outgoingGlobalPackets.pop_front(outgoingPacket);
             }
         }
         
         // Send client-specific outgoing packets
         {
             // Iterate through all addressed packets
-            SpecificPacketPair* pairPtr = m_outgoingPackets.pop_front();
-            while(pairPtr != nullptr) {
-                IcyProtocol::SessionId sessionId = pairPtr->sessionId;
-                IcyPacket* outgoingPacket = pairPtr->packet;
+            SpecificPacketPair pairPtr;
+            bool isOutgoing = m_outgoingPackets.pop_front(pairPtr);
+            while(isOutgoing) {
+                IcyProtocol::SessionId sessionId = pairPtr.sessionId;
+                IcyPacket* outgoingPacket = pairPtr.packet;
                 
                 //TODO optimize with a map
                 for(std::list<Session*>::iterator it = m_sessions.begin(); it != m_sessions.end(); ++ it) {
@@ -257,7 +258,7 @@ void IcyServer::startConnectionSustainingLoop() {
                     }
                 }
                 
-                pairPtr = m_outgoingPackets.pop_front();
+                isOutgoing = m_outgoingPackets.pop_front(pairPtr);
             }
             
             // Iterate through all connected sessions
@@ -291,16 +292,16 @@ void IcyServer::startConnectionSustainingLoop() {
                 // Session has been verified; treat as normal...
                 else {
                     // Manage outgoing packets specific to this session
-                    IcyPacket** outgoingPacketPtr = session->m_outgoingPackets.pop_front();
-                    while(outgoingPacketPtr != nullptr) {
+                    IcyPacket* outgoingPacket;
+                    bool isOutgoingPacket = session->m_outgoingPackets.pop_front(outgoingPacket);
+                    while(isOutgoingPacket) {
                         #ifndef NICYDEBUG
                         std::cout << "Sending packet to client " << session->m_session.m_sessionId << std::endl;
                         #endif
-                        IcyPacket* outgoingPacket = *outgoingPacketPtr;
                         session->m_session.sendOutgoing(outgoingPacket); // This is called appropriately
                         session->m_heartbeatTimer.restart();
                         
-                        outgoingPacketPtr = session->m_outgoingPackets.pop_front();
+                        isOutgoingPacket = session->m_outgoingPackets.pop_front(outgoingPacket);
                     }
                     
                     // If we have not sent this client any packets within a certain time, send a dummy (heartbeat) packet to keep the connection alive

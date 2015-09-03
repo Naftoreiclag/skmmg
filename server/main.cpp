@@ -18,20 +18,21 @@ int main(int argc, char **argv) {
     sf::Clock clock;
     sf::Time time = sf::seconds(0.5f);
     while(true) {
-        IcyServer::SpecificPacketPair* data = server.m_incomingPackets.pop_front();
-        while(data != nullptr) {
+        IcyServer::SpecificPacketPair data;
+        bool isData = server.m_incomingPackets.pop_front(data);
+        while(isData) {
             
-            if(data->packet->getId() == IcyPacket::s_protocol_chat) {
+            if(data.packet->getId() == IcyPacket::s_protocol_chat) {
                 std::cout << "Chat packet" << std::endl;
-                IcyPacketChat* chatPack = (IcyPacketChat*) data->packet;
+                IcyPacketChat* chatPack = (IcyPacketChat*) data.packet;
                 
-                std::cout << data->sessionId << ":" << chatPack->m_message << std::endl;
+                std::cout << data.sessionId << ":" << chatPack->m_message << std::endl;
                 
                 //server.m_outgoingGlobalPackets.push_back(new IcyPacketChat(chatPack->m_message));
             }
             
-            delete data->packet;
-            data = server.m_incomingPackets.pop_front();
+            delete data.packet;
+            isData = server.m_incomingPackets.pop_front(data);
         }
         //sf::sleep(time);
     }

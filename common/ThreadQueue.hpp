@@ -27,19 +27,17 @@ namespace skm {
             return data.size();
         }
 
-        T* pop_front() {
+        bool pop_front(T& popped) {
             std::lock_guard<std::mutex> lock(mutex);
-            T* ptr;
 
             if(data.size() > 0) {
-                ptr = &data.front();
+                popped = data.front();
                 data.pop();
+                return true;
             }
             else {
-                ptr = nullptr;
+                return false;
             }
-            
-            return ptr;
         }
         
 
