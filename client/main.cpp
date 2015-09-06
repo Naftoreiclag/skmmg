@@ -3,11 +3,11 @@
 
 #include "SFML/Network.hpp"
 
-#include "irrlicht.h"
-
 #include "IcyClient.hpp"
 #include "IcySession.hpp"
 #include "IcyPacketChat.hpp"
+
+#include "irrlicht.h"
 
 using namespace skm;
 
