@@ -63,11 +63,14 @@
         <IncludePath Value="."/>
         <IncludePath Value="../common"/>
         <IncludePath Value="../library/SFML-2.3.1/include"/>
+        <IncludePath Value="../library/irrlicht-1.8.2/include"/>
       </Compiler>
       <Linker Options="" Required="yes">
         <LibraryPath Value="../library/SFML-2.3.1/lib"/>
+        <LibraryPath Value="../library/irrlicht-1.8.2/lib/Win32-gcc"/>
         <Library Value="sfml-system"/>
         <Library Value="sfml-network"/>
+        <Library Value="libIrrlicht.a"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
