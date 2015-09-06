@@ -17,9 +17,11 @@ class IcySession
 {
 public:
     struct Status {
-        bool serverContacted = false;
-        bool sessionVerified = false;
-        bool connected = false;
+        Status();
+        
+        bool serverContacted;
+        bool sessionVerified;
+        bool connected;
     };
     
 public:

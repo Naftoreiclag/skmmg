@@ -12,6 +12,12 @@ namespace skm
 IcySession::IcySession() {}
 IcySession::~IcySession() {}
 
+IcySession::Status::Status() {
+    serverContacted = false;
+    sessionVerified = false;
+    connected = false;
+};
+
 IcyPacket* IcySession::processRawIncoming(sf::Packet& packet) {
     // Update remote sequence number and ack field
     {

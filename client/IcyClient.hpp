@@ -14,9 +14,11 @@ namespace skm {
 class IcyClient {
 public:
     struct SessionStatus {
-        bool serverContacted = false;
-        bool sessionVerified = false;
-        bool connected = false;
+        SessionStatus();
+        
+        bool serverContacted;
+        bool sessionVerified;
+        bool connected;
         
         IcyProtocol::SessionId sessionId;
     };

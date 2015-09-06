@@ -3,25 +3,49 @@
 
 #include "SFML/Network.hpp"
 
+#include "irrlicht.h"
+
 #include "IcyClient.hpp"
 #include "IcySession.hpp"
 #include "IcyPacketChat.hpp"
+
 
 using namespace skm;
 
 int main(int argc, char **argv) {
     std::cout << "Client." << std::endl;
     
-    IcyClient client;
+    irr::core::vector2df test;
+    test.X = 9.f;
+    test.Y = 9.f;
+    test.normalize();
+    
+    std::cout << "Performing normalization test..." << std::endl;
+    std::cout << test.X << test.Y << std::endl;
+    
     
     sf::IpAddress serverAddress = sf::IpAddress::LocalHost;
     IcyProtocol::Port serverPort = 25564;
+    std::cout << "Server info:" << serverAddress << std::endl;
     
     std::cout << "Starting connection to server..." << std::endl;
+    
+    IcyClient client;
     client.initializeConnection(serverAddress, serverPort);
-    IcyClient::SessionStatus status = client.getStatus();
-    if(!status.connected) {
+    IcyClient::SessionStatus status;
+    std::cout << "status.connected = " << (status.connected ? "true" : "false") << std::endl;
+    status = client.getStatus();
+    bool isConnected = status.connected;
+    if(isConnected) {
+        std::cout << "true\n";
+    }
+    if(!isConnected) {
+        std::cout << "false\n";
+    }
+    std::cout << "status.connected = " << (status.connected ? "true" : "false") << std::endl;
+    if(!isConnected) {
         if(!status.serverContacted) {
+            std::cout << "what?" << std::endl;
             std::cout << "Could not contact server!" << std::endl;
             return 0;
         }
@@ -30,21 +54,32 @@ int main(int argc, char **argv) {
         std::cout << "Connected to server successfully." << std::endl;
         std::cout << "Session id is " << status.sessionId << std::endl;
     }
-    std::thread clientThread(&IcyClient::startConnectionSustainingLoop, &client);
-    //client.terminateConnection();
     
-    sf::Clock clock;
-    sf::Time time = sf::seconds(0.5f);
-    while(true) {
+    std::thread clientThread(&IcyClient::startConnectionSustainingLoop, &client);
+    
+    
+    /*
+    irr::SIrrlichtCreationParameters params;
+    params.DriverType = irr::video::EDT_OPENGL;
+    params.WindowSize = irr::core::dimension2d<irr::u32>(1280, 720);
+    params.Bits = 16;
+    params.Fullscreen = false;
+    params.Stencilbuffer = false;
+    params.Vsync = false;
+    params.EventReceiver = 0;
+    params.AntiAlias = 2; // "Multisampling"
+    irr::IrrlichtDevice* device = irr::createDeviceEx(params);
+    */
+    irr::IrrlichtDevice* device = irr::createDevice(irr::video::EDT_SOFTWARE, irr::core::dimension2d<irr::u32>(1280, 720), 16, false, false, false, 0);
+    
+    std::cout << "Created irrlicht device successfully!" << std::endl;
+    
+    while(device->run()) {
+        //client.m_outgoingPackets.push_back(new IcyPacketChat(message));
         
-        std::string message;
-        std::cin >> message;
-        
-        client.m_outgoingPackets.push_back(new IcyPacketChat(message));
-        
-        IcyPacket** dataptr = client.m_incomingPackets.pop_front();
-        while(dataptr != nullptr) {
-            IcyPacket* data = *dataptr;
+        IcyPacket* data;
+        bool dataPopped = client.m_incomingPackets.pop_front(data);
+        while(dataPopped) {
             
             if(data->getId() == IcyPacket::s_protocol_chat) {
                 IcyPacketChat* chatPack = (IcyPacketChat*) data;
@@ -53,7 +88,7 @@ int main(int argc, char **argv) {
             }
             
             delete data;
-            dataptr = client.m_incomingPackets.pop_front();
+            dataPopped = client.m_incomingPackets.pop_front(data);
         }
         
         IcyClient::SessionStatus status = client.getStatus();

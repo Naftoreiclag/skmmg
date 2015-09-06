@@ -1,11 +1,10 @@
 #include "IcyClient.hpp"
 
-#include "DebugAwareness.hpp"
-
 #ifndef NICYDEBUG
 #include <iostream>
 #endif
 
+#include "DebugAwareness.hpp"
 #include "IcyPacketHeartbeat.hpp"
 
 
@@ -182,6 +181,9 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
     m_session->m_status.sessionVerified = true;
     
     m_session->m_status.connected = true;
+    #ifndef NICYDEBUG
+    std::cout << "Successfully initiated connection. m_session->m_status.connected = true" << std::endl;
+    #endif
 }
 
 void IcyClient::startConnectionSustainingLoop() {
@@ -202,12 +204,12 @@ void IcyClient::startConnectionSustainingLoop() {
         }
         
         // Send outgoing packets
-        IcyPacket** outgoingPacketPtr = m_outgoingPackets.pop_front();
-        bool packetsSent = outgoingPacketPtr != nullptr;
-        while(outgoingPacketPtr != nullptr) {
-            IcyPacket* outgoingPacket = *outgoingPacketPtr;
+        IcyPacket* outgoingPacket;
+        bool outgoingPacketPopped = m_outgoingPackets.pop_front(outgoingPacket);
+        bool packetsSent = outgoingPacketPopped;
+        while(outgoingPacketPopped) {
             m_session->sendOutgoing(outgoingPacket);
-            outgoingPacketPtr = m_outgoingPackets.pop_front();
+            outgoingPacketPopped = m_outgoingPackets.pop_front(outgoingPacket);
         }
         if(packetsSent) {
             heartbeatTimer.restart();
@@ -272,16 +274,18 @@ void IcyClient::terminateConnection() {
     m_session->m_status.connected = false;
 }
 
+IcyClient::SessionStatus::SessionStatus() {
+    serverContacted = false;
+    sessionVerified = false;
+    connected = false;
+    sessionId = 0;
+}
+
 IcyClient::SessionStatus IcyClient::getStatus() {
     SessionStatus status;
-    if(m_session == nullptr) {
-        status.connected = false;
-        status.serverContacted = false;
-        status.sessionVerified = false;
-        status.sessionId = 0;
-    }
-    else {
-        status.connected = m_session->m_status.connected;
+    if(m_session != nullptr) {
+        status.connected = true;//m_session->m_status.connected;
+        std::cout << "m_session->m_status.connected = " << (status.connected ? "true" : "false") << std::endl;
         status.serverContacted = m_session->m_status.serverContacted;
         status.sessionVerified = m_session->m_status.sessionVerified;
         status.sessionId = m_session->m_sessionId;
