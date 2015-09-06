@@ -16,23 +16,11 @@ namespace skm
 class IcySession
 {
 public:
-    struct Status {
-        Status();
-        
-        bool serverContacted;
-        bool sessionVerified;
-        bool connected;
-    };
-    
-public:
     IcyProtocol::SessionId m_sessionId;
     sf::UdpSocket* m_socket;
     
     sf::IpAddress m_serverAddress;
     IcyProtocol::Port m_serverPort;
-    
-    Status m_status;
-    std::mutex m_status_mutex;
     
     IcyProtocol::SequenceNumber m_localSequence;
     IcyProtocol::SequenceNumber m_ack;

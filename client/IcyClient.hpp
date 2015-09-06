@@ -25,7 +25,11 @@ public:
 private:
     sf::UdpSocket m_socket;
     
+    std::mutex m_status_mutex;
+    SessionStatus m_status;
     IcySession* m_session;
+    
+    bool m_connected;
 public:
     IcyClient();
     ~IcyClient();
@@ -46,6 +50,7 @@ public:
     void terminateConnection();
     
     SessionStatus getStatus();
+    bool isConnected();
     
 };
 

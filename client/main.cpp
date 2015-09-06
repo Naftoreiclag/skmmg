@@ -9,19 +9,10 @@
 #include "IcySession.hpp"
 #include "IcyPacketChat.hpp"
 
-
 using namespace skm;
 
 int main(int argc, char **argv) {
     std::cout << "Client." << std::endl;
-    
-    irr::core::vector2df test;
-    test.X = 9.f;
-    test.Y = 9.f;
-    test.normalize();
-    
-    std::cout << "Performing normalization test..." << std::endl;
-    std::cout << test.X << test.Y << std::endl;
     
     
     sf::IpAddress serverAddress = sf::IpAddress::LocalHost;
@@ -32,25 +23,12 @@ int main(int argc, char **argv) {
     
     IcyClient client;
     client.initializeConnection(serverAddress, serverPort);
-    IcyClient::SessionStatus status;
-    std::cout << "status.connected = " << (status.connected ? "true" : "false") << std::endl;
-    status = client.getStatus();
-    bool isConnected = status.connected;
-    if(isConnected) {
-        std::cout << "true\n";
-    }
+    bool isConnected = client.isConnected();
     if(!isConnected) {
-        std::cout << "false\n";
-    }
-    std::cout << "status.connected = " << (status.connected ? "true" : "false") << std::endl;
-    if(!isConnected) {
-        if(!status.serverContacted) {
-            std::cout << "what?" << std::endl;
-            std::cout << "Could not contact server!" << std::endl;
-            return 0;
-        }
+        std::cout << "Connection failed." << std::endl;
     }
     else {
+        IcyClient::SessionStatus status = client.getStatus();
         std::cout << "Connected to server successfully." << std::endl;
         std::cout << "Session id is " << status.sessionId << std::endl;
     }
@@ -70,11 +48,11 @@ int main(int argc, char **argv) {
     params.AntiAlias = 2; // "Multisampling"
     irr::IrrlichtDevice* device = irr::createDeviceEx(params);
     */
-    irr::IrrlichtDevice* device = irr::createDevice(irr::video::EDT_SOFTWARE, irr::core::dimension2d<irr::u32>(1280, 720), 16, false, false, false, 0);
+    //irr::IrrlichtDevice* device = irr::createDevice(irr::video::EDT_SOFTWARE, irr::core::dimension2d<irr::u32>(1280, 720), 16, false, false, false, 0);
     
     std::cout << "Created irrlicht device successfully!" << std::endl;
     
-    while(device->run()) {
+    while(true) {
         //client.m_outgoingPackets.push_back(new IcyPacketChat(message));
         
         IcyPacket* data;

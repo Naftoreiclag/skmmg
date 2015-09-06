@@ -100,7 +100,8 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
         return;
     }
     
-    m_session->m_status.serverContacted = true;
+    
+    m_status.serverContacted = true;
     
     m_session->m_localSequence = 0;
     m_session->m_ack = 0;
@@ -178,15 +179,18 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
         return;
     }
     
-    m_session->m_status.sessionVerified = true;
+    m_status.sessionVerified = true;
     
-    m_session->m_status.connected = true;
+    m_status.connected = true;
     #ifndef NICYDEBUG
-    std::cout << "Successfully initiated connection. m_session->m_status.connected = true" << std::endl;
+    std::cout << "Successfully initiated connection." << std::endl;
     #endif
 }
 
 void IcyClient::startConnectionSustainingLoop() {
+    #ifndef NICYDEBUG
+    std::cout << "Connection-sustaining loop began." << std::endl;
+    #endif
     
     // Keep track of the time since we last sent any data
     sf::Clock heartbeatTimer;
@@ -194,8 +198,13 @@ void IcyClient::startConnectionSustainingLoop() {
     // Reset the server timeout, duh
     sf::Clock serverTimeout;
     
+    m_connected = false;
     // As long as we are connected
-    while(m_session->m_status.connected) {
+    {
+        std::lock_guard<std::mutex> lock(m_status_mutex);
+        m_connected = m_status.connected;
+    }
+    while(m_connected) {
         
         // Send heartbeats
         if(heartbeatTimer.getElapsedTime().asMilliseconds() > IcyProtocol::s_heartbeatDelayMs) {
@@ -271,7 +280,7 @@ void IcyClient::startConnectionSustainingLoop() {
 }
 
 void IcyClient::terminateConnection() {
-    m_session->m_status.connected = false;
+    m_status.connected = false;
 }
 
 IcyClient::SessionStatus::SessionStatus() {
@@ -282,15 +291,13 @@ IcyClient::SessionStatus::SessionStatus() {
 }
 
 IcyClient::SessionStatus IcyClient::getStatus() {
-    SessionStatus status;
-    if(m_session != nullptr) {
-        status.connected = true;//m_session->m_status.connected;
-        std::cout << "m_session->m_status.connected = " << (status.connected ? "true" : "false") << std::endl;
-        status.serverContacted = m_session->m_status.serverContacted;
-        status.sessionVerified = m_session->m_status.sessionVerified;
-        status.sessionId = m_session->m_sessionId;
-    }
-    return status;
+    std::lock_guard<std::mutex> lock(m_status_mutex);
+    return m_status;
+}
+
+bool IcyClient::isConnected() {
+    SessionStatus status = getStatus();
+    return status.connected;
 }
     
 }
