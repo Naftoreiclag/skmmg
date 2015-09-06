@@ -23,12 +23,14 @@ int main(int argc, char **argv) {
     
     IcyClient client;
     client.initializeConnection(serverAddress, serverPort);
-    bool isConnected = client.isConnected();
-    if(!isConnected) {
-        std::cout << "Connection failed." << std::endl;
+    IcyClient::SessionStatus status = client.getStatus();
+    if(!status.connected) {
+        if(!status.serverContacted) {
+            std::cout << "Could not contact server!" << std::endl;
+            return 0;
+        }
     }
     else {
-        IcyClient::SessionStatus status = client.getStatus();
         std::cout << "Connected to server successfully." << std::endl;
         std::cout << "Session id is " << status.sessionId << std::endl;
     }
