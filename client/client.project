@@ -65,15 +65,28 @@
       <ResourceCompiler Options=""/>
     </GlobalSettings>
     <Configuration Name="Debug" CompilerType="MinGW ( gcc.exe (x86_64-posix-seh-rev0, Built by MinGW-W64 project) 5.1.0 )" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
-      <Compiler Options="-g;-O0;-Wall;-std=c++11" C_Options="-g;-O0;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+      <Compiler Options="-g;-O0;-Wall;-std=c++11;-mthreads;-fmessage-length=0;-fexceptions;-fident" C_Options="-g;-O0;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
         <IncludePath Value="."/>
         <IncludePath Value="../common"/>
         <IncludePath Value="../library/mingw-w64/SFML-2.3.1/include"/>
+        <IncludePath Value="$(OGRE_HOME)/include"/>
+        <IncludePath Value="$(OGRE_HOME)/include/OGRE"/>
+        <IncludePath Value="$(BOOST_HOME)"/>
+        <Preprocessor Value="_DEBUG"/>
+        <Preprocessor Value="WIN32"/>
+        <Preprocessor Value="_WINDOWS"/>
       </Compiler>
-      <Linker Options="" Required="yes">
+      <Linker Options="-Wl,--enable-auto-image-base;-Wl,--add-stdcall-alias;-Wl,--enable-auto-import" Required="yes">
         <LibraryPath Value="../library/mingw-w64/SFML-2.3.1/lib/Debug"/>
+        <LibraryPath Value="$(OGRE_HOME)/bin/Debug"/>
+        <LibraryPath Value="$(BOOST_HOME)/lib"/>
         <Library Value="sfml-system-d"/>
         <Library Value="sfml-network-d"/>
+        <Library Value="OgreMain_d"/>
+        <Library Value="boost_date_time-mgw51-sd-1_59"/>
+        <Library Value="boost_thread-mgw51-mt-sd-1_59"/>
+        <Library Value="boost_system-mgw51-mt-sd-1_59"/>
+        <Library Value="boost_chrono-mgw51-sd-1_59"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
@@ -91,8 +104,12 @@
         <Command Enabled="yes">cp ../README.md $(IntermediateDirectory)</Command>
         <Command Enabled="yes"/>
         <Command Enabled="no"># SFML</Command>
-        <Command Enabled="yes">cp ../library/mingw-w64/SFML-2.3.1/bin/Debug/*.dll $(IntermediateDirectory)</Command>
+        <Command Enabled="yes">cp ../library/mingw-w64/SFML-2.3.1/bin/Release/*.dll $(IntermediateDirectory)</Command>
         <Command Enabled="yes">cp ../library/mingw-w64/SFML-2.3.1/sfml-license.txt $(IntermediateDirectory)</Command>
+        <Command Enabled="yes"/>
+        <Command Enabled="no"># OGRE</Command>
+        <Command Enabled="yes">cp $(OGRE_HOME)/bin/Debug/*.dll $(IntermediateDirectory)</Command>
+        <Command Enabled="yes">cp ogre-config/Debug/*.cfg $(IntermediateDirectory)</Command>
       </PostBuild>
       <CustomBuild Enabled="no">
         <RebuildCommand/>
@@ -116,16 +133,28 @@
       </Completion>
     </Configuration>
     <Configuration Name="Release" CompilerType="MinGW ( TDM-GCC-32 )" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
-      <Compiler Options="-O2;-Wall;-std=c++11" C_Options="-O2;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+      <Compiler Options="-O2;-Wall;-std=c++11;-mthreads;-fmessage-length=0;-fexceptions;-fident" C_Options="-O2;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
         <IncludePath Value="."/>
         <IncludePath Value="../common"/>
         <IncludePath Value="../library/mingw-w64/SFML-2.3.1/include"/>
+        <IncludePath Value="$(OGRE_HOME)/include"/>
+        <IncludePath Value="$(OGRE_HOME)/include/OGRE"/>
+        <IncludePath Value="$(BOOST_HOME)"/>
         <Preprocessor Value="NDEBUG"/>
+        <Preprocessor Value="WIN32"/>
+        <Preprocessor Value="_WINDOWS"/>
       </Compiler>
-      <Linker Options="" Required="yes">
+      <Linker Options="-Wl,--enable-auto-image-base;-Wl,--add-stdcall-alias;-Wl,--enable-auto-import" Required="yes">
         <LibraryPath Value="../library/mingw-w64/SFML-2.3.1/lib/Release"/>
+        <LibraryPath Value="$(OGRE_HOME)/bin/RelWithDebInfo"/>
+        <LibraryPath Value="$(BOOST_HOME)/lib"/>
         <Library Value="sfml-system"/>
         <Library Value="sfml-network"/>
+        <Library Value="OgreMain"/>
+        <Library Value="boost_date_time-mgw51-s-1_59"/>
+        <Library Value="boost_thread-mgw51-mt-s-1_59"/>
+        <Library Value="boost_system-mgw51-mt-s-1_59"/>
+        <Library Value="boost_chrono-mgw51-s-1_59"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Release" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
@@ -145,6 +174,11 @@
         <Command Enabled="no"># SFML</Command>
         <Command Enabled="yes">cp ../library/mingw-w64/SFML-2.3.1/bin/Release/*.dll $(IntermediateDirectory)</Command>
         <Command Enabled="yes">cp ../library/mingw-w64/SFML-2.3.1/sfml-license.txt $(IntermediateDirectory)</Command>
+        <Command Enabled="yes"/>
+        <Command Enabled="no"># OGRE</Command>
+        <Command Enabled="yes">cp $(OGRE_HOME)/bin/RelWithDebInfo/*.dll $(IntermediateDirectory)</Command>
+        <Command Enabled="yes">cp ogre-config/Release/*.cfg $(IntermediateDirectory)</Command>
+        <Command Enabled="yes"/>
       </PostBuild>
       <CustomBuild Enabled="no">
         <RebuildCommand/>
