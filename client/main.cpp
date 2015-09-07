@@ -12,7 +12,6 @@ using namespace skm;
 int main(int argc, char **argv) {
     std::cout << "Client." << std::endl;
     
-    
     sf::IpAddress serverAddress = sf::IpAddress::LocalHost;
     IcyProtocol::Port serverPort = 25564;
     std::cout << "Server info:" << serverAddress << std::endl;
