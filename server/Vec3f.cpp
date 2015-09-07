@@ -26,8 +26,8 @@ Vec3f::~Vec3f() {
 }
     
 // For debugging
-std::ostream& Vec3f::operator<<(std::ostream& os) {
-    os << "Vec3[" << x << ", " << y << ", " << z << "]" << std::endl;
+std::ostream& operator<<(std::ostream& os, const Vec3f& v) {
+    os << "Vec3[" << v.x << ", " << v.y << ", " << v.z << "]";
     
     return os;
 }
@@ -41,20 +41,44 @@ bool Vec3f::operator==(const Vec3f& v1) {
 Vec3f Vec3f::operator*(float s) {
     return Vec3f(x * s, y * s, z * s);
 }
+Vec3f& Vec3f::operator*=(float s) {
+    x *= s;
+    y *= s;
+    z *= s;
+    return *this;
+}
 
 // Inverse scaling
 Vec3f Vec3f::operator/(float s) {
     return Vec3f(x / s, y / s, z / s);
+}
+Vec3f& Vec3f::operator/=(float s) {
+    x /= s;
+    y /= s;
+    z /= s;
+    return *this;
 }
 
 // Addition
 Vec3f Vec3f::operator+(const Vec3f& v) {
     return Vec3f(x + v.x, y + v.y, z + v.z);
 }
+Vec3f& Vec3f::operator+=(const Vec3f& v) {
+    x *= v.x;
+    y *= v.y;
+    z *= v.z;
+    return *this;
+}
 
 // Subtraction
 Vec3f Vec3f::operator-(const Vec3f& v) {
     return Vec3f(x - v.x, y - v.y, z - v.z);
+}
+Vec3f& Vec3f::operator-=(const Vec3f& v) {
+    x *= v.x;
+    y *= v.y;
+    z *= v.z;
+    return *this;
 }
 
 // Dot product
