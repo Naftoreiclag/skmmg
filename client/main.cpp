@@ -7,8 +7,6 @@
 #include "IcySession.hpp"
 #include "IcyPacketChat.hpp"
 
-#include "irrlicht.h"
-
 using namespace skm;
 
 int main(int argc, char **argv) {
@@ -36,23 +34,6 @@ int main(int argc, char **argv) {
     }
     
     std::thread clientThread(&IcyClient::startConnectionSustainingLoop, &client);
-    
-    
-    /*
-    irr::SIrrlichtCreationParameters params;
-    params.DriverType = irr::video::EDT_OPENGL;
-    params.WindowSize = irr::core::dimension2d<irr::u32>(1280, 720);
-    params.Bits = 16;
-    params.Fullscreen = false;
-    params.Stencilbuffer = false;
-    params.Vsync = false;
-    params.EventReceiver = 0;
-    params.AntiAlias = 2; // "Multisampling"
-    irr::IrrlichtDevice* device = irr::createDeviceEx(params);
-    */
-    //irr::IrrlichtDevice* device = irr::createDevice(irr::video::EDT_SOFTWARE, irr::core::dimension2d<irr::u32>(1280, 720), 16, false, false, false, 0);
-    
-    std::cout << "Created irrlicht device successfully!" << std::endl;
     
     while(true) {
         //client.m_outgoingPackets.push_back(new IcyPacketChat(message));

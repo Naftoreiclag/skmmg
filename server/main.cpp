@@ -5,11 +5,14 @@
 #include "IcyServer.hpp"
 #include "IcyPacketChat.hpp"
 
+#include "World.hpp"
+
 using namespace skm;
 
 int main(int argc, char **argv) {
-	
-    std::cout << "Server." << std::endl;
+    std::cout << "SKMMG Server" << std::endl;
+    
+    World world;
     
     IcyServer server;
     server.initialize(25564);

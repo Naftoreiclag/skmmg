@@ -30,12 +30,27 @@
   <Dependencies/>
   <VirtualDirectory Name="src">
     <File Name="main.cpp"/>
-    <File Name="IcyServer.cpp"/>
-    <File Name="IcyServer.hpp"/>
-    <File Name="DebugAwareness.hpp"/>
+    <VirtualDirectory Name="arithmetic">
+      <File Name="Vec3f.cpp"/>
+      <File Name="Vec3f.hpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="networking">
+      <File Name="IcyServer.cpp"/>
+      <File Name="IcyServer.hpp"/>
+      <File Name="ServerMessage.hpp"/>
+      <File Name="ServerMessage.cpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="debugging">
+      <File Name="DebugAwareness.hpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="mundane">
+      <File Name="Entity.cpp"/>
+      <File Name="Entity.hpp"/>
+      <File Name="World.cpp"/>
+      <File Name="World.hpp"/>
+    </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="src-common">
-    <File Name="../common/ThreadQueue.hpp"/>
     <VirtualDirectory Name="networking">
       <File Name="../common/IcyPacket.cpp"/>
       <File Name="../common/IcyPacket.hpp"/>
@@ -46,6 +61,9 @@
       <File Name="../common/IcyProtocol.hpp"/>
       <File Name="../common/IcySession.cpp"/>
       <File Name="../common/IcySession.hpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="threading">
+      <File Name="../common/ThreadQueue.hpp"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Settings Type="Executable">
@@ -62,12 +80,12 @@
       <Compiler Options="-g;-O0;-Wall;-std=c++11" C_Options="-g;-O0;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
         <IncludePath Value="."/>
         <IncludePath Value="../common"/>
-        <IncludePath Value="../library/SFML-2.3.1/include"/>
+        <IncludePath Value="../library/mingw-w64/SFML-2.3.1/include"/>
       </Compiler>
       <Linker Options="" Required="yes">
-        <LibraryPath Value="../library/SFML-2.3.1/lib"/>
-        <Library Value="sfml-system"/>
-        <Library Value="sfml-network"/>
+        <LibraryPath Value="../library/mingw-w64/SFML-2.3.1/lib/Debug"/>
+        <Library Value="sfml-system-d"/>
+        <Library Value="sfml-network-d"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
@@ -80,7 +98,14 @@
         <StartupCommands/>
       </Debugger>
       <PreBuild/>
-      <PostBuild/>
+      <PostBuild>
+        <Command Enabled="no"># README</Command>
+        <Command Enabled="yes">cp ../README.md $(IntermediateDirectory)</Command>
+        <Command Enabled="yes"/>
+        <Command Enabled="no"># SFML</Command>
+        <Command Enabled="yes">cp ../library/mingw-w64/SFML-2.3.1/bin/Debug/*.dll $(IntermediateDirectory)</Command>
+        <Command Enabled="yes">cp ../library/mingw-w64/SFML-2.3.1/sfml-license.txt $(IntermediateDirectory)</Command>
+      </PostBuild>
       <CustomBuild Enabled="no">
         <RebuildCommand/>
         <CleanCommand/>
@@ -102,15 +127,15 @@
         <SearchPaths/>
       </Completion>
     </Configuration>
-    <Configuration Name="Release" CompilerType="MinGW ( TDM-GCC-32 )" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+    <Configuration Name="Release" CompilerType="MinGW ( gcc.exe (x86_64-posix-seh-rev0, Built by MinGW-W64 project) 5.1.0 )" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
       <Compiler Options="-O2;-Wall;-std=c++11" C_Options="-O2;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
         <IncludePath Value="."/>
         <IncludePath Value="../common"/>
-        <IncludePath Value="../library/SFML-2.3.1/include"/>
+        <IncludePath Value="../library/mingw-w64/SFML-2.3.1/include"/>
         <Preprocessor Value="NDEBUG"/>
       </Compiler>
       <Linker Options="" Required="yes">
-        <LibraryPath Value="../library/SFML-2.3.1/lib"/>
+        <LibraryPath Value="../library/mingw-w64/SFML-2.3.1/lib/Release"/>
         <Library Value="sfml-system"/>
         <Library Value="sfml-network"/>
       </Linker>
@@ -125,7 +150,15 @@
         <StartupCommands/>
       </Debugger>
       <PreBuild/>
-      <PostBuild/>
+      <PostBuild>
+        <Command Enabled="no"># README</Command>
+        <Command Enabled="yes">cp ../README.md $(IntermediateDirectory)</Command>
+        <Command Enabled="yes"/>
+        <Command Enabled="no"># SFML</Command>
+        <Command Enabled="yes">cp ../library/mingw-w64/SFML-2.3.1/bin/Release/*.dll $(IntermediateDirectory)</Command>
+        <Command Enabled="yes">cp ../library/mingw-w64/SFML-2.3.1/sfml-license.txt $(IntermediateDirectory)</Command>
+        <Command Enabled="yes"/>
+      </PostBuild>
       <CustomBuild Enabled="no">
         <RebuildCommand/>
         <CleanCommand/>
