@@ -33,8 +33,6 @@
     <VirtualDirectory Name="networking">
       <File Name="IcyServer.cpp"/>
       <File Name="IcyServer.hpp"/>
-      <File Name="ServerMsg.cpp"/>
-      <File Name="ServerMsg.hpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="debugging">
       <File Name="DebugAwareness.hpp"/>

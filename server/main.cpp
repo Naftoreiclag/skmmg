@@ -4,7 +4,6 @@
 #include "SFML/Network.hpp"
 #include "IcyServer.hpp"
 #include "IcyPacketChat.hpp"
-#include "ServerMsg.hpp"
 
 #include "World.hpp"
 
@@ -23,18 +22,16 @@ int main(int argc, char **argv) {
     sf::Time time = sf::seconds(0.5f);
     while(true) {
         
-        ServerMsg msg;
+        IcyServer::Message msg;
         bool isMsg = server.m_notifications.pop_front(msg);
         while(isMsg) {
             switch(msg.m_type) {
-                case ServerMsg::Type::USER_JOIN: {
+                case IcyServer::Message::Type::USER_JOIN: {
                     std::cout << "User " << msg.m_session << " joined!" << std::endl;
-                    
                     break;
                 }
-                case ServerMsg::Type::USER_LEAVE: {
+                case IcyServer::Message::Type::USER_LEAVE: {
                     std::cout << "User " << msg.m_session << " left!" << std::endl;
-                    
                     break;
                 }
                 default: {

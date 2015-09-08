@@ -9,10 +9,21 @@
 #include "IcyPacketHeartbeat.hpp"
 
 namespace skm {
-        
+    
+IcyServer::Message::Message() {
+}
+    
+IcyServer::Message::Message(Type type, IcyProtocol::SessionId session)
+: m_type(type)
+, m_session(session) {}
+
+IcyServer::Message::~Message() {
+}
+
 
 IcyServer::Session::Session() {
 }
+
 IcyServer::Session::~Session() {
 }
     
@@ -132,7 +143,7 @@ void IcyServer::startConnectionSustainingLoop() {
                                 
                                 // Connection now verified
                                 sessionSearch->m_verifiedId = true;
-                                m_notifications.push_back(ServerMsg(ServerMsg::Type::USER_JOIN, sessionSearch->m_session.m_sessionId));
+                                m_notifications.push_back(Message(Message::Type::USER_JOIN, sessionSearch->m_session.m_sessionId));
                                 
                                 sessionSearch->m_clientTimeout.restart();
                                 sessionSearch->m_heartbeatTimer.restart();
@@ -202,7 +213,7 @@ void IcyServer::startConnectionSustainingLoop() {
                         
                         // Remove this client from the session list
                         it = m_sessions.erase(it);
-                        m_notifications.push_back(ServerMsg(ServerMsg::Type::USER_LEAVE, session->m_session.m_sessionId));
+                        m_notifications.push_back(Message(Message::Type::USER_LEAVE, session->m_session.m_sessionId));
                         delete session;
                         continue;
                     }
@@ -219,7 +230,7 @@ void IcyServer::startConnectionSustainingLoop() {
                     
                     // Remove this client from the session list
                     it = m_sessions.erase(it);
-                    m_notifications.push_back(ServerMsg(ServerMsg::Type::USER_LEAVE, session->m_session.m_sessionId));
+                    m_notifications.push_back(Message(Message::Type::USER_LEAVE, session->m_session.m_sessionId));
                     delete session;
                     continue;
                 }

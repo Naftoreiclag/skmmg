@@ -10,12 +10,27 @@
 #include "IcyPacket.hpp"
 #include "ThreadQueue.hpp"
 #include "IcySession.hpp"
-#include "ServerMsg.hpp"
 
 namespace skm {
-
+    
 class IcyServer {
 public:
+    class Message {
+    public:
+        enum Type {
+            USER_JOIN,
+            USER_LEAVE
+        };
+    public:
+        Message();
+        Message(Type type, IcyProtocol::SessionId session);
+        ~Message();
+        
+        Type m_type;
+        
+        IcyProtocol::SessionId m_session;
+    };
+
     class Session {
     public:
         Session();
@@ -64,7 +79,7 @@ public:
     ThreadQueue<SpecificPacketPair> m_outgoingPackets;
     ThreadQueue<SpecificPacketPair> m_incomingPackets;
     
-    ThreadQueue<ServerMsg> m_notifications;
+    ThreadQueue<Message> m_notifications;
     
 private:
     IcyProtocol::SessionId nextAvailableSessionId();
