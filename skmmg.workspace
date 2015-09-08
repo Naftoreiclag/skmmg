@@ -3,11 +3,11 @@
   <Project Name="client" Path="client/client.project" Active="Yes"/>
   <Project Name="server" Path="server/server.project" Active="No"/>
   <BuildMatrix>
-    <WorkspaceConfiguration Name="Debug" Selected="no">
+    <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Project Name="client" ConfigName="Debug"/>
       <Project Name="server" ConfigName="Debug"/>
     </WorkspaceConfiguration>
-    <WorkspaceConfiguration Name="Release" Selected="yes">
+    <WorkspaceConfiguration Name="Release" Selected="no">
       <Project Name="client" ConfigName="Release"/>
       <Project Name="server" ConfigName="Release"/>
     </WorkspaceConfiguration>

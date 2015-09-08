@@ -82,6 +82,7 @@
         <LibraryPath Value="../library/mingw-w64/SFML-2.3.1/lib/Debug"/>
         <LibraryPath Value="$(OGRE_HOME)/bin/Debug"/>
         <LibraryPath Value="$(BOOST_HOME)/lib"/>
+        <Library Value="sfml-window-d"/>
         <Library Value="sfml-system-d"/>
         <Library Value="sfml-network-d"/>
         <Library Value="OgreMain_d"/>
@@ -150,6 +151,7 @@
         <LibraryPath Value="../library/mingw-w64/SFML-2.3.1/lib/Release"/>
         <LibraryPath Value="$(OGRE_HOME)/bin/RelWithDebInfo"/>
         <LibraryPath Value="$(BOOST_HOME)/lib"/>
+        <Library Value="sfml-window"/>
         <Library Value="sfml-system"/>
         <Library Value="sfml-network"/>
         <Library Value="OgreMain"/>

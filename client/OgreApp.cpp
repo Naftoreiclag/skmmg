@@ -6,6 +6,8 @@
 #include "OgreEntity.h"
 #include "OgreWindowEventUtilities.h"
 
+#include "SFML/Window.hpp"
+
 OgreApp::OgreApp()
 : m_ogreRoot(nullptr)
 , m_cam(nullptr)
@@ -72,7 +74,10 @@ void OgreApp::run() {
     while(true) {
         Ogre::WindowEventUtilities::messagePump();
         
-        headNode->rotate(Ogre::Vector3(0, 1, 0), Ogre::Radian(0.01));
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
+            headNode->rotate(Ogre::Vector3(0, 1, 0), Ogre::Radian(0.01));
+            
+        }
         
         if(m_window->isClosed()) {
             break;
