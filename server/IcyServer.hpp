@@ -10,6 +10,7 @@
 #include "IcyPacket.hpp"
 #include "ThreadQueue.hpp"
 #include "IcySession.hpp"
+#include "ServerMsg.hpp"
 
 namespace skm {
 
@@ -62,6 +63,8 @@ public:
     ThreadQueue<IcyPacket*> m_outgoingGlobalPackets;
     ThreadQueue<SpecificPacketPair> m_outgoingPackets;
     ThreadQueue<SpecificPacketPair> m_incomingPackets;
+    
+    ThreadQueue<ServerMsg> m_notifications;
     
 private:
     IcyProtocol::SessionId nextAvailableSessionId();

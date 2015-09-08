@@ -14,10 +14,10 @@ using namespace skm;
 int main(int argc, char **argv) {
     std::cout << "Client." << std::endl;
     
+    /*
     OgreApp app;
     app.run();
-    
-    /*
+    */
     
     sf::IpAddress serverAddress = sf::IpAddress::LocalHost;
     IcyProtocol::Port serverPort = 25564;
@@ -64,7 +64,6 @@ int main(int argc, char **argv) {
             break;
         }
     }
-    */
     
 	return 0;
 }

@@ -6,14 +6,12 @@
 namespace skm
 {
 
-class Entity
-{
+class Entity {
 public:
     Vec3f location;
 
     Entity();
     ~Entity();
-
 };
 
 }

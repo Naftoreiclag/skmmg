@@ -5,7 +5,6 @@
 #ifndef NICYDEBUG
 #include <iostream>
 #endif
-#include <iostream>
 
 #include "IcyPacketHeartbeat.hpp"
 
@@ -13,10 +12,8 @@ namespace skm {
         
 
 IcyServer::Session::Session() {
-    
 }
 IcyServer::Session::~Session() {
-    
 }
     
 IcyServer::IcyServer() {
@@ -128,11 +125,14 @@ void IcyServer::startConnectionSustainingLoop() {
                                 #endif
                                 
                                 if(!sessionSearch->m_verifiedId) {
+                                    #ifndef NICYDEBUG
                                     std::cout << "Client connected. Session id: " << sessionSearch->m_session.m_sessionId << std::endl;
+                                    #endif
                                 }
                                 
                                 // Connection now verified
                                 sessionSearch->m_verifiedId = true;
+                                m_notifications.push_back(ServerMsg(ServerMsg::Type::USER_JOIN, sessionSearch->m_session.m_sessionId));
                                 
                                 sessionSearch->m_clientTimeout.restart();
                                 sessionSearch->m_heartbeatTimer.restart();
@@ -202,6 +202,7 @@ void IcyServer::startConnectionSustainingLoop() {
                         
                         // Remove this client from the session list
                         it = m_sessions.erase(it);
+                        m_notifications.push_back(ServerMsg(ServerMsg::Type::USER_LEAVE, session->m_session.m_sessionId));
                         delete session;
                         continue;
                     }
@@ -212,10 +213,13 @@ void IcyServer::startConnectionSustainingLoop() {
                 
                 // Session is verified, but too quiet
                 if(session->m_clientTimeout.getElapsedTime().asMilliseconds() > IcyProtocol::s_serverTimeoutMs) {
+                    #ifndef NICYDEBUG
                     std::cout << "Lost connection to client " << session->m_session.m_sessionId << std::endl;
+                    #endif
                     
                     // Remove this client from the session list
                     it = m_sessions.erase(it);
+                    m_notifications.push_back(ServerMsg(ServerMsg::Type::USER_LEAVE, session->m_session.m_sessionId));
                     delete session;
                     continue;
                 }

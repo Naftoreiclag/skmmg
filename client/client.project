@@ -55,6 +55,10 @@
     <VirtualDirectory Name="threading">
       <File Name="../common/ThreadQueue.hpp"/>
     </VirtualDirectory>
+    <File Name="../common/Vec3f.cpp"/>
+    <File Name="../common/Vec3f.hpp"/>
+    <File Name="../common/Entity.hpp"/>
+    <File Name="../common/Entity.cpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>

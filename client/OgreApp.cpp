@@ -40,7 +40,7 @@ void OgreApp::run() {
     
     if(m_ogreRoot->restoreConfig() || m_ogreRoot->showConfigDialog()) {
         m_ogreRoot->initialise(false, "OgreApp");
-        m_window = m_ogreRoot->createRenderWindow("Name", 640, 480, false);
+        m_window = m_ogreRoot->createRenderWindow("Name", 1280, 720, false);
     }
     else {
         return;
@@ -75,7 +75,7 @@ void OgreApp::run() {
         Ogre::WindowEventUtilities::messagePump();
         
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
-            headNode->rotate(Ogre::Vector3(0, 1, 0), Ogre::Radian(0.01));
+            headNode->rotate(Ogre::Vector3(0, 1, 0), Ogre::Radian(0.001));
             
         }
         
