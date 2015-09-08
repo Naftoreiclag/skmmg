@@ -37,7 +37,8 @@ void OgreApp::run() {
     }
     
     if(m_ogreRoot->restoreConfig() || m_ogreRoot->showConfigDialog()) {
-        m_window = m_ogreRoot->initialise(true, "OgreApp");
+        m_ogreRoot->initialise(false, "OgreApp");
+        m_window = m_ogreRoot->createRenderWindow("Name", 640, 480, false);
     }
     else {
         return;
