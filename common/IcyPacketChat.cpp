@@ -16,7 +16,7 @@ IcyPacket::ProtocolId IcyPacketChat::getId() const {
     return IcyPacket::s_protocol_chat;
 }
 bool IcyPacketChat::isContinuous() const {
-    return true;
+    return false;
 }
 
 bool IcyPacketChat::read(sf::Packet& data) {

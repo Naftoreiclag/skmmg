@@ -49,7 +49,7 @@ public:
         sf::Clock m_heartbeatTimer;
         
         ThreadQueue<IcyPacket*> m_outgoingPackets;
-        ThreadQueue<IcyPacket*> m_incomingPackets;
+        //ThreadQueue<IcyPacket*> m_incomingPackets;
     };
 private:
     sf::UdpSocket m_socket;

@@ -12,11 +12,13 @@ using namespace skm;
 int main(int argc, char **argv) {
     std::cout << "SKMMG Server" << std::endl;
     
-    World world;
     
     IcyServer server;
     server.initialize(25564);
     std::thread clientThread(&IcyServer::startConnectionSustainingLoop, &server);
+    
+    World world;
+    world.m_server = &server;
     
     sf::Clock clock;
     sf::Time time = sf::seconds(0.5f);
@@ -28,6 +30,7 @@ int main(int argc, char **argv) {
             switch(msg.m_type) {
                 case IcyServer::Message::Type::USER_JOIN: {
                     std::cout << "User " << msg.m_session << " joined!" << std::endl;
+                    world.spawnPlayer(msg.m_session);
                     break;
                 }
                 case IcyServer::Message::Type::USER_LEAVE: {
@@ -38,7 +41,6 @@ int main(int argc, char **argv) {
                     break;
                 }
             }
-                
             isMsg = server.m_notifications.pop_front(msg);
         }
         

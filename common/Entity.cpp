@@ -3,12 +3,11 @@
 namespace skm
 {
 
-Entity::Entity()
-{
+Entity::Entity(const Handle& handle)
+: m_handle(handle) {
 }
 
-Entity::~Entity()
-{
+Entity::~Entity() {
 }
 
 

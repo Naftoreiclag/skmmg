@@ -2,16 +2,21 @@
 #define ENTITY_HPP
 
 #include "Vec3f.hpp"
+#include "SFML/System.hpp"
 
 namespace skm
 {
 
 class Entity {
 public:
-    Vec3f location;
+    typedef sf::Uint32 Handle;
+public:
+    Vec3f m_location;
+    
+    const Handle m_handle;
 
-    Entity();
-    ~Entity();
+    Entity(const Handle& handle);
+    virtual ~Entity();
 };
 
 }

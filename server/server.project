@@ -40,6 +40,8 @@
     <VirtualDirectory Name="mundane">
       <File Name="World.cpp"/>
       <File Name="World.hpp"/>
+      <File Name="Player.hpp"/>
+      <File Name="Player.cpp"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="src-common">
@@ -53,10 +55,14 @@
       <File Name="../common/IcyProtocol.hpp"/>
       <File Name="../common/IcySession.cpp"/>
       <File Name="../common/IcySession.hpp"/>
+      <File Name="../common/IcyPacketPlayerJoin.cpp"/>
+      <File Name="../common/IcyPacketPlayerJoin.hpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="threading">
       <File Name="../common/ThreadQueue.hpp"/>
     </VirtualDirectory>
+    <File Name="../common/Entity.cpp"/>
+    <File Name="../common/Entity.hpp"/>
     <File Name="../common/Vec3f.cpp"/>
     <File Name="../common/Vec3f.hpp"/>
   </VirtualDirectory>

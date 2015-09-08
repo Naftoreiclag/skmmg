@@ -8,6 +8,7 @@
 #include "IcyClient.hpp"
 #include "IcySession.hpp"
 #include "IcyPacketChat.hpp"
+#include "IcyPacketPlayerJoin.hpp"
 
 using namespace skm;
 
@@ -48,10 +49,16 @@ int main(int argc, char **argv) {
         bool dataPopped = client.m_incomingPackets.pop_front(data);
         while(dataPopped) {
             
+            std::cout << "Receive" << std::endl;
             if(data->getId() == IcyPacket::s_protocol_chat) {
                 IcyPacketChat* chatPack = (IcyPacketChat*) data;
                 
                 std::cout << "null" << ":" << chatPack->m_message << std::endl;
+            }
+            else if(data->getId() == IcyPacket::s_protocol_playerJoin) {
+                IcyPacketPlayerJoin* playerJoin = (IcyPacketPlayerJoin*) data;
+                
+                std::cout << "null" << ":" << playerJoin->m_handle << std::endl;
             }
             
             delete data;

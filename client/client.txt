@@ -1,1 +1,1 @@
-./Release/main.cpp.o ./Release/OgreApp.cpp.o ./Release/common_Vec3f.cpp.o ./Release/common_Entity.cpp.o ./Release/IcyClient.cpp.o ./Release/common_IcyPacket.cpp.o ./Release/common_IcyPacketChat.cpp.o ./Release/common_IcyPacketHeartbeat.cpp.o ./Release/common_IcySession.cpp.o   
+./Debug/main.cpp.o ./Debug/OgreApp.cpp.o ./Debug/common_Vec3f.cpp.o ./Debug/common_Entity.cpp.o ./Debug/IcyClient.cpp.o ./Debug/common_IcyPacket.cpp.o ./Debug/common_IcyPacketChat.cpp.o ./Debug/common_IcyPacketHeartbeat.cpp.o ./Debug/common_IcySession.cpp.o ./Debug/common_IcyPacketPlayerJoin.cpp.o   

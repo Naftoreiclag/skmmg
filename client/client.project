@@ -51,6 +51,8 @@
       <File Name="../common/IcyProtocol.hpp"/>
       <File Name="../common/IcySession.cpp"/>
       <File Name="../common/IcySession.hpp"/>
+      <File Name="../common/IcyPacketPlayerJoin.cpp"/>
+      <File Name="../common/IcyPacketPlayerJoin.hpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="threading">
       <File Name="../common/ThreadQueue.hpp"/>

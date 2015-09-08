@@ -1,7 +1,7 @@
 #ifndef ICYPROTOCOL_HPP
 #define ICYPROTOCOL_HPP
 
-#include "SFML/Network.hpp"
+#include "SFML/System.hpp"
 
 namespace skm
 {
