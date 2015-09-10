@@ -245,6 +245,7 @@ void IcyServer::startConnectionSustainingLoop() {
             IcyPacket* outgoingPacket;
             bool isOutgoingPacket = m_outgoingGlobalPackets.pop_front(outgoingPacket);
             while(isOutgoingPacket) {
+                std::cout << "Send " << ((int) outgoingPacket->getId()) << std::endl;
                 
                 for(std::list<Session*>::iterator it = m_sessions.begin(); it != m_sessions.end(); ++ it) {
                     Session* session = *it;
@@ -311,9 +312,7 @@ void IcyServer::startConnectionSustainingLoop() {
                     IcyPacket* outgoingPacket;
                     bool isOutgoingPacket = session->m_outgoingPackets.pop_front(outgoingPacket);
                     while(isOutgoingPacket) {
-                        #ifndef NICYDEBUG
-                        std::cout << "Sending packet to client " << session->m_session.m_sessionId << std::endl;
-                        #endif
+                        std::cout << "Sending packet" << ((int) outgoingPacket->getId()) << " to client " << ((int) session->m_session.m_sessionId) << std::endl;
                         session->m_session.sendOutgoing(outgoingPacket); // This is called appropriately
                         session->m_heartbeatTimer.restart();
                         

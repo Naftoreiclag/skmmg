@@ -22,7 +22,11 @@ public:
     sf::IpAddress m_serverAddress;
     IcyProtocol::Port m_serverPort;
     
+    // The sequence number to use when sending a new packet
     IcyProtocol::SequenceNumber m_localSequence;
+    
+    // The most recent packet that we have receieved
+    bool m_neverReceievedPacketBefore;
     IcyProtocol::SequenceNumber m_ack;
     IcyProtocol::AckBitfield m_ackBits;
     

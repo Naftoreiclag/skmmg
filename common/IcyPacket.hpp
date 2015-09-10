@@ -11,7 +11,7 @@ public:
     typedef sf::Uint8 ProtocolId;
     
     static const ProtocolId s_protocol_session = 0;
-    static const ProtocolId s_protocol_heartbeat = 1;
+    static const ProtocolId s_protocol_heartbeat = 7;
     static const ProtocolId s_protocol_chat = 2;
     static const ProtocolId s_protocol_playerJoin = 3;
     

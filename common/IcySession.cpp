@@ -5,11 +5,17 @@
 #ifndef NICYDEBUG
 #include <iostream>
 #endif
+#include <iostream>
 
 namespace skm
 {
 
-IcySession::IcySession() {}
+IcySession::IcySession()
+: m_localSequence(0)
+, m_ack(0)
+, m_ackBits(0)
+, m_neverReceievedPacketBefore(true) {
+}
 IcySession::~IcySession() {}
 
 IcyPacket* IcySession::processRawIncoming(sf::Packet& packet) {
@@ -18,12 +24,19 @@ IcyPacket* IcySession::processRawIncoming(sf::Packet& packet) {
         // Get when this packet was sent by the server
         IcyProtocol::SequenceNumber remoteSeq;
         packet >> remoteSeq;
+        
         #ifndef NICYDEBUG
         //std::cout << "Received #" << remoteSeq << std::endl;
         #endif
         
+        // Never receieved a packet before, obviously this packet should be processed
+        if(m_neverReceievedPacketBefore) {
+            m_ack = remoteSeq;
+            m_neverReceievedPacketBefore = false;
+        }
+        
         // This packet is more recent than the previous most recent packet
-        if(remoteSeq > m_ack) {
+        else if(remoteSeq > m_ack) {
             // Find how much the ack bitfield should be shifted
             /*
              * Example:
@@ -76,12 +89,14 @@ IcyPacket* IcySession::processRawIncoming(sf::Packet& packet) {
             
             // We have already receieved this exact packet because the sequence number was set in the bitfield, so do nothing
             else {
+                std::cout << "case 1" << std::endl;
                 return nullptr;
             }
         }
         
         // We have already receieved this exact packet because the sequence number is the same, so do nothing
         else {
+                std::cout << "case 2" << std::endl;
             return nullptr;
         }
     }
@@ -162,13 +177,17 @@ IcyPacket* IcySession::processRawIncoming(sf::Packet& packet) {
         IcyPacket* newPacket = IcyPacket::newPacketFromRaw(packet);
         
         if(newPacket == nullptr) {
+                std::cout << "case 3" << std::endl;
             return nullptr;
         }
+        
+        std::cout << "Packet type: " << ((int) newPacket->getId()) << std::endl;
         
         // This packet is a heartbeat
         if(newPacket->getId() == IcyPacket::s_protocol_heartbeat) {
             // Since heartbeats are only sent in the absense of data, just delete it
             delete newPacket;
+                std::cout << "case 4" << std::endl;
             return nullptr;
         }
         
@@ -197,12 +216,6 @@ void IcySession::sendOutgoing(IcyPacket* packet) {
     // Ack bitfield
     rawPacket << m_ackBits;
     
-    #ifndef NICYDEBUG
-    //std::cout << "Writing id" << std::endl;
-    std::cout << packet << std::endl;
-    unsigned int i = packet->getId();
-    std::cout << i << std::endl;
-    #endif
     // Actual data
     rawPacket << packet->getId();
     

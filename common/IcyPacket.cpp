@@ -1,7 +1,10 @@
 #include "IcyPacket.hpp"
 
+#include <iostream>
+
 #include "IcyPacketHeartbeat.hpp"
 #include "IcyPacketChat.hpp"
+#include "IcyPacketPlayerJoin.hpp"
 
 namespace skm
 {
@@ -9,6 +12,7 @@ namespace skm
 IcyPacket* IcyPacket::newPacketFromRaw(sf::Packet& packet) {
     ProtocolId pid;
     packet >> pid;
+    std::cout << ((int) pid);
     
     if(pid == s_protocol_heartbeat) {
         return new IcyPacketHeartbeat();
@@ -18,6 +22,12 @@ IcyPacket* IcyPacket::newPacketFromRaw(sf::Packet& packet) {
         p->read(packet);
         return p;
     }
+    else if(pid == s_protocol_playerJoin) {
+        IcyPacket* p = new IcyPacketPlayerJoin();
+        p->read(packet);
+        return p;
+    }
+    
     
     return nullptr;
 }

@@ -46,9 +46,7 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
                 verifySessionId << IcyProtocol::s_sessionRequestId;
                 
                 m_socket.send(verifySessionId, m_session->m_serverAddress, m_session->m_serverPort);
-                #ifndef NICYDEBUG
                 std::cout << "Requesting connection..." << std::endl;
-                #endif
                 
                 firstRequest = false;
             }
@@ -67,9 +65,7 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
                     receivedPacket >> magicNum;
                     receivedPacket >> sessionId;
                     
-                    #ifndef NICYDEBUG
                     std::cout << "Session id: " << sessionId << std::endl;
-                    #endif
                     
                     if(magicNum == IcyProtocol::s_magicHandshake) {
                         m_session->m_sessionId = sessionId;
@@ -103,10 +99,6 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
     
     m_status.serverContacted = true;
     
-    m_session->m_localSequence = 0;
-    m_session->m_ack = 0;
-    m_session->m_ackBits = 0;
-    
     bool responseTimedOut = false;
     {
         sf::Clock resendTimer;
@@ -122,9 +114,7 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
                 verifySessionId << m_session->m_sessionId;
                 
                 m_socket.send(verifySessionId, m_session->m_serverAddress, m_session->m_serverPort);
-                #ifndef NICYDEBUG
                 std::cout << "Verifying id..." << std::endl;
-                #endif
                 
                 firstVerify = false;
             }
@@ -142,13 +132,15 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
                     
                     // Magic number is correct
                     if(magicNum == IcyProtocol::s_magicNumber) {
-                        #ifndef NICYDEBUG
                         std::cout << "Id verified. Now processing incoming non-handshake packets..." << std::endl;
-                        #endif
                         IcyPacket* receievedPacket = m_session->processRawIncoming(receivedPacket);
                         
                         if(receievedPacket != nullptr) {
                             m_incomingPackets.push_back(receievedPacket);
+                            std::cout << "FIRST PACKET IS NOT NULL!" << std::endl;
+                        }
+                        else {
+                            std::cout << "FIRST PACKET IS NULL!" << std::endl;
                         }
                         
                         break;

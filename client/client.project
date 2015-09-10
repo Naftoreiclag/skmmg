@@ -80,7 +80,6 @@
         <IncludePath Value="$(OGRE_SDK)/$(OgreSDKName)/include"/>
         <IncludePath Value="$(OGRE_SDK)/$(OgreSDKName)/include/OGRE"/>
         <IncludePath Value="$(BOOST_HOME)"/>
-        <Preprocessor Value="NICYDEBUG"/>
         <Preprocessor Value="_DEBUG"/>
         <Preprocessor Value="WIN32"/>
         <Preprocessor Value="_WINDOWS"/>

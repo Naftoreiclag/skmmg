@@ -4,6 +4,7 @@
 #include "SFML/Network.hpp"
 #include "IcyServer.hpp"
 #include "IcyPacketChat.hpp"
+#include "IcyPacketPlayerJoin.hpp"
 
 #include "World.hpp"
 
@@ -20,8 +21,7 @@ int main(int argc, char **argv) {
     World world;
     world.m_server = &server;
     
-    sf::Clock clock;
-    sf::Time time = sf::seconds(0.5f);
+    sf::Clock broadcastClock;
     while(true) {
         
         IcyServer::Message msg;
@@ -60,7 +60,16 @@ int main(int argc, char **argv) {
             delete data.packet;
             isData = server.m_incomingPackets.pop_front(data);
         }
-        //sf::sleep(time);
+        
+        if(broadcastClock.getElapsedTime().asMilliseconds() >= 5000) {
+            
+            IcyPacketChat* chatPack = new IcyPacketChat("yolo");
+            //IcyPacketPlayerJoin* chatPack = new IcyPacketPlayerJoin(315);
+            
+            server.m_outgoingGlobalPackets.push_back(chatPack);
+            
+            broadcastClock.restart();
+        }
     }
     
 	return 0;

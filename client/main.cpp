@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
             else if(data->getId() == IcyPacket::s_protocol_playerJoin) {
                 IcyPacketPlayerJoin* playerJoin = (IcyPacketPlayerJoin*) data;
                 
-                std::cout << "null" << ":" << playerJoin->m_handle << std::endl;
+                std::cout << "handle" << ":" << playerJoin->m_handle << std::endl;
             }
             
             delete data;
