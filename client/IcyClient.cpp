@@ -1,8 +1,6 @@
 #include "IcyClient.hpp"
 
-#ifndef NICYDEBUG
 #include <iostream>
-#endif
 
 #include "DebugAwareness.hpp"
 #include "IcyPacketHeartbeat.hpp"
@@ -14,9 +12,7 @@ namespace skm {
 IcyClient::IcyClient() {
     m_session = nullptr;
     m_socket.setBlocking(false);
-    #ifndef NICYDEBUG
     std::cout << "Binding to port " << m_socket.getLocalPort() << std::endl;
-    #endif
     m_socket.bind(m_socket.getLocalPort());
 }
 
@@ -137,10 +133,6 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
                         
                         if(receievedPacket != nullptr) {
                             m_incomingPackets.push_back(receievedPacket);
-                            std::cout << "FIRST PACKET IS NOT NULL!" << std::endl;
-                        }
-                        else {
-                            std::cout << "FIRST PACKET IS NULL!" << std::endl;
                         }
                         
                         break;
@@ -174,15 +166,11 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
     m_status.sessionVerified = true;
     
     m_status.connected = true;
-    #ifndef NICYDEBUG
     std::cout << "Successfully initiated connection." << std::endl;
-    #endif
 }
 
 void IcyClient::startConnectionSustainingLoop() {
-    #ifndef NICYDEBUG
     std::cout << "Connection-sustaining loop began." << std::endl;
-    #endif
     
     // Keep track of the time since we last sent any data
     sf::Clock heartbeatTimer;
