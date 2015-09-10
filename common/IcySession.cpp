@@ -19,7 +19,7 @@ IcyPacket* IcySession::processRawIncoming(sf::Packet& packet) {
         IcyProtocol::SequenceNumber remoteSeq;
         packet >> remoteSeq;
         #ifndef NICYDEBUG
-        std::cout << "Received #" << remoteSeq << std::endl;
+        //std::cout << "Received #" << remoteSeq << std::endl;
         #endif
         
         // This packet is more recent than the previous most recent packet
@@ -93,7 +93,7 @@ IcyPacket* IcySession::processRawIncoming(sf::Packet& packet) {
         packet >> firstAck;
         packet >> prevAcks;
         #ifndef NICYDEBUG
-        std::cout << "Ack #" << firstAck << std::endl;
+        //std::cout << "Ack #" << firstAck << std::endl;
         #endif
         std::list<SentPacket>::iterator it = m_sentPackets.begin();
         while(it != m_sentPackets.end()) {
@@ -102,7 +102,7 @@ IcyPacket* IcySession::processRawIncoming(sf::Packet& packet) {
             // This is the packet referenced by the fully referenced ack
             if(sentPacket.sequence == firstAck) {
                 #ifndef NICYDEBUG
-                std::cout << "DELETEa #" << sentPacket.sequence << " ptr:" << sentPacket.data << std::endl;
+                //std::cout << "DELETEa #" << sentPacket.sequence << " ptr:" << sentPacket.data << std::endl;
                 #endif
                 // Delete the packet data (since there is no need to ever resend it)
                 sentPacket.data->drop();
@@ -128,7 +128,7 @@ IcyPacket* IcySession::processRawIncoming(sf::Packet& packet) {
                 if((prevAcks & (1 << bitPos)) != 0) {
                     // Delete the packet data (since there is no need to ever resend it)
                     #ifndef NICYDEBUG
-                    std::cout << "DELETEb #" << sentPacket.sequence << std::endl;
+                    //std::cout << "DELETEb #" << sentPacket.sequence << std::endl;
                     #endif
                     sentPacket.data->drop();
                 
@@ -141,7 +141,7 @@ IcyPacket* IcySession::processRawIncoming(sf::Packet& packet) {
             // Packet is too old to be in the bitfield
             else {
                 #ifndef NICYDEBUG
-                std::cout << "RESEND #" << sentPacket.sequence << std::endl;
+                //std::cout << "RESEND #" << sentPacket.sequence << std::endl;
                 #endif
                 // Resend packet with new id
                 sentPacket.data->dropNoDelete();
@@ -181,7 +181,7 @@ IcyPacket* IcySession::processRawIncoming(sf::Packet& packet) {
 
 void IcySession::sendOutgoing(IcyPacket* packet) {
     #ifndef NICYDEBUG
-    std::cout << "Sending #" << m_localSequence << std::endl;
+    //std::cout << "Sending #" << m_localSequence << std::endl;
     #endif
     sf::Packet rawPacket;
     
@@ -198,7 +198,7 @@ void IcySession::sendOutgoing(IcyPacket* packet) {
     rawPacket << m_ackBits;
     
     #ifndef NICYDEBUG
-    std::cout << "Writing id" << std::endl;
+    //std::cout << "Writing id" << std::endl;
     std::cout << packet << std::endl;
     unsigned int i = packet->getId();
     std::cout << i << std::endl;
@@ -207,16 +207,16 @@ void IcySession::sendOutgoing(IcyPacket* packet) {
     rawPacket << packet->getId();
     
     #ifndef NICYDEBUG
-    std::cout << "Writing data" << std::endl;
+    //std::cout << "Writing data" << std::endl;
     #endif
     packet->write(rawPacket);
     
     #ifndef NICYDEBUG
-    std::cout << "Sending" << std::endl;
+    //std::cout << "Sending" << std::endl;
     #endif
     m_socket->send(rawPacket, m_serverAddress, m_serverPort);
     #ifndef NICYDEBUG
-    std::cout << "Complete" << std::endl;
+    //std::cout << "Complete" << std::endl;
     #endif
     
     // Remove unverified continuous packets
