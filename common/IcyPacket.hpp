@@ -10,10 +10,13 @@ class IcyPacket {
 public:
     typedef sf::Uint8 ProtocolId;
     
-    static const ProtocolId s_protocol_session = 0;
-    static const ProtocolId s_protocol_heartbeat = 7;
+    static const ProtocolId s_protocol_session = 0; // Currently unused?
+    static const ProtocolId s_protocol_disconnect = 1;
     static const ProtocolId s_protocol_chat = 2;
     static const ProtocolId s_protocol_playerJoin = 3;
+    static const ProtocolId s_protocol_entitySpawn = 4;
+    static const ProtocolId s_protocol_entityUpdate = 5;
+    static const ProtocolId s_protocol_heartbeat = 7;
     
 public:
     static IcyPacket* newPacketFromRaw(sf::Packet& packet);

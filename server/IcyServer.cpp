@@ -35,6 +35,14 @@ IcyServer::IcyServer() {
 IcyServer::~IcyServer() {
 }
 
+IcyServer::SpecificPacketPair::SpecificPacketPair() {
+}
+
+IcyServer::SpecificPacketPair::SpecificPacketPair(IcyProtocol::SessionId sessionId, IcyPacket* packet)
+: sessionId(sessionId)
+, packet(packet) {
+}
+
 IcyProtocol::SessionId IcyServer::nextAvailableSessionId() {
     return m_lastSessionId ++;
 }
@@ -245,8 +253,6 @@ void IcyServer::startConnectionSustainingLoop() {
             IcyPacket* outgoingPacket;
             bool isOutgoingPacket = m_outgoingGlobalPackets.pop_front(outgoingPacket);
             while(isOutgoingPacket) {
-                std::cout << "Send " << ((int) outgoingPacket->getId()) << std::endl;
-                
                 for(std::list<Session*>::iterator it = m_sessions.begin(); it != m_sessions.end(); ++ it) {
                     Session* session = *it;
                     session->m_outgoingPackets.push_back(outgoingPacket);
@@ -286,9 +292,6 @@ void IcyServer::startConnectionSustainingLoop() {
                 if(!session->m_verifiedId) {
                     // Send verification requests
                     if(session->m_verificationTimer.getElapsedTime().asMilliseconds() > IcyProtocol::s_verifyDelayMs || !session->m_firstVerificationSent) {
-                        #ifndef NICYDEBUG
-                        std::cout << "Sending client session id..." << std::endl;
-                        #endif
                         session->m_verificationTimer.restart();
                         
                         // Send verification
@@ -312,7 +315,6 @@ void IcyServer::startConnectionSustainingLoop() {
                     IcyPacket* outgoingPacket;
                     bool isOutgoingPacket = session->m_outgoingPackets.pop_front(outgoingPacket);
                     while(isOutgoingPacket) {
-                        std::cout << "Sending packet" << ((int) outgoingPacket->getId()) << " to client " << ((int) session->m_session.m_sessionId) << std::endl;
                         session->m_session.sendOutgoing(outgoingPacket); // This is called appropriately
                         session->m_heartbeatTimer.restart();
                         
@@ -333,6 +335,31 @@ void IcyServer::terminate() {
     
     m_running = false;
     
+}
+
+void IcyServer::send(IcyPacket* packet, IcyProtocol::SessionId sessionId) {
+    m_outgoingPackets.push_back(SpecificPacketPair(sessionId, packet));
+    
+}
+void IcyServer::send(IcyPacket* packet) {
+    m_outgoingGlobalPackets.push_back(packet);
+}
+
+bool IcyServer::receive(IcyServer::Message& data) {
+    return m_notifications.pop_front(data);
+}
+bool IcyServer::receive(IcyPacket*& packet, IcyProtocol::SessionId& sessionId) {
+    SpecificPacketPair packetPair;
+    if(m_incomingPackets.pop_front(packetPair)) {
+        
+        packet = packetPair.packet;
+        sessionId = packetPair.sessionId;
+        
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 }

@@ -1,10 +1,11 @@
 #include "IcyPacket.hpp"
 
-#include <iostream>
-
 #include "IcyPacketHeartbeat.hpp"
 #include "IcyPacketChat.hpp"
 #include "IcyPacketPlayerJoin.hpp"
+#include "IcyPacketDisconnect.hpp"
+#include "IcyPacketEntitySpawn.hpp"
+#include "IcyPacketEntityUpdate.hpp"
 
 namespace skm
 {
@@ -12,24 +13,44 @@ namespace skm
 IcyPacket* IcyPacket::newPacketFromRaw(sf::Packet& packet) {
     ProtocolId pid;
     packet >> pid;
-    std::cout << ((int) pid);
     
-    if(pid == s_protocol_heartbeat) {
-        return new IcyPacketHeartbeat();
+    IcyPacket* p;
+    switch(pid) {
+        case s_protocol_heartbeat: {
+            p = new IcyPacketHeartbeat();
+            break;
+        }
+        case s_protocol_disconnect: {
+            p = new IcyPacketDisconnect();
+            break;
+        }
+        case s_protocol_chat: {
+            p = new IcyPacketChat();
+            break;
+        }
+        case s_protocol_playerJoin: {
+            p = new IcyPacketPlayerJoin();
+            break;
+        }
+        case s_protocol_entitySpawn: {
+            p = new IcyPacketEntitySpawn();
+            break;
+        }
+        case s_protocol_entityUpdate: {
+            p = new IcyPacketEntityUpdate();
+            break;
+        }
+        default: {
+            p = nullptr;
+            break;
+        }
     }
-    else if(pid == s_protocol_chat) {
-        IcyPacket* p = new IcyPacketChat();
+    
+    if(p != nullptr) {
         p->read(packet);
-        return p;
-    }
-    else if(pid == s_protocol_playerJoin) {
-        IcyPacket* p = new IcyPacketPlayerJoin();
-        p->read(packet);
-        return p;
     }
     
-    
-    return nullptr;
+    return p;
 }
 
 void IcyPacket::grab() {

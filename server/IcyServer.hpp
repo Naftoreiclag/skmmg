@@ -71,6 +71,9 @@ public:
     void terminate();
     
     struct SpecificPacketPair {
+        SpecificPacketPair();
+        SpecificPacketPair(IcyProtocol::SessionId sessionId, IcyPacket* packet);
+        
         IcyProtocol::SessionId sessionId;
         IcyPacket* packet;
     };
@@ -80,6 +83,12 @@ public:
     ThreadQueue<SpecificPacketPair> m_incomingPackets;
     
     ThreadQueue<Message> m_notifications;
+    
+    void send(IcyPacket* packet, IcyProtocol::SessionId sessionId);
+    void send(IcyPacket* packet);
+    
+    bool receive(IcyServer::Message& data);
+    bool receive(IcyPacket*& packet, IcyProtocol::SessionId& sessionId);
     
 private:
     IcyProtocol::SessionId nextAvailableSessionId();

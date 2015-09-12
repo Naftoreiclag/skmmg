@@ -53,6 +53,12 @@
       <File Name="../common/IcySession.hpp"/>
       <File Name="../common/IcyPacketPlayerJoin.cpp"/>
       <File Name="../common/IcyPacketPlayerJoin.hpp"/>
+      <File Name="../common/IcyPacketDisconnect.cpp"/>
+      <File Name="../common/IcyPacketDisconnect.hpp"/>
+      <File Name="../common/IcyPacketEntitySpawn.cpp"/>
+      <File Name="../common/IcyPacketEntitySpawn.hpp"/>
+      <File Name="../common/IcyPacketEntityUpdate.cpp"/>
+      <File Name="../common/IcyPacketEntityUpdate.hpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="threading">
       <File Name="../common/ThreadQueue.hpp"/>

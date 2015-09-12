@@ -16,6 +16,7 @@ IcySession::IcySession()
 , m_ackBits(0)
 , m_neverReceievedPacketBefore(true) {
 }
+
 IcySession::~IcySession() {}
 
 IcyPacket* IcySession::processRawIncoming(sf::Packet& packet) {

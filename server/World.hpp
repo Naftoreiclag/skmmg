@@ -17,13 +17,19 @@ private:
     Entity::Handle m_lastHandle;
     Entity::Handle getNextHandle();
     
+    typedef std::vector<Entity*> EntityContainer;
+    typedef std::vector<Player*> PlayerContainer;
+    
 public:
-    std::vector<Entity*> m_entities;
-    std::vector<Player*> m_players;
+    EntityContainer m_entities;
+    PlayerContainer m_players;
 
     IcyServer* m_server;
     
     void spawnPlayer(const IcyProtocol::SessionId& sessionId);
+    void despawnPlayer(const IcyProtocol::SessionId& sessionId);
+    
+    void spawnEntity();
 
     World();
     ~World();
