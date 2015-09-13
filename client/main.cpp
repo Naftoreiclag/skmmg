@@ -1,9 +1,12 @@
 #include <iostream>
 #include <thread>
+#include <vector>
 
 #include "SFML/Network.hpp"
 
 #include "OgreApp.hpp"
+
+#include "ServerConfig.hpp"
 
 #include "IcyClient.hpp"
 #include "IcySession.hpp"
@@ -15,13 +18,24 @@ using namespace skm;
 int main(int argc, char **argv) {
     std::cout << "Client." << std::endl;
     
+    ServerConfig::ServerList& servers = ServerConfig::getInstance().m_serverList;
+    for(ServerConfig::ServerList::iterator it = servers.begin(); it != servers.end(); ++ it) {
+        ServerConfig::Server& server = *it;
+        
+        std::cout << server.name << std::endl;
+        std::cout << server.address << std::endl;
+        std::cout << server.port << std::endl;
+    }
+    
     /*
     OgreApp app;
     app.run();
     */
     
-    sf::IpAddress serverAddress = sf::IpAddress::LocalHost;
-    IcyProtocol::Port serverPort = 25564;
+    ServerConfig::Server& serverInfo = *servers.begin();
+    
+    sf::IpAddress& serverAddress = serverInfo.address;
+    IcyProtocol::Port& serverPort = serverInfo.port;
     std::cout << "Server info:" << serverAddress << std::endl;
     
     std::cout << "Starting connection to server..." << std::endl;

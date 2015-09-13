@@ -39,6 +39,10 @@
     </VirtualDirectory>
     <File Name="OgreApp.hpp"/>
     <File Name="OgreApp.cpp"/>
+    <VirtualDirectory Name="config">
+      <File Name="ServerConfig.cpp"/>
+      <File Name="ServerConfig.hpp"/>
+    </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="src-common">
     <VirtualDirectory Name="networking">
@@ -86,6 +90,7 @@
         <IncludePath Value="$(OGRE_SDK)/$(OgreSDKName)/include"/>
         <IncludePath Value="$(OGRE_SDK)/$(OgreSDKName)/include/OGRE"/>
         <IncludePath Value="$(BOOST_HOME)"/>
+        <IncludePath Value="../library/header-only/rapidxml-1.13/include"/>
         <Preprocessor Value="_DEBUG"/>
         <Preprocessor Value="WIN32"/>
         <Preprocessor Value="_WINDOWS"/>
@@ -131,6 +136,9 @@
         <Command Enabled="no"># OGRE</Command>
         <Command Enabled="yes">cp $(OGRE_SDK)/$(OgreSDKName)/bin/Debug/*.dll $(IntermediateDirectory)</Command>
         <Command Enabled="yes">cp ogre-config/Debug/*.cfg $(IntermediateDirectory)</Command>
+        <Command Enabled="yes"/>
+        <Command Enabled="no"># CONFIG</Command>
+        <Command Enabled="yes">cp config/Debug/*.xml $(IntermediateDirectory)</Command>
       </PostBuild>
       <CustomBuild Enabled="no">
         <RebuildCommand/>
