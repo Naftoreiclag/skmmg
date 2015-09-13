@@ -27,11 +27,6 @@ int main(int argc, char **argv) {
         std::cout << server.port << std::endl;
     }
     
-    /*
-    OgreApp app;
-    app.run();
-    */
-    
     ServerConfig::Server& serverInfo = *servers.begin();
     
     sf::IpAddress& serverAddress = serverInfo.address;
@@ -56,6 +51,10 @@ int main(int argc, char **argv) {
     
     std::thread clientThread(&IcyClient::startConnectionSustainingLoop, &client);
     
+    OgreApp app(client);
+    app.run();
+    
+    /*
     while(true) {
         //client.m_outgoingPackets.push_back(new IcyPacketChat(message));
         
@@ -85,6 +84,7 @@ int main(int argc, char **argv) {
             break;
         }
     }
+    */
     
 	return 0;
 }

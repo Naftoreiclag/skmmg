@@ -1,5 +1,7 @@
 #include "OgreApp.hpp"
 
+#include <iostream>
+
 #include "OgreLogManager.h"
 #include "OgreViewport.h"
 #include "OgreConfigFile.h"
@@ -8,8 +10,16 @@
 
 #include "SFML/Window.hpp"
 
-OgreApp::OgreApp()
-: m_ogreRoot(nullptr)
+#include "IcyClient.hpp"
+#include "IcySession.hpp"
+#include "IcyPacketChat.hpp"
+#include "IcyPacketPlayerJoin.hpp"
+
+namespace skm {
+    
+OgreApp::OgreApp(IcyClient& client)
+: m_client(client)
+, m_ogreRoot(nullptr)
 , m_cam(nullptr)
 , m_smgr(nullptr)
 , m_window(nullptr) {
@@ -72,6 +82,32 @@ void OgreApp::run() {
     light->setPosition(20,80,50);
     
     while(true) {
+        IcyPacket* data;
+        bool dataPopped = m_client.m_incomingPackets.pop_front(data);
+        while(dataPopped) {
+            
+            std::cout << "Receive" << std::endl;
+            if(data->getId() == IcyPacket::s_protocol_chat) {
+                IcyPacketChat* chatPack = (IcyPacketChat*) data;
+                
+                std::cout << "null" << ":" << chatPack->m_message << std::endl;
+            }
+            else if(data->getId() == IcyPacket::s_protocol_playerJoin) {
+                IcyPacketPlayerJoin* playerJoin = (IcyPacketPlayerJoin*) data;
+                
+                std::cout << "handle" << ":" << playerJoin->m_handle << std::endl;
+            }
+            
+            delete data;
+            dataPopped = m_client.m_incomingPackets.pop_front(data);
+        }
+        
+        IcyClient::SessionStatus status = m_client.getStatus();
+        if(!status.connected) {
+            std::cout << "Connection lost!" << std::endl;
+            break;
+        }
+        
         Ogre::WindowEventUtilities::messagePump();
         
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
@@ -90,3 +126,5 @@ void OgreApp::run() {
 }
 
 
+
+}
