@@ -20,6 +20,7 @@ Libraries
 - [SFML](http://www.sfml-dev.org/) 2.3.1*
 - [Boost](http://www.boost.org/) 1.59.0
 - [OGRE](http://www.ogre3d.org/) 1.8.1
+- [RapidXml](http://rapidxml.sourceforge.net/) 1.13*
 
 **included in repository*
 
