@@ -16,7 +16,10 @@ public:
     IcyPacketEntityUpdate(Entity::Handle handle);
     virtual ~IcyPacketEntityUpdate();
     
-    bool exists = true;
+    bool m_exists = true;
+    
+    bool m_changeLoc = false;
+    Vec3f m_loc;
     
     virtual ProtocolId getId() const;
     virtual bool isContinuous() const;
@@ -25,6 +28,7 @@ public:
     virtual void write(sf::Packet& data);
     
     void despawn();
+    void setLoc(Vec3f& loc);
 };
 
 }

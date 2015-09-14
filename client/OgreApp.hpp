@@ -1,12 +1,13 @@
 #ifndef OGREAPP_HPP
 #define OGREAPP_HPP
 
-#include "IcyClient.hpp"
-
 #include "OgreRoot.h"
 #include "OgreCamera.h"
 #include "OgreSceneManager.h"
 #include "OgreRenderWindow.h"
+
+#include "IcyClient.hpp"
+#include "IcyPacket.hpp"
 
 namespace skm {
 
@@ -22,6 +23,7 @@ private:
     Ogre::Camera* m_cam;
     Ogre::SceneManager* m_smgr;
     Ogre::RenderWindow* m_window;
+    
 };
 
 }

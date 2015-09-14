@@ -14,6 +14,10 @@
 #include "IcySession.hpp"
 #include "IcyPacketChat.hpp"
 #include "IcyPacketPlayerJoin.hpp"
+#include "IcyPacketEntitySpawn.hpp"
+#include "IcyPacketEntityUpdate.hpp"
+
+#include "World.hpp"
 
 namespace skm {
     
@@ -81,21 +85,40 @@ void OgreApp::run() {
     Ogre::Light* light = m_smgr->createLight("Light");
     light->setPosition(20,80,50);
     
+    World world;
+    
     while(true) {
         IcyPacket* data;
         bool dataPopped = m_client.m_incomingPackets.pop_front(data);
         while(dataPopped) {
             
             std::cout << "Receive" << std::endl;
-            if(data->getId() == IcyPacket::s_protocol_chat) {
-                IcyPacketChat* chatPack = (IcyPacketChat*) data;
-                
-                std::cout << "null" << ":" << chatPack->m_message << std::endl;
-            }
-            else if(data->getId() == IcyPacket::s_protocol_playerJoin) {
-                IcyPacketPlayerJoin* playerJoin = (IcyPacketPlayerJoin*) data;
-                
-                std::cout << "handle" << ":" << playerJoin->m_handle << std::endl;
+            switch(data->getId()) {
+                case IcyPacket::s_protocol_chat: {
+                    IcyPacketChat* chatPack = (IcyPacketChat*) data;
+                    
+                    std::cout << "null" << ":" << chatPack->m_message << std::endl;
+                    break;
+                }
+                case IcyPacket::s_protocol_playerJoin: {
+                    IcyPacketPlayerJoin* playerJoin = (IcyPacketPlayerJoin*) data;
+                    
+                    std::cout << "handle" << ":" << playerJoin->m_handle << std::endl;
+                    break;
+                }
+                case IcyPacket::s_protocol_entitySpawn: {
+                    IcyPacketEntitySpawn* entSpawn = (IcyPacketEntitySpawn*) data;
+                    world.spawnEntity(*entSpawn);
+                    break;
+                }
+                case IcyPacket::s_protocol_entityUpdate: {
+                    IcyPacketEntityUpdate* entUpdate = (IcyPacketEntityUpdate*) data;
+                    world.updateEntity(*entUpdate);
+                    break;
+                }
+                default: {
+                    break;
+                }
             }
             
             delete data;

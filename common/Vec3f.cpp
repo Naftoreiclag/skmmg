@@ -24,13 +24,6 @@ Vec3f::Vec3f(const Vec3f &v)
 
 Vec3f::~Vec3f() {
 }
-    
-// For debugging
-std::ostream& operator<<(std::ostream& os, const Vec3f& v) {
-    os << "Vec3[" << v.x << ", " << v.y << ", " << v.z << "]";
-    
-    return os;
-}
 
 // Equals
 bool Vec3f::operator==(const Vec3f& v1) {
@@ -120,5 +113,16 @@ bool Vec3f::isZero() {
     return x == 0.f && y == 0.f && z == 0.f;
 }
 
+}
+    
+// For debugging
+std::ostream& operator<<(std::ostream& os, const skm::Vec3f& v) {
+    return os << "Vec3[" << v.x << ", " << v.y << ", " << v.z << "]";
+}
 
+sf::Packet& operator<<(sf::Packet& p, const skm::Vec3f& v) {
+    return p << v.x << v.y << v.z;
+}
+sf::Packet& operator>>(sf::Packet& p, skm::Vec3f& v) {
+    return p >> v.x >> v.y >> v.z;
 }

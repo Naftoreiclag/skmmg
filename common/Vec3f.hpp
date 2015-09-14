@@ -3,6 +3,8 @@
 
 #include <ostream>
 
+#include "SFML/Network.hpp"
+
 namespace skm {
 
 class Vec3f {
@@ -56,9 +58,12 @@ public:
     bool isZero();
 };
 
-// For debugging
-std::ostream& operator<<(std::ostream& os, const Vec3f& v);
-
 }
+
+// For debugging
+std::ostream& operator<<(std::ostream& os, const skm::Vec3f& v);
+
+sf::Packet& operator<<(sf::Packet& p, const skm::Vec3f& v);
+sf::Packet& operator>>(sf::Packet& p, skm::Vec3f& v);
 
 #endif // VEC3F_HPP

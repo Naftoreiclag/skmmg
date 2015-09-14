@@ -43,6 +43,10 @@
       <File Name="ServerConfig.cpp"/>
       <File Name="ServerConfig.hpp"/>
     </VirtualDirectory>
+    <VirtualDirectory Name="mundane">
+      <File Name="World.cpp"/>
+      <File Name="World.hpp"/>
+    </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="src-common">
     <VirtualDirectory Name="networking">

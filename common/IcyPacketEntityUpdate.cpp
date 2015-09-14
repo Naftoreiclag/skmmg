@@ -21,14 +21,25 @@ bool IcyPacketEntityUpdate::isContinuous() const {
 
 bool IcyPacketEntityUpdate::read(sf::Packet& data) {
     data >> m_handle;
+    data >> m_exists;
+    data >> m_changeLoc;
+    data >> m_loc;
     return true;
 }
 void IcyPacketEntityUpdate::write(sf::Packet& data) {
     data << m_handle;
+    data << m_exists;
+    data << m_changeLoc;
+    data << m_loc;
 }
 
 void IcyPacketEntityUpdate::despawn() {
-    exists = false;
+    m_exists = false;
+}
+
+void IcyPacketEntityUpdate::setLoc(Vec3f& loc) {
+    m_changeLoc = true;
+    m_loc = loc;
 }
 
 
