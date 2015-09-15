@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<keys>
+	<moveForward>W</moveForward>
+	<moveLeft>A</moveLeft>
+	<moveBack>S</moveBack>
+	<moveRight>D</moveRight>
+</keys>
