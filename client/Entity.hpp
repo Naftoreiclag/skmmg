@@ -20,6 +20,7 @@ public:
     virtual ~Entity();
     
     virtual void setLocation(Vec3f location) = 0;
+    virtual void tick(float tpf) = 0;
 };
 
 }

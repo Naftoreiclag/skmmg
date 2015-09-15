@@ -91,7 +91,13 @@ void OgreApp::run() {
     
     World world(m_smgr);
     
+    sf::Clock tpsTimer;
     while(true) {
+        float tps = tpsTimer.getElapsedTime().asSeconds();
+        tpsTimer.restart();
+        
+        world.tick(tps);
+        
         IcyPacket* data;
         bool dataPopped = m_client.m_incomingPackets.pop_front(data);
         while(dataPopped) {
@@ -128,6 +134,7 @@ void OgreApp::run() {
             delete data;
             dataPopped = m_client.m_incomingPackets.pop_front(data);
         }
+        
         
         IcyClient::SessionStatus status = m_client.getStatus();
         if(!status.connected) {

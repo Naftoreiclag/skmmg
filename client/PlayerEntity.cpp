@@ -1,5 +1,6 @@
 #include "PlayerEntity.hpp"
 
+#include <iostream>
 #include <sstream>
 
 namespace skm
@@ -10,7 +11,7 @@ std::string PlayerEntity::nextOgreName(){
     
     std::stringstream ss;
     ss << "Player";
-    ss << next;
+    ss << next ++;
     return ss.str();
 }
 
@@ -30,6 +31,10 @@ void PlayerEntity::setLocation(Vec3f location) {
     if(m_smgr) {
         
     }
+}
+
+void PlayerEntity::tick(float tpf) {
+    m_ogreSceneNode->rotate(Ogre::Vector3(0, 1, 0), Ogre::Radian(tpf));
 }
 
 }

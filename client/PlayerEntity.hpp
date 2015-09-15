@@ -22,6 +22,7 @@ public:
     PlayerEntity(const Handle& handle, Ogre::SceneManager* smgr);
     virtual ~PlayerEntity();
     virtual void setLocation(Vec3f location);
+    virtual void tick(float tpf);
 
 };
 

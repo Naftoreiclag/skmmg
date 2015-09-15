@@ -49,6 +49,14 @@ Entity* World::getByHandle(const Entity::Handle handle) {
     }
 }
 
+void World::tick(float tps) {
+    for(EntityMap::iterator it = m_entities.begin(); it != m_entities.end(); ++ it) {
+        Entity* entity = it->second;
+        
+        entity->tick(tps);
+    }
+}
+
 
 }
 

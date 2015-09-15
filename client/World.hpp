@@ -27,6 +27,8 @@ public:
     void spawnEntity(const IcyPacketEntitySpawn& spawnData);
     void updateEntity(const IcyPacketEntityUpdate& updateData);
     
+    void tick(float tps);
+    
     Entity* getByHandle(const Entity::Handle handle);
 
     EntityMap m_entities;
