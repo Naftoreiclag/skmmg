@@ -3,20 +3,24 @@
 
 #include "Vec3f.hpp"
 #include "SFML/System.hpp"
+#include "EntityProtocol.hpp"
 
 namespace skm
 {
 
 class Entity {
-public:
-    typedef sf::Uint32 Handle;
-public:
+private:
     Vec3f m_location;
     
+public:
+    typedef EntityProtocol::Handle Handle;
+public:
     const Handle m_handle;
 
     Entity(const Handle& handle);
     virtual ~Entity();
+    
+    void setLocation(Vec3f location);
 };
 
 }

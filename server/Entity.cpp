@@ -10,6 +10,9 @@ Entity::Entity(const Handle& handle)
 Entity::~Entity() {
 }
 
+void Entity::setLocation(Vec3f location) {
+    m_location = location;
+}
 
 }
 

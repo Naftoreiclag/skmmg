@@ -3,10 +3,13 @@
 
 #include <map>
 
+#include "OgreSceneManager.h"
+
 #include "Entity.hpp"
 
 #include "IcyPacketEntitySpawn.hpp"
 #include "IcyPacketEntityUpdate.hpp"
+
 namespace skm
 {
 
@@ -16,8 +19,10 @@ public:
     
     typedef std::map<Entity::Handle, Entity*> EntityMap;
     
-    World();
+    World(Ogre::SceneManager* smgr);
     ~World();
+    
+    Ogre::SceneManager* const m_smgr;
     
     void spawnEntity(const IcyPacketEntitySpawn& spawnData);
     void updateEntity(const IcyPacketEntityUpdate& updateData);

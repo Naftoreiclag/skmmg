@@ -3,17 +3,21 @@
 #include <vector>
 #include <iostream>
 
+#include "PlayerEntity.hpp"
+
 namespace skm
 {
 
-World::World() {
+World::World(Ogre::SceneManager* smgr)
+: m_smgr(smgr) {
 }
 
 World::~World() {
 }
 
 void World::spawnEntity(const IcyPacketEntitySpawn& spawnData) {
-    Entity* entity = new Entity(spawnData.m_handle);
+    
+    Entity* entity = new PlayerEntity(spawnData.m_handle, m_smgr);
     m_entities[spawnData.m_handle] = entity;
     
     std::cout << "Entity has spawned " << spawnData.m_handle << std::endl;
@@ -31,7 +35,7 @@ void World::updateEntity(const IcyPacketEntityUpdate& updateData) {
         return;
     }
     if(updateData.m_changeLoc) {
-        entity->m_location = updateData.m_loc;
+        entity->setLocation(updateData.m_loc);
     }
 }
 Entity* World::getByHandle(const Entity::Handle handle) {
