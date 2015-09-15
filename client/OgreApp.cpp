@@ -19,6 +19,8 @@
 
 #include "World.hpp"
 
+#include "KeyConfig.hpp"
+
 namespace skm {
     
 OgreApp::OgreApp(IcyClient& client)
@@ -76,16 +78,18 @@ void OgreApp::run() {
     Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
     Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
     
+    /*
     Ogre::SceneNode* headNode = m_smgr->getRootSceneNode()->createChildSceneNode();
     Ogre::Entity* ogreHead = m_smgr->createEntity("Head", "ogrehead.mesh");
     headNode->attachObject(ogreHead);
+    */
     
     m_smgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
     
     Ogre::Light* light = m_smgr->createLight("Light");
     light->setPosition(20,80,50);
     
-    World world;
+    World world(m_smgr);
     
     while(true) {
         IcyPacket* data;
@@ -132,9 +136,8 @@ void OgreApp::run() {
         }
         
         Ogre::WindowEventUtilities::messagePump();
-        
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
-            headNode->rotate(Ogre::Vector3(0, 1, 0), Ogre::Radian(0.001));
+        if(sf::Keyboard::isKeyPressed(KeyConfig::getInstance().moveForward)) {
+            //headNode->rotate(Ogre::Vector3(0, 1, 0), Ogre::Radian(0.001));
             
         }
         

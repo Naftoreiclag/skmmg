@@ -42,6 +42,8 @@
       <File Name="World.hpp"/>
       <File Name="Player.hpp"/>
       <File Name="Player.cpp"/>
+      <File Name="Entity.cpp"/>
+      <File Name="Entity.hpp"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="src-common">
@@ -67,10 +69,9 @@
     <VirtualDirectory Name="threading">
       <File Name="../common/ThreadQueue.hpp"/>
     </VirtualDirectory>
-    <File Name="../common/Entity.cpp"/>
-    <File Name="../common/Entity.hpp"/>
     <File Name="../common/Vec3f.cpp"/>
     <File Name="../common/Vec3f.hpp"/>
+    <File Name="../common/EntityProtocol.hpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>

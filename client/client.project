@@ -42,11 +42,20 @@
     <VirtualDirectory Name="config">
       <File Name="ServerConfig.cpp"/>
       <File Name="ServerConfig.hpp"/>
+      <File Name="KeySerialization.cpp"/>
+      <File Name="KeySerialization.hpp"/>
+      <File Name="KeyConfig.hpp"/>
+      <File Name="KeyConfig.cpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="mundane">
       <File Name="World.cpp"/>
       <File Name="World.hpp"/>
+      <File Name="Entity.cpp"/>
+      <File Name="Entity.hpp"/>
+      <File Name="PlayerEntity.hpp"/>
+      <File Name="PlayerEntity.cpp"/>
     </VirtualDirectory>
+    <VirtualDirectory Name="utility"/>
   </VirtualDirectory>
   <VirtualDirectory Name="src-common">
     <VirtualDirectory Name="networking">
@@ -73,8 +82,7 @@
     </VirtualDirectory>
     <File Name="../common/Vec3f.cpp"/>
     <File Name="../common/Vec3f.hpp"/>
-    <File Name="../common/Entity.hpp"/>
-    <File Name="../common/Entity.cpp"/>
+    <File Name="../common/EntityProtocol.hpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
