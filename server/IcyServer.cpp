@@ -1,11 +1,10 @@
 #include "IcyServer.hpp"
 
-#include "DebugAwareness.hpp"
+//#include "DebugAwareness.hpp"
 
 #ifndef NICYDEBUG
 #include <iostream>
 #endif
-#include <iostream>
 
 #include "IcyPacketHeartbeat.hpp"
 
@@ -49,7 +48,8 @@ IcyProtocol::SessionId IcyServer::nextAvailableSessionId() {
 
 void IcyServer::initialize(IcyProtocol::Port port) {
     m_port = port;
-    m_socket.setBlocking(false);
+    m_vacant = true;
+    m_socket.setBlocking(true);
     m_socket.bind(m_port);
 }
 
@@ -67,10 +67,6 @@ void IcyServer::startConnectionSustainingLoop() {
                 
                 // Packet to receive
                 if(receiveStatus == sf::UdpSocket::Status::Done) {
-                    #ifndef NICYDEBUG
-                    std::cout << "Packet receieved." << std::endl;
-                    #endif
-                    
                     // Magic number
                     IcyProtocol::MagicNumber magicNum;
                     receivedPacket >> magicNum;
@@ -117,6 +113,11 @@ void IcyServer::startConnectionSustainingLoop() {
                             newSession->m_verificationTimeout.restart();
                             newSession->m_verificationTimer.restart();
                             m_sessions.push_back(newSession);
+                            
+                            m_vacant_mutex.lock();
+                            m_vacant = false;
+                            m_vacant_mutex.unlock();
+                            m_socket.setBlocking(false);
                             
                             #ifndef NICYDEBUG
                             std::cout << "New session created for client." << std::endl;
@@ -179,9 +180,6 @@ void IcyServer::startConnectionSustainingLoop() {
                         }
                         
                         // Process normal packet!
-                        #ifndef NICYDEBUG
-                        std::cout << "Processing normal packet..." << std::endl;
-                        #endif
                         sessionSearch->m_clientTimeout.restart();
                         IcyPacket* receievedPacket = sessionSearch->m_session.processRawIncoming(receivedPacket);
                         
@@ -222,6 +220,7 @@ void IcyServer::startConnectionSustainingLoop() {
                         
                         // Remove this client from the session list
                         it = m_sessions.erase(it);
+                        
                         m_notifications.push_back(Message(Message::Type::USER_LEAVE, session->m_session.m_sessionId));
                         delete session;
                         continue;
@@ -239,12 +238,24 @@ void IcyServer::startConnectionSustainingLoop() {
                     
                     // Remove this client from the session list
                     it = m_sessions.erase(it);
+                        
                     m_notifications.push_back(Message(Message::Type::USER_LEAVE, session->m_session.m_sessionId));
                     delete session;
                     continue;
                 }
                 
                 ++ it;
+            }
+                        
+            // If there are no sessions, then there is no reason to do anything but wait for an incoming message
+            if(m_sessions.size() == 0) {
+                #ifndef NICYDEBUG
+                std::cout << "Last client disconnected. Setting listener to blocking mode." << std::endl;
+                #endif
+                m_vacant_mutex.lock();
+                m_vacant = true;
+                m_vacant_mutex.unlock();
+                m_socket.setBlocking(true);
             }
         }
         
@@ -338,10 +349,26 @@ void IcyServer::terminate() {
 }
 
 void IcyServer::send(IcyPacket* packet, IcyProtocol::SessionId sessionId) {
+    // Do not queue if there is nobody to send it to
+    {
+        std::lock_guard<std::mutex> lock(m_vacant_mutex);
+        if(m_vacant) {
+            return;
+        }
+    }
+    
     m_outgoingPackets.push_back(SpecificPacketPair(sessionId, packet));
     
 }
 void IcyServer::send(IcyPacket* packet) {
+    // Do not queue if there is nobody to send it to
+    {
+        std::lock_guard<std::mutex> lock(m_vacant_mutex);
+        if(m_vacant) {
+            return;
+        }
+    }
+    
     m_outgoingGlobalPackets.push_back(packet);
 }
 

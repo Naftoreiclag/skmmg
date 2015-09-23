@@ -5,6 +5,7 @@ server/Debug/*
 server/Release/*
 client/Debug/*
 client/Release/*
+test/*
 
 server/*.mk
 client/*.mk

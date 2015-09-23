@@ -57,18 +57,6 @@ private:
     IcyProtocol::Port m_port;
     std::list<Session*> m_sessions;
     IcyProtocol::SessionId m_lastSessionId;
-
-public:
-    IcyServer();
-    ~IcyServer();
-    
-    // Prepare to accept clients; bind to port
-    void initialize(IcyProtocol::Port port);
-    
-    // Start this method on a new thread; this will begin a loop that will sustain connections to the clients
-    void startConnectionSustainingLoop();
-    
-    void terminate();
     
     struct SpecificPacketPair {
         SpecificPacketPair();
@@ -81,6 +69,20 @@ public:
     ThreadQueue<IcyPacket*> m_outgoingGlobalPackets;
     ThreadQueue<SpecificPacketPair> m_outgoingPackets;
     ThreadQueue<SpecificPacketPair> m_incomingPackets;
+
+    bool m_vacant;
+    std::mutex m_vacant_mutex;
+public:
+    IcyServer();
+    ~IcyServer();
+    
+    // Prepare to accept clients; bind to port
+    void initialize(IcyProtocol::Port port);
+    
+    // Start this method on a new thread; this will begin a loop that will sustain connections to the clients
+    void startConnectionSustainingLoop();
+    
+    void terminate();
     
     ThreadQueue<Message> m_notifications;
     
