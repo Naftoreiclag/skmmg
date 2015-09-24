@@ -78,11 +78,9 @@ void OgreApp::run() {
     Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
     Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
     
-    /*
     Ogre::SceneNode* headNode = m_smgr->getRootSceneNode()->createChildSceneNode();
     Ogre::Entity* ogreHead = m_smgr->createEntity("Head", "ogrehead.mesh");
     headNode->attachObject(ogreHead);
-    */
     
     m_smgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
     
@@ -91,12 +89,33 @@ void OgreApp::run() {
     
     World world(m_smgr);
     
+    sf::Clock oneSecond;
+    unsigned int numFrames = 0;
+    unsigned int numPrints = 0;
+    unsigned int totalFrames = 0;
+    
+    m_client.prepareTimeouts();
     sf::Clock tpsTimer;
     while(true) {
         float tps = tpsTimer.getElapsedTime().asSeconds();
         tpsTimer.restart();
         
+        if(oneSecond.getElapsedTime().asMilliseconds() >= 1000) {
+            std::cout << "FPS: " << numFrames;
+            ++ numPrints;
+            totalFrames += numFrames;
+            numFrames = 0;
+            std::cout << "\tAverage: " << (totalFrames / numPrints) << std::endl;
+            oneSecond.restart();
+        }
+        else {
+            ++ numFrames;
+        }
+        
+        m_client.sustainConnection();
+        
         world.tick(tps);
+        
         
         IcyPacket* data;
         bool dataPopped = m_client.m_incomingPackets.pop_front(data);
@@ -134,20 +153,18 @@ void OgreApp::run() {
             delete data;
             dataPopped = m_client.m_incomingPackets.pop_front(data);
         }
-        
-        
         IcyClient::SessionStatus status = m_client.getStatus();
         if(!status.connected) {
             std::cout << "Connection lost!" << std::endl;
             break;
         }
+        headNode->rotate(Ogre::Vector3(0, 1, 0), Ogre::Radian(tps));
         
         Ogre::WindowEventUtilities::messagePump();
         if(sf::Keyboard::isKeyPressed(KeyConfig::getInstance().moveForward)) {
             //headNode->rotate(Ogre::Vector3(0, 1, 0), Ogre::Radian(0.001));
             
         }
-        
         if(m_window->isClosed()) {
             break;
         }

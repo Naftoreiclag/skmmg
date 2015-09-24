@@ -169,97 +169,93 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
     std::cout << "Successfully initiated connection." << std::endl;
 }
 
-void IcyClient::startConnectionSustainingLoop() {
+void IcyClient::prepareTimeouts() {
     std::cout << "Connection-sustaining loop began." << std::endl;
-    
-    // Keep track of the time since we last sent any data
-    sf::Clock heartbeatTimer;
-    
-    // Reset the server timeout, duh
-    sf::Clock serverTimeout;
-    
-    m_connected = false;
-    // As long as we are connected
-    {
-        std::lock_guard<std::mutex> lock(m_status_mutex);
-        m_connected = m_status.connected;
+    m_heartbeatTimer.restart();
+    m_serverTimeout.restart();
+}
+
+void IcyClient::sustainConnection() {
+    // Send heartbeats
+    if(m_heartbeatTimer.getElapsedTime().asMilliseconds() > IcyProtocol::s_heartbeatDelayMs) {
+        m_heartbeatTimer.restart();
+        m_session->sendOutgoing(new IcyPacketHeartbeat());
     }
-    while(m_connected) {
+    
+    // Send outgoing packets
+    IcyPacket* outgoingPacket;
+    bool outgoingPacketPopped = m_outgoingPackets.pop_front(outgoingPacket);
+    bool packetsSent = outgoingPacketPopped;
+    while(outgoingPacketPopped) {
+        m_session->sendOutgoing(outgoingPacket);
+        outgoingPacketPopped = m_outgoingPackets.pop_front(outgoingPacket);
+    }
+    if(packetsSent) {
+        m_heartbeatTimer.restart();
+    }
+    
+    // Receive incoming packets
+    bool packetsToReceive = true;
+    while(packetsToReceive) {
+        sf::IpAddress senderAddress;
+        IcyProtocol::Port senderPort;
+        sf::Packet receivedPacket;
+        sf::UdpSocket::Status receiveStatus = m_socket.receive(receivedPacket, senderAddress, senderPort);
         
-        // Send heartbeats
-        if(heartbeatTimer.getElapsedTime().asMilliseconds() > IcyProtocol::s_heartbeatDelayMs) {
-            heartbeatTimer.restart();
-            m_session->sendOutgoing(new IcyPacketHeartbeat());
-        }
-        
-        // Send outgoing packets
-        IcyPacket* outgoingPacket;
-        bool outgoingPacketPopped = m_outgoingPackets.pop_front(outgoingPacket);
-        bool packetsSent = outgoingPacketPopped;
-        while(outgoingPacketPopped) {
-            m_session->sendOutgoing(outgoingPacket);
-            outgoingPacketPopped = m_outgoingPackets.pop_front(outgoingPacket);
-        }
-        if(packetsSent) {
-            heartbeatTimer.restart();
-        }
-        
-        // Receive incoming packets
-        bool packetsToReceive = true;
-        while(packetsToReceive) {
-            sf::IpAddress senderAddress;
-            IcyProtocol::Port senderPort;
-            sf::Packet receivedPacket;
-            sf::UdpSocket::Status receiveStatus = m_socket.receive(receivedPacket, senderAddress, senderPort);
-            
-            // Packet to receive
-            if(receiveStatus == sf::UdpSocket::Status::Done) {
-                // Data was from server
-                if(senderPort == m_session->m_serverPort && senderAddress == m_session->m_serverAddress) {
-                    // Check magic number
-                    IcyProtocol::MagicNumber magicNum;
-                    receivedPacket >> magicNum;
+        // Packet to receive
+        if(receiveStatus == sf::UdpSocket::Status::Done) {
+            // Data was from server
+            if(senderPort == m_session->m_serverPort && senderAddress == m_session->m_serverAddress) {
+                // Check magic number
+                IcyProtocol::MagicNumber magicNum;
+                receivedPacket >> magicNum;
+                
+                // Magic number is correct
+                if(magicNum == IcyProtocol::s_magicNumber) {
+                
+                    IcyPacket* receievedPacket = m_session->processRawIncoming(receivedPacket);
                     
-                    // Magic number is correct
-                    if(magicNum == IcyProtocol::s_magicNumber) {
-                    
-                        IcyPacket* receievedPacket = m_session->processRawIncoming(receivedPacket);
-                        
-                        if(receievedPacket != nullptr) {
-                            m_incomingPackets.push_back(receievedPacket);
-                        }
-                        
-                        serverTimeout.restart();
-                        
+                    if(receievedPacket != nullptr) {
+                        m_incomingPackets.push_back(receievedPacket);
                     }
                     
-                    // Magic number unknown
-                    else {
-                        // Wrong magic number??
-                    }
+                    m_serverTimeout.restart();
+                    
                 }
                 
-                // Data was not from server
+                // Magic number unknown
                 else {
-                    // Got a response from elsewhere??
+                    // Wrong magic number??
                 }
             }
             
-            // No packet to receive
+            // Data was not from server
             else {
-                packetsToReceive = false;
+                // Got a response from elsewhere??
             }
         }
         
-        // Check the time passed since the last receieved packet
-        if(serverTimeout.getElapsedTime().asMilliseconds() > IcyProtocol::s_serverTimeoutMs) {
-            // Too long; terminate connection
-            terminateConnection();
+        // No packet to receive
+        else {
+            packetsToReceive = false;
         }
+    }
+    
+    // Check the time passed since the last receieved packet
+    if(m_serverTimeout.getElapsedTime().asMilliseconds() > IcyProtocol::s_serverTimeoutMs) {
+        // Too long; terminate connection
+        terminateConnection();
+    }
+}
+
+void IcyClient::startConnectionSustainingLoop() {
+    while(isConnected()) {
+        sustainConnection();
     }
 }
 
 void IcyClient::terminateConnection() {
+    std::lock_guard<std::mutex> lock(m_status_mutex);
     m_status.connected = false;
 }
 

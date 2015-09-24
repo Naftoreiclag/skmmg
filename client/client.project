@@ -114,6 +114,7 @@
         <Library Value="sfml-window-d"/>
         <Library Value="sfml-system-d"/>
         <Library Value="sfml-network-d"/>
+        <Library Value="sfml-graphics-d"/>
         <Library Value="OgreMain_d"/>
         <Library Value="boost_date_time-mgw51-mt-d-1_59"/>
         <Library Value="boost_thread-mgw51-mt-d-1_59"/>
@@ -192,6 +193,7 @@
         <Library Value="sfml-window"/>
         <Library Value="sfml-system"/>
         <Library Value="sfml-network"/>
+        <Library Value="sfml-graphics"/>
         <Library Value="OgreMain"/>
         <Library Value="boost_date_time-mgw51-mt-1_59"/>
         <Library Value="boost_thread-mgw51-mt-1_59"/>

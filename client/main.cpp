@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
         std::cout << "Session id is " << status.sessionId << std::endl;
     }
     
-    std::thread clientThread(&IcyClient::startConnectionSustainingLoop, &client);
+    //std::thread clientThread(&IcyClient::startConnectionSustainingLoop, &client);
     
     OgreApp app(client);
     app.run();

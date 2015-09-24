@@ -29,7 +29,11 @@ private:
     SessionStatus m_status;
     IcySession* m_session;
     
-    bool m_connected;
+    // Keep track of the time since we last sent any data
+    sf::Clock m_heartbeatTimer;
+    
+    // Reset the server timeout, duh
+    sf::Clock m_serverTimeout;
 public:
     IcyClient();
     ~IcyClient();
@@ -45,6 +49,10 @@ public:
     
     // Start this method on a new thread; this will begin a loop that will try sustain the connection with the server
     void startConnectionSustainingLoop();
+    
+    // Alternatively, add this to the main loop
+    void sustainConnection();
+    void prepareTimeouts();
     
     // Ends the loop called by startConnectionSustainingLoop; thread-safe
     void terminateConnection();
