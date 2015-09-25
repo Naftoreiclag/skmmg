@@ -16,6 +16,9 @@ IcyServer::Message::Message() {
 IcyServer::Message::Message(Type type, IcyProtocol::SessionId session)
 : m_type(type)
 , m_session(session) {}
+    
+IcyServer::Message::Message(Type type)
+: m_type(type) {}
 
 IcyServer::Message::~Message() {
 }
@@ -53,7 +56,7 @@ void IcyServer::initialize(IcyProtocol::Port port) {
     m_socket.bind(m_port);
 }
 
-void IcyServer::startConnectionSustainingLoop() {
+void IcyServer::startConnectionSustainingLoop(std::condition_variable& siestaCond, std::mutex& siestaMutex, bool& siestaNotify) {
     // As long as we are connected
     while(m_running) {
         // Receive incoming packets
@@ -115,6 +118,11 @@ void IcyServer::startConnectionSustainingLoop() {
                             m_sessions.push_back(newSession);
                             
                             m_vacant_mutex.lock();
+                            if(m_vacant) {
+                                std::unique_lock<std::mutex> lock(siestaMutex);
+                                siestaNotify = true;
+                                siestaCond.notify_one();
+                            }
                             m_vacant = false;
                             m_vacant_mutex.unlock();
                             m_socket.setBlocking(false);
@@ -252,6 +260,9 @@ void IcyServer::startConnectionSustainingLoop() {
                 #ifndef NICYDEBUG
                 std::cout << "Last client disconnected. Setting listener to blocking mode." << std::endl;
                 #endif
+                
+                m_notifications.push_back(Message(Message::Type::ENTER_SIESTA_MODE));
+                
                 m_vacant_mutex.lock();
                 m_vacant = true;
                 m_vacant_mutex.unlock();

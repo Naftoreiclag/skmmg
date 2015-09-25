@@ -19,7 +19,8 @@ public:
     public:
         enum Type {
             USER_JOIN,
-            USER_LEAVE
+            USER_LEAVE,
+            ENTER_SIESTA_MODE
         };
     public:
         Message();
@@ -80,7 +81,7 @@ public:
     void initialize(IcyProtocol::Port port);
     
     // Start this method on a new thread; this will begin a loop that will sustain connections to the clients
-    void startConnectionSustainingLoop();
+    void startConnectionSustainingLoop(std::condition_variable& siestaCond, std::mutex& siestaMutex, bool& siestaNotify);
     
     void terminate();
     
