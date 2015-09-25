@@ -51,6 +51,7 @@ IcyProtocol::SessionId IcyServer::nextAvailableSessionId() {
 
 void IcyServer::initialize(IcyProtocol::Port port) {
     m_port = port;
+    m_notifications.push_back(Message(Message::Type::ENTER_SIESTA_MODE));
     m_vacant = true;
     m_socket.setBlocking(true);
     m_socket.bind(m_port);
@@ -119,7 +120,7 @@ void IcyServer::startConnectionSustainingLoop(std::condition_variable& siestaCon
                             
                             m_vacant_mutex.lock();
                             if(m_vacant) {
-                                std::unique_lock<std::mutex> lock(siestaMutex);
+                                //std::unique_lock<std::mutex> lock(siestaMutex);
                                 siestaNotify = true;
                                 siestaCond.notify_one();
                             }

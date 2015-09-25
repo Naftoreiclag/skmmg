@@ -1,6 +1,7 @@
 #ifndef ICYSERVER_HPP
 #define ICYSERVER_HPP
 
+#include <condition_variable>
 #include <mutex>
 #include <list>
 
@@ -25,6 +26,7 @@ public:
     public:
         Message();
         Message(Type type, IcyProtocol::SessionId session);
+        Message(Type type);
         ~Message();
         
         Type m_type;

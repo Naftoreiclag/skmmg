@@ -1,3 +1,5 @@
+#include <condition_variable>
+#include <mutex>
 #include <iostream>
 #include <thread>
 
@@ -28,15 +30,18 @@ int main(int argc, char **argv) {
     world.m_server = &server;
     
     // Run for eternity
-    bool siestaMode = true;
+    bool siestaMode = false;
+    bool running = true;
     sf::Clock tpsTimer;
-    while(true) {
+    while(running) {
         if(siestaMode) {
+            std::cout << "Main thread now sleeping until user joins." << std::endl;
             while(!siestaNotify) {
                 std::unique_lock<std::mutex> lock(siestaMutex);
                 siestaCond.wait(lock);
             }
             siestaNotify = false;
+            siestaMode = false;
         }
         
         float tps = tpsTimer.getElapsedTime().asSeconds();
@@ -51,6 +56,7 @@ int main(int argc, char **argv) {
                     // Enter sleep modes
                     case IcyServer::Message::Type::ENTER_SIESTA_MODE: {
                         siestaMode = true;
+                        break;
                     }
                     case IcyServer::Message::Type::USER_JOIN: {
                         std::cout << "User " << data.m_session << " joined!" << std::endl;
