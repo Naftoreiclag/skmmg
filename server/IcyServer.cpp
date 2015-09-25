@@ -119,8 +119,8 @@ void IcyServer::startConnectionSustainingLoop(std::condition_variable& siestaCon
                             m_sessions.push_back(newSession);
                             
                             m_vacant_mutex.lock();
+                            // If the server is vacant, then the main thread must have been sleeping, so wake it up.
                             if(m_vacant) {
-                                //std::unique_lock<std::mutex> lock(siestaMutex);
                                 siestaNotify = true;
                                 siestaCond.notify_one();
                             }

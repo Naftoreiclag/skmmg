@@ -30,6 +30,8 @@ public:
     void despawnPlayer(const IcyProtocol::SessionId& sessionId);
     
     void spawnEntity();
+    
+    void tick(float tps);
 
     World();
     ~World();

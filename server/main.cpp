@@ -16,34 +16,50 @@ int main(int argc, char **argv) {
     // Hello world
     std::cout << "SKMMG Server" << std::endl;
     
-    // Create new server, initialize
+    // Create new server and initialize
     IcyServer server;
     server.initialize(25564);
     
+    // Initialize siesta wakeup protocol
     std::condition_variable siestaCond;
     std::mutex siestaMutex;
     bool siestaNotify = false;
+    
+    // Begin thread
     std::thread clientThread(&IcyServer::startConnectionSustainingLoop, &server, std::ref(siestaCond), std::ref(siestaMutex), std::ref(siestaNotify));
     
-    // 
+    // World
     World world;
     world.m_server = &server;
     
-    // Run for eternity
+    // State management
     bool siestaMode = false;
     bool running = true;
+    
+    // Keep track of tps
     sf::Clock tpsTimer;
+    
+    // Main loop/thread
     while(running) {
+        
+        // In siesta mode
         if(siestaMode) {
             std::cout << "Main thread now sleeping until user joins." << std::endl;
+            
+            // Sleep until we get an atomic notification
             while(!siestaNotify) {
                 std::unique_lock<std::mutex> lock(siestaMutex);
                 siestaCond.wait(lock);
             }
+            
+            // Consume notification
             siestaNotify = false;
+            
+            // Leave siesta mode
             siestaMode = false;
         }
         
+        // Find how long since the last tick
         float tps = tpsTimer.getElapsedTime().asSeconds();
         tpsTimer.restart();
         
@@ -53,7 +69,7 @@ int main(int argc, char **argv) {
             bool isData = server.receive(data);
             while(isData) {
                 switch(data.m_type) {
-                    // Enter sleep modes
+                    // Switch server to siesta mode
                     case IcyServer::Message::Type::ENTER_SIESTA_MODE: {
                         siestaMode = true;
                         break;
@@ -102,7 +118,8 @@ int main(int argc, char **argv) {
             }
         }
         
-        // Perform some other logic here
+        // Tick world
+        world.tick(tps);
     }
     
 	return 0;

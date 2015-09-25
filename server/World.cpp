@@ -55,5 +55,11 @@ void World::despawnPlayer(const IcyProtocol::SessionId& sessionId) {
     
 }
 
+
+void World::tick(float tps) {
+    
+    // Do something here
+}
+
 }
 
