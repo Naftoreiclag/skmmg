@@ -1,3 +1,5 @@
+#include "DebugAwareness.hpp"
+
 #include <condition_variable>
 #include <mutex>
 #include <iostream>
@@ -44,7 +46,9 @@ int main(int argc, char **argv) {
         
         // In siesta mode
         if(siestaMode) {
+            #ifndef NTHREADINGDEBUG
             std::cout << "Main thread now sleeping until user joins." << std::endl;
+            #endif
             
             // Sleep until we get an atomic notification
             while(!siestaNotify) {
@@ -106,6 +110,7 @@ int main(int argc, char **argv) {
                         IcyPacketChat* chatPack = (IcyPacketChat*) packet;
                         
                         std::cout << sessionId << ":" << chatPack->m_message << std::endl;
+                        break;
                     }
                     default: {
                         break;

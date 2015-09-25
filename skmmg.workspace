@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Workspace Name="skmmg" Database="">
-  <Project Name="client" Path="client/client.project" Active="No"/>
-  <Project Name="server" Path="server/server.project" Active="Yes"/>
+  <Project Name="client" Path="client/client.project" Active="Yes"/>
+  <Project Name="server" Path="server/server.project" Active="No"/>
   <Project Name="test" Path="test/test.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
@@ -9,7 +9,7 @@
       <Project Name="server" ConfigName="Debug"/>
       <Project Name="test" ConfigName="Debug"/>
     </WorkspaceConfiguration>
-    <WorkspaceConfiguration Name="Release" Selected="yes">
+    <WorkspaceConfiguration Name="Release" Selected="no">
       <Project Name="client" ConfigName="Release"/>
       <Project Name="server" ConfigName="Release"/>
       <Project Name="test" ConfigName="Release"/>

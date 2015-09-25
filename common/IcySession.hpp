@@ -26,9 +26,9 @@ public:
     IcyProtocol::SequenceNumber m_localSequence;
     
     // The most recent packet that we have receieved
-    bool m_neverReceievedPacketBefore;
     IcyProtocol::SequenceNumber m_ack;
     IcyProtocol::AckBitfield m_ackBits;
+    bool m_neverReceievedPacketBefore;
     
     struct SentPacket {
         IcyProtocol::SequenceNumber sequence;

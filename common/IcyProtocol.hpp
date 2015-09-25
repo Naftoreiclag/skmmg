@@ -25,7 +25,7 @@ namespace IcyProtocol
     const sf::Int32 s_verifyDelayMs = 1000; // Time between verification requests
     const sf::Int32 s_verifyTimeoutMs = 15000; // If the server does not verify the session within this time, terminate connection
     
-    const sf::Int32 s_heartbeatDelayMs = 2000; // Time between sent heartbeats
+    const sf::Int32 s_heartbeatDelayMs = 3000; // Time between sent heartbeats
     const sf::Int32 s_serverTimeoutMs = 15000; // If we do not receive any packets for this long, terminate connection
     
     const SessionId s_sessionRequestId = 0xFFFFFFFF;

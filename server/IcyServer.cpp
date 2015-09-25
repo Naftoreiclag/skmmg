@@ -1,6 +1,6 @@
 #include "IcyServer.hpp"
 
-//#include "DebugAwareness.hpp"
+#include "DebugAwareness.hpp"
 
 #ifndef NICYDEBUG
 #include <iostream>

@@ -5,6 +5,9 @@
     #ifndef NICYDEBUG
     #define NICYDEBUG
     #endif
+    #ifndef NTHREADINGDEBUG
+    #define NTHREADINGDEBUG
+    #endif
 #endif
 
 #endif // DEBUGAWARENESS_HPP
