@@ -65,6 +65,8 @@
       <File Name="../common/IcyPacketEntitySpawn.hpp"/>
       <File Name="../common/IcyPacketEntityUpdate.cpp"/>
       <File Name="../common/IcyPacketEntityUpdate.hpp"/>
+      <File Name="../common/IcyPacketReconciledLocationUpdate.cpp"/>
+      <File Name="../common/IcyPacketReconciledLocationUpdate.hpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="threading">
       <File Name="../common/ThreadQueue.hpp"/>
@@ -97,7 +99,7 @@
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
-        <![CDATA[]]>
+        <![CDATA[Mingw64Dlls=C:/mingw-w64/x86_64-5.1.0-posix-seh-rt_v4-rev0/mingw64/bin]]>
       </Environment>
       <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="" IsExtended="no">
         <DebuggerSearchPaths/>
@@ -112,6 +114,12 @@
         <Command Enabled="no"># SFML</Command>
         <Command Enabled="yes">cp ../library/mingw-w64/SFML-2.3.1/bin/Debug/*.dll $(IntermediateDirectory)</Command>
         <Command Enabled="yes">cp ../library/mingw-w64/SFML-2.3.1/sfml-license.txt $(IntermediateDirectory)</Command>
+        <Command Enabled="yes"/>
+        <Command Enabled="no"># Mingw64</Command>
+        <Command Enabled="yes">cp $(Mingw64Dlls)/libgcc_s_seh*.dll $(IntermediateDirectory)</Command>
+        <Command Enabled="yes">cp $(Mingw64Dlls)/libstdc++*.dll $(IntermediateDirectory)</Command>
+        <Command Enabled="yes">cp $(Mingw64Dlls)/libwinpthread*.dll $(IntermediateDirectory)</Command>
+        <Command Enabled="yes"/>
       </PostBuild>
       <CustomBuild Enabled="no">
         <RebuildCommand/>
@@ -149,7 +157,7 @@
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Release" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
-        <![CDATA[]]>
+        <![CDATA[Mingw64Dlls=C:/mingw-w64/x86_64-5.1.0-posix-seh-rt_v4-rev0/mingw64/bin]]>
       </Environment>
       <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="" IsExtended="no">
         <DebuggerSearchPaths/>
@@ -164,6 +172,12 @@
         <Command Enabled="no"># SFML</Command>
         <Command Enabled="yes">cp ../library/mingw-w64/SFML-2.3.1/bin/Release/*.dll $(IntermediateDirectory)</Command>
         <Command Enabled="yes">cp ../library/mingw-w64/SFML-2.3.1/sfml-license.txt $(IntermediateDirectory)</Command>
+        <Command Enabled="yes"/>
+        <Command Enabled="no"># Mingw64</Command>
+        <Command Enabled="yes">cp $(Mingw64Dlls)/libgcc_s_seh*.dll $(IntermediateDirectory)</Command>
+        <Command Enabled="yes">cp $(Mingw64Dlls)/libstdc++*.dll $(IntermediateDirectory)</Command>
+        <Command Enabled="yes">cp $(Mingw64Dlls)/libwinpthread*.dll $(IntermediateDirectory)</Command>
+        <Command Enabled="yes"/>
         <Command Enabled="yes"/>
       </PostBuild>
       <CustomBuild Enabled="no">

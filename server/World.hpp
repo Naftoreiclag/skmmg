@@ -28,6 +28,7 @@ public:
     
     void spawnPlayer(const IcyProtocol::SessionId& sessionId);
     void despawnPlayer(const IcyProtocol::SessionId& sessionId);
+    Player* getPlayer(const IcyProtocol::SessionId& sessionId) const;
     
     void spawnEntity();
     

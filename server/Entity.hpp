@@ -9,7 +9,7 @@ namespace skm
 {
 
 class Entity {
-private:
+public:
     Vec3f m_location;
     
 public:

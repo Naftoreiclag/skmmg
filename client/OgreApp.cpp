@@ -19,6 +19,8 @@
 
 #include "World.hpp"
 
+#include "ReconciledLocation.hpp"
+
 #include "KeyConfig.hpp"
 
 namespace skm {
@@ -89,6 +91,8 @@ void OgreApp::run() {
     
     World world(m_smgr);
     
+    ReconciledLocation reconLoc(m_client);
+    
     sf::Clock oneSecond;
     unsigned int numFrames = 0;
     unsigned int numPrints = 0;
@@ -107,6 +111,7 @@ void OgreApp::run() {
             numFrames = 0;
             std::cout << "\tAverage: " << (totalFrames / numPrints) << std::endl;
             oneSecond.restart();
+            std::cout << reconLoc.getX() << "\t" << reconLoc.getZ() << std::endl;
         }
         else {
             ++ numFrames;
@@ -114,6 +119,7 @@ void OgreApp::run() {
         
         m_client.sustainConnection();
         
+        reconLoc.tick();
         world.tick(tps);
         
         
@@ -121,7 +127,6 @@ void OgreApp::run() {
         bool dataPopped = m_client.m_incomingPackets.pop_front(data);
         while(dataPopped) {
             
-            std::cout << "Receive" << std::endl;
             switch(data->getId()) {
                 case IcyPacket::s_protocol_chat: {
                     IcyPacketChat* chatPack = (IcyPacketChat*) data;
@@ -145,6 +150,11 @@ void OgreApp::run() {
                     world.updateEntity(*entUpdate);
                     break;
                 }
+                case IcyPacket::s_protocol_reconciledLocationUpdate: {
+                    IcyPacketReconciledLocationUpdate* reconLocUpdate = (IcyPacketReconciledLocationUpdate*) data;
+                    reconLoc.handlePacket(reconLocUpdate);
+                    break;
+                }
                 default: {
                     break;
                 }
@@ -158,7 +168,9 @@ void OgreApp::run() {
             std::cout << "Connection lost!" << std::endl;
             break;
         }
-        headNode->rotate(Ogre::Vector3(0, 1, 0), Ogre::Radian(tps));
+        //headNode->rotate(Ogre::Vector3(0, 1, 0), Ogre::Radian(tps));
+        headNode->setPosition(reconLoc.getX(), 0, reconLoc.getZ());
+        reconLoc.requestSet(reconLoc.getX() + tps * 5, reconLoc.getZ());
         
         Ogre::WindowEventUtilities::messagePump();
         if(sf::Keyboard::isKeyPressed(KeyConfig::getInstance().moveForward)) {

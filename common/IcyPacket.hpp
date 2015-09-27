@@ -16,6 +16,7 @@ public:
     static const ProtocolId s_protocol_playerJoin = 3;
     static const ProtocolId s_protocol_entitySpawn = 4;
     static const ProtocolId s_protocol_entityUpdate = 5;
+    static const ProtocolId s_protocol_reconciledLocationUpdate = 6;
     static const ProtocolId s_protocol_heartbeat = 7;
     
 public:

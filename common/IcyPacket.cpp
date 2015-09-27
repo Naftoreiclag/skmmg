@@ -6,6 +6,7 @@
 #include "IcyPacketDisconnect.hpp"
 #include "IcyPacketEntitySpawn.hpp"
 #include "IcyPacketEntityUpdate.hpp"
+#include "IcyPacketReconciledLocationUpdate.hpp"
 
 namespace skm
 {
@@ -38,6 +39,10 @@ IcyPacket* IcyPacket::newPacketFromRaw(sf::Packet& packet) {
         }
         case s_protocol_entityUpdate: {
             p = new IcyPacketEntityUpdate();
+            break;
+        }
+        case s_protocol_reconciledLocationUpdate: {
+            p = new IcyPacketReconciledLocationUpdate();
             break;
         }
         default: {

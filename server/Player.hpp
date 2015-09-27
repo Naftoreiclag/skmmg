@@ -2,6 +2,7 @@
 #define PLAYER_HPP
 
 #include "IcyProtocol.hpp"
+#include "IcyPacketReconciledLocationUpdate.hpp"
 
 #include "Entity.hpp"
 
@@ -15,6 +16,9 @@ public:
     virtual ~Player();
     
     const IcyProtocol::SessionId m_sessionId;
+    
+    IcyPacketReconciledLocationUpdate::Sequence_t m_reconLocSeq;
+    IcyPacketReconciledLocationUpdate* handlePacket(const IcyPacketReconciledLocationUpdate* packet);
 };
 
 }

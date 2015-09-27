@@ -54,6 +54,17 @@ void World::despawnPlayer(const IcyProtocol::SessionId& sessionId) {
     }
     
 }
+Player* World::getPlayer(const IcyProtocol::SessionId& sessionId) const {
+    for(PlayerContainer::const_iterator it = m_players.begin(); it != m_players.end(); ++ it) {
+        Player* player = *it;
+        
+        if(player->m_sessionId == sessionId) {
+            return player;
+        }
+    }
+    
+    return nullptr;
+}
 
 
 void World::tick(float tps) {

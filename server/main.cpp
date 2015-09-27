@@ -9,8 +9,10 @@
 #include "IcyServer.hpp"
 #include "IcyPacketChat.hpp"
 #include "IcyPacketPlayerJoin.hpp"
+#include "IcyPacketReconciledLocationUpdate.hpp"
 
 #include "World.hpp"
+#include "Player.hpp"
 
 using namespace skm;
 
@@ -78,16 +80,22 @@ int main(int argc, char **argv) {
                         siestaMode = true;
                         break;
                     }
+                    
+                    // User joined game
                     case IcyServer::Message::Type::USER_JOIN: {
                         std::cout << "User " << data.m_session << " joined!" << std::endl;
                         world.spawnPlayer(data.m_session);
                         break;
                     }
+                    
+                    // User left game
                     case IcyServer::Message::Type::USER_LEAVE: {
                         std::cout << "User " << data.m_session << " left!" << std::endl;
                         world.despawnPlayer(data.m_session);
                         break;
                     }
+                    
+                    // Unknown message
                     default: {
                         break;
                     }
@@ -110,6 +118,21 @@ int main(int argc, char **argv) {
                         IcyPacketChat* chatPack = (IcyPacketChat*) packet;
                         
                         std::cout << sessionId << ":" << chatPack->m_message << std::endl;
+                        break;
+                    }
+                    case IcyPacket::s_protocol_reconciledLocationUpdate: {
+                        IcyPacketReconciledLocationUpdate* locUpd = (IcyPacketReconciledLocationUpdate*) packet;
+                        
+                        Player* player = world.getPlayer(sessionId);
+                        
+                        if(player == nullptr) {
+                            break;
+                        }
+                        
+                        IcyPacketReconciledLocationUpdate* resp = player->handlePacket(locUpd);
+                        
+                        server.send(resp, sessionId);
+                        
                         break;
                     }
                     default: {
