@@ -23,9 +23,9 @@ bool IcyPacketReconciledLocationUpdate::isContinuous() const {
 }
 
 bool IcyPacketReconciledLocationUpdate::read(sf::Packet& data) {
-    data << sequence;
-    data << x;
-    data << z;
+    data >> sequence;
+    data >> x;
+    data >> z;
     if(std::isnan(z) || std::isnan(x)) {
         std::cout << "Packet is nan!" << std::endl;
         return false;
@@ -33,9 +33,9 @@ bool IcyPacketReconciledLocationUpdate::read(sf::Packet& data) {
     return true;
 }
 void IcyPacketReconciledLocationUpdate::write(sf::Packet& data) {
-    data >> sequence;
-    data >> x;
-    data >> z;
+    data << sequence;
+    data << x;
+    data << z;
 }
 
 }
