@@ -9,7 +9,7 @@ Building
 **IDE:**  
 SKMMG uses [CodeLite](http://codelite.org/) as its main IDE. Once installed, just open the repository as a workspace. The client and server are included as separate projects.
 
-**Compiler:**  
+**Recommended Compiler:**  
 - [MinGW-w64](http://sourceforge.net/projects/mingw-w64/) for Windows
 
 **Other:**  
