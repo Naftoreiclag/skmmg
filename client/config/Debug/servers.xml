@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <serverlist>
 	<server>
+		<name>test</name>
+		<address>192.168.1.116</address>
+		<port>25564</port>
+	</server>
+	<server>
 		<name>localhost</name>
 		<address>127.0.0.1</address>
 		<port>25564</port>
