@@ -42,7 +42,12 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
                 verifySessionId << IcyProtocol::s_sessionRequestId;
                 
                 m_socket.send(verifySessionId, m_session->m_serverAddress, m_session->m_serverPort);
-                std::cout << "Requesting connection..." << std::endl;
+                if(firstRequest) {
+                    std::cout << "Requesting connection..." ;
+                }
+                else {
+                    std::cout << ".";
+                }
                 
                 firstRequest = false;
             }
@@ -61,6 +66,7 @@ void IcyClient::initializeConnection(sf::IpAddress address, IcyProtocol::Port po
                     receivedPacket >> magicNum;
                     receivedPacket >> sessionId;
                     
+                    std::cout << std::endl;
                     std::cout << "Session id: " << sessionId << std::endl;
                     
                     if(magicNum == IcyProtocol::s_magicHandshake) {

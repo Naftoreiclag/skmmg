@@ -40,6 +40,7 @@ int main(int argc, char **argv) {
     IcyClient::SessionStatus status = client.getStatus();
     if(!status.connected) {
         if(!status.serverContacted) {
+            std::cout << std::endl;
             std::cout << "Could not contact server!" << std::endl;
             return 0;
         }

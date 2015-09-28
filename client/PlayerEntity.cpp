@@ -20,6 +20,7 @@ PlayerEntity::PlayerEntity(const Handle& handle, Ogre::SceneManager* smgr)
     m_ogreSceneNode = m_smgr->getRootSceneNode()->createChildSceneNode();
     m_ogreEntity = m_smgr->createEntity(nextOgreName(), "ogrehead.mesh");
     m_ogreSceneNode->attachObject(m_ogreEntity);
+    m_ogreSceneNode->setScale(0.2f, 0.2f, 0.2f);
 }
 
 PlayerEntity::~PlayerEntity()

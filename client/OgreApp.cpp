@@ -85,8 +85,11 @@ void OgreApp::run() {
     Ogre::SceneNode* headNode = m_smgr->getRootSceneNode()->createChildSceneNode();
     Ogre::Entity* ogreHead = m_smgr->createEntity("Head", "ogrehead.mesh");
     headNode->attachObject(ogreHead);
+    headNode->setScale(0.2f, 0.2f, 0.2f);
     
     m_smgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
+    
+    m_smgr->setSkyBox(true, "Test");
     
     Ogre::Light* light = m_smgr->createLight("Light");
     light->setPosition(20,80,50);
@@ -100,27 +103,11 @@ void OgreApp::run() {
     unsigned int numPrints = 0;
     unsigned int totalFrames = 0;
     
-    sf::Clock squareMeTimer;
-    float num = 0;
-    
     m_client.prepareTimeouts();
     sf::Clock tpsTimer;
     while(true) {
         float tps = tpsTimer.getElapsedTime().asSeconds();
         tpsTimer.restart();
-        
-        if(squareMeTimer.getElapsedTime().asMilliseconds() >= 300) {
-            num += 2.f;
-            
-            IcyPacketSquareRoot* sqr = new IcyPacketSquareRoot();
-            
-            sqr->danger = num;
-            std::cout << num << std::endl;
-            
-            m_client.m_outgoingPackets.push_back(sqr);
-            
-            squareMeTimer.restart();
-        }
         
         if(oneSecond.getElapsedTime().asMilliseconds() >= 1000) {
             std::cout << "FPS: " << numFrames;
@@ -188,12 +175,19 @@ void OgreApp::run() {
         }
         //headNode->rotate(Ogre::Vector3(0, 1, 0), Ogre::Radian(tps));
         headNode->setPosition(reconLoc.getX(), 0, reconLoc.getZ());
-        reconLoc.requestSet(reconLoc.getX() + tps * 5, reconLoc.getZ());
         
         Ogre::WindowEventUtilities::messagePump();
         if(sf::Keyboard::isKeyPressed(KeyConfig::getInstance().moveForward)) {
-            //headNode->rotate(Ogre::Vector3(0, 1, 0), Ogre::Radian(0.001));
-            
+            reconLoc.requestSet(reconLoc.getX(), reconLoc.getZ() - tps * 5);
+        }
+        if(sf::Keyboard::isKeyPressed(KeyConfig::getInstance().moveBack)) {
+            reconLoc.requestSet(reconLoc.getX(), reconLoc.getZ() + tps * 5);
+        }
+        if(sf::Keyboard::isKeyPressed(KeyConfig::getInstance().moveLeft)) {
+            reconLoc.requestSet(reconLoc.getX() - tps * 5, reconLoc.getZ());
+        }
+        if(sf::Keyboard::isKeyPressed(KeyConfig::getInstance().moveRight)) {
+            reconLoc.requestSet(reconLoc.getX() + tps * 5, reconLoc.getZ());
         }
         if(m_window->isClosed()) {
             break;
