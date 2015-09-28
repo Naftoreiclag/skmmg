@@ -1,6 +1,7 @@
 #include "OgreApp.hpp"
 
 #include <iostream>
+#include <math.h>
 
 #include "OgreLogManager.h"
 #include "OgreViewport.h"
@@ -16,6 +17,7 @@
 #include "IcyPacketPlayerJoin.hpp"
 #include "IcyPacketEntitySpawn.hpp"
 #include "IcyPacketEntityUpdate.hpp"
+#include "IcyPacketSquareRoot.hpp"
 
 #include "World.hpp"
 
@@ -98,11 +100,27 @@ void OgreApp::run() {
     unsigned int numPrints = 0;
     unsigned int totalFrames = 0;
     
+    sf::Clock squareMeTimer;
+    float num = 0;
+    
     m_client.prepareTimeouts();
     sf::Clock tpsTimer;
     while(true) {
         float tps = tpsTimer.getElapsedTime().asSeconds();
         tpsTimer.restart();
+        
+        if(squareMeTimer.getElapsedTime().asMilliseconds() >= 300) {
+            num += 2.f;
+            
+            IcyPacketSquareRoot* sqr = new IcyPacketSquareRoot();
+            
+            sqr->danger = num;
+            std::cout << num << std::endl;
+            
+            m_client.m_outgoingPackets.push_back(sqr);
+            
+            squareMeTimer.restart();
+        }
         
         if(oneSecond.getElapsedTime().asMilliseconds() >= 1000) {
             std::cout << "FPS: " << numFrames;
@@ -169,8 +187,8 @@ void OgreApp::run() {
             break;
         }
         //headNode->rotate(Ogre::Vector3(0, 1, 0), Ogre::Radian(tps));
-        headNode->setPosition(reconLoc.getX(), 0, reconLoc.getZ());
-        reconLoc.requestSet(reconLoc.getX() + tps * 5, reconLoc.getZ());
+        //headNode->setPosition(reconLoc.getX(), 0, reconLoc.getZ());
+        //reconLoc.requestSet(reconLoc.getX() + tps * 5, reconLoc.getZ());
         
         Ogre::WindowEventUtilities::messagePump();
         if(sf::Keyboard::isKeyPressed(KeyConfig::getInstance().moveForward)) {

@@ -1,5 +1,7 @@
 #include "IcyPacket.hpp"
 
+#include <iostream>
+
 #include "IcyPacketHeartbeat.hpp"
 #include "IcyPacketChat.hpp"
 #include "IcyPacketPlayerJoin.hpp"
@@ -7,6 +9,7 @@
 #include "IcyPacketEntitySpawn.hpp"
 #include "IcyPacketEntityUpdate.hpp"
 #include "IcyPacketReconciledLocationUpdate.hpp"
+#include "IcyPacketSquareRoot.hpp"
 
 namespace skm
 {
@@ -45,6 +48,10 @@ IcyPacket* IcyPacket::newPacketFromRaw(sf::Packet& packet) {
             p = new IcyPacketReconciledLocationUpdate();
             break;
         }
+        case s_protocol_squareRoot: {
+            p = new IcyPacketSquareRoot();
+            break;
+        }
         default: {
             p = nullptr;
             break;
@@ -53,6 +60,13 @@ IcyPacket* IcyPacket::newPacketFromRaw(sf::Packet& packet) {
     
     if(p != nullptr) {
         p->read(packet);
+        if(!packet) {
+            std::cout << "error" << std::endl;
+        }
+        
+        if(!p->read(packet)) {
+            return nullptr;
+        }
     }
     
     return p;

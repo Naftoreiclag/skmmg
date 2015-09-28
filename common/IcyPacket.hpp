@@ -18,6 +18,8 @@ public:
     static const ProtocolId s_protocol_entityUpdate = 5;
     static const ProtocolId s_protocol_reconciledLocationUpdate = 6;
     static const ProtocolId s_protocol_heartbeat = 7;
+    static const ProtocolId s_protocol_squareRoot = 16;
+    
     
 public:
     static IcyPacket* newPacketFromRaw(sf::Packet& packet);

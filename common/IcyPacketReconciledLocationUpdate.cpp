@@ -1,5 +1,7 @@
 #include "IcyPacketReconciledLocationUpdate.hpp"
 
+#include <iostream>
+
 namespace skm
 {
 IcyPacketReconciledLocationUpdate::IcyPacketReconciledLocationUpdate() {
@@ -24,6 +26,10 @@ bool IcyPacketReconciledLocationUpdate::read(sf::Packet& data) {
     data << sequence;
     data << x;
     data << z;
+    if(std::isnan(z) || std::isnan(x)) {
+        std::cout << "Packet is nan!" << std::endl;
+        return false;
+    }
     return true;
 }
 void IcyPacketReconciledLocationUpdate::write(sf::Packet& data) {

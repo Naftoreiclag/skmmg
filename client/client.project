@@ -80,6 +80,8 @@
       <File Name="../common/IcyPacketEntityUpdate.hpp"/>
       <File Name="../common/IcyPacketReconciledLocationUpdate.hpp"/>
       <File Name="../common/IcyPacketReconciledLocationUpdate.cpp"/>
+      <File Name="../common/IcyPacketSquareRoot.cpp"/>
+      <File Name="../common/IcyPacketSquareRoot.hpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="threading">
       <File Name="../common/ThreadQueue.hpp"/>

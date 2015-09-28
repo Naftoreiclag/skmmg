@@ -10,6 +10,7 @@
 #include "IcyPacketChat.hpp"
 #include "IcyPacketPlayerJoin.hpp"
 #include "IcyPacketReconciledLocationUpdate.hpp"
+#include "IcyPacketSquareRoot.hpp"
 
 #include "World.hpp"
 #include "Player.hpp"
@@ -118,6 +119,12 @@ int main(int argc, char **argv) {
                         IcyPacketChat* chatPack = (IcyPacketChat*) packet;
                         
                         std::cout << sessionId << ":" << chatPack->m_message << std::endl;
+                        break;
+                    }
+                    case IcyPacket::s_protocol_squareRoot: {
+                        IcyPacketSquareRoot* sqr = (IcyPacketSquareRoot*) packet;
+                        
+                        std::cout << "Square: " << (sqr->danger * sqr->danger) << std::endl;
                         break;
                     }
                     case IcyPacket::s_protocol_reconciledLocationUpdate: {
