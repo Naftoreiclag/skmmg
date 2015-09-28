@@ -187,8 +187,8 @@ void OgreApp::run() {
             break;
         }
         //headNode->rotate(Ogre::Vector3(0, 1, 0), Ogre::Radian(tps));
-        //headNode->setPosition(reconLoc.getX(), 0, reconLoc.getZ());
-        //reconLoc.requestSet(reconLoc.getX() + tps * 5, reconLoc.getZ());
+        headNode->setPosition(reconLoc.getX(), 0, reconLoc.getZ());
+        reconLoc.requestSet(reconLoc.getX() + tps * 5, reconLoc.getZ());
         
         Ogre::WindowEventUtilities::messagePump();
         if(sf::Keyboard::isKeyPressed(KeyConfig::getInstance().moveForward)) {
