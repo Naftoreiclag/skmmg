@@ -7,21 +7,24 @@
 
 #include "SFML/Network.hpp"
 
+#include "ThreadQueue.hpp"
+
 #include "IcyProtocol.hpp"
 #include "IcyPacket.hpp"
-#include "ThreadQueue.hpp"
 #include "IcySession.hpp"
 
 namespace skm {
-    
+
 class IcyServer {
 public:
+
+    // Non-packet notifications sent by this class to the main thread
     class Message {
     public:
         enum Type {
-            USER_JOIN,
-            USER_LEAVE,
-            ENTER_SIESTA_MODE
+            USER_JOIN, // A user joins the game
+            USER_LEAVE, // A user leaves the game
+            ENTER_SIESTA_MODE // Enter "siesta" mode; sleep main thread until awoken by a condition_variable
         };
     public:
         Message();
@@ -29,21 +32,28 @@ public:
         Message(Type type);
         ~Message();
         
+        // What type of message this is
         Type m_type;
         
+        // Only applicable for USER_JOIN and USER_LEAVE
         IcyProtocol::SessionId m_session;
     };
 
+    // Wrapper for the symmetric parts of the icy protocol; i.e. IcySession
+    // Note: This would probably have made more sense as a sub-class of IcySession
     class Session {
     public:
         Session();
         ~Session();
         
+        // Client's location; exactly matches the one in m_session
         sf::IpAddress m_address;
         IcyProtocol::Port m_port;
         
+        // Interface to the "lower-level" io
         IcySession m_session;
         
+        // True if this client has left the "verification" stage of connection
         bool m_verifiedId;
         bool m_firstVerificationSent;
         sf::Clock m_verificationTimeout;
@@ -52,7 +62,6 @@ public:
         sf::Clock m_heartbeatTimer;
         
         ThreadQueue<IcyPacket*> m_outgoingPackets;
-        //ThreadQueue<IcyPacket*> m_incomingPackets;
     };
 private:
     sf::UdpSocket m_socket;
