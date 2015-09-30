@@ -9,6 +9,7 @@
 
 #include "IcyPacketEntitySpawn.hpp"
 #include "IcyPacketEntityUpdate.hpp"
+#include "IcyPacketPlayerJoin.hpp"
 
 namespace skm
 {
@@ -24,6 +25,10 @@ public:
     
     Ogre::SceneManager* const m_smgr;
     
+    Entity::Handle m_localPlayerHandle;
+    PlayerEntity m_localPlayer;
+    
+    void playerJoin(const IcyPacketPlayerJoin* data);
     void spawnEntity(const IcyPacketEntitySpawn& spawnData);
     void updateEntity(const IcyPacketEntityUpdate& updateData);
     

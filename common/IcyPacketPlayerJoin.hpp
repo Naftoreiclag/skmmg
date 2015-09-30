@@ -8,7 +8,7 @@
 namespace skm
 {
 
-// Sent to notify clients that a player has joined the game. Includes entity handle for that player
+// Sent to client after it joins the game, including information about what entity it is etc
 class IcyPacketPlayerJoin : public IcyPacket {
 public:
     Entity::Handle m_handle;

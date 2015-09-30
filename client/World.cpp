@@ -9,18 +9,31 @@ namespace skm
 {
 
 World::World(Ogre::SceneManager* smgr)
-: m_smgr(smgr) {
+: m_smgr(smgr)
+, m_playerHandle(0) {
 }
 
 World::~World() {
 }
 
-void World::spawnEntity(const IcyPacketEntitySpawn& spawnData) {
+void World::playerJoin(const IcyPacketPlayerJoin* data) {
+    m_playerHandle = data.m_handle;
     
+    // If that entity has already spawned, try find it
+    EntityMap::iterator it = m_entities.find(m_playerHandle);
+    if(it != m_entities.end()) {
+        m_localPlayer = (PlayerEntity*) it->second;
+    }
+}
+
+void World::spawnEntity(const IcyPacketEntitySpawn& spawnData) {
     Entity* entity = new PlayerEntity(spawnData.m_handle, m_smgr);
     m_entities[spawnData.m_handle] = entity;
     
-    std::cout << "Entity has spawned " << spawnData.m_handle << std::endl;
+    // If this is the entity that is supposed to be the player
+    if(m_playerHandle == spawnData.m_handle) {
+        m_localPlayer = (PlayerEntity*) entity;
+    }
 }
 void World::updateEntity(const IcyPacketEntityUpdate& updateData) {
     EntityMap::iterator it = m_entities.find(updateData.m_handle);

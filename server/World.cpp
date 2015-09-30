@@ -25,8 +25,8 @@ void World::spawnPlayer(const IcyProtocol::SessionId& sessionId) {
     Player* player = new Player(handle, sessionId);
     
     m_players.push_back(player);
-    m_server->send(new IcyPacketPlayerJoin(handle));
     m_server->send(new IcyPacketEntitySpawn(handle));
+    m_server->send(new IcyPacketPlayerJoin(handle), sessionId);
 }
 void World::despawnPlayer(const IcyProtocol::SessionId& sessionId) {
     

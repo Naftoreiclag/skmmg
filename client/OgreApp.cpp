@@ -140,9 +140,8 @@ void OgreApp::run() {
                     break;
                 }
                 case IcyPacket::s_protocol_playerJoin: {
-                    IcyPacketPlayerJoin* playerJoin = (IcyPacketPlayerJoin*) data;
-                    
-                    std::cout << "handle" << ":" << playerJoin->m_handle << std::endl;
+                    IcyPacketPlayerJoin* playerJoined = (IcyPacketPlayerJoin*) data;
+                    world.playerJoin(playerJoined);
                     break;
                 }
                 case IcyPacket::s_protocol_entitySpawn: {

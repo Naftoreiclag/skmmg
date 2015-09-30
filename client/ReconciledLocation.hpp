@@ -24,6 +24,7 @@ private:
     
     bool m_idle;
     Sequence_t m_sequence;
+    Sequence_t m_ignoreLessThan; // Ignore position updates with a sequence number less than this value
     
     float m_xReq;
     float m_zReq;

@@ -80,7 +80,9 @@ private:
     
     ThreadQueue<IcyPacket*> m_outgoingGlobalPackets;
     ThreadQueue<SpecificPacketPair> m_outgoingPackets;
+    ThreadQueue<SpecificPacketPair> m_outgoingExceptionPackets;
     ThreadQueue<SpecificPacketPair> m_incomingPackets;
+    ThreadQueue<Message> m_notifications;
 
     bool m_vacant;
     std::mutex m_vacant_mutex;
@@ -96,13 +98,12 @@ public:
     
     void terminate();
     
-    ThreadQueue<Message> m_notifications;
+    void send(IcyPacket* packet); // Send packet to everyone on server
+    void send(IcyPacket* packet, IcyProtocol::SessionId sessionId); // Send packet to specific user
+    void sendExcept(IcyPacket* packet, IcyProtocol::SessionId sessionId); // Send packet to everyone but specific user (More useful then might be expected)
     
-    void send(IcyPacket* packet, IcyProtocol::SessionId sessionId);
-    void send(IcyPacket* packet);
-    
-    bool receive(IcyServer::Message& data);
-    bool receive(IcyPacket*& packet, IcyProtocol::SessionId& sessionId);
+    bool receive(IcyServer::Message& data); // Receive message
+    bool receive(IcyPacket*& packet, IcyProtocol::SessionId& sessionId); // Receive packet
     
 private:
     IcyProtocol::SessionId nextAvailableSessionId();

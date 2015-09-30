@@ -271,7 +271,7 @@ void IcyServer::startConnectionSustainingLoop(std::condition_variable& siestaCon
             }
         }
         
-        // Send global outgoing packets
+        // Send packets addressed to everyone
         {
             IcyPacket* outgoingPacket;
             bool isOutgoingPacket = m_outgoingGlobalPackets.pop_front(outgoingPacket);
@@ -282,6 +282,26 @@ void IcyServer::startConnectionSustainingLoop(std::condition_variable& siestaCon
                 }
                 
                 isOutgoingPacket = m_outgoingGlobalPackets.pop_front(outgoingPacket);
+            }
+        }
+        
+        // Send packets addressed to everyone except someone
+        {
+            SpecificPacketPair pairPtr;
+            bool isOutgoing = m_outgoingExceptionPackets.pop_front(pairPtr);
+            while(isOutgoing) {
+                IcyProtocol::SessionId sessionId = pairPtr.sessionId;
+                IcyPacket* outgoingPacket = pairPtr.packet;
+            
+                for(std::list<Session*>::iterator it = m_sessions.begin(); it != m_sessions.end(); ++ it) {
+                    Session* session = *it;
+                    
+                    if(session->m_session.m_sessionId != sessionId) {
+                        session->m_outgoingPackets.push_back(outgoingPacket);
+                    }
+                }
+            
+                isOutgoing = m_outgoingExceptionPackets.pop_front(pairPtr);
             }
         }
         
@@ -370,6 +390,18 @@ void IcyServer::send(IcyPacket* packet, IcyProtocol::SessionId sessionId) {
     }
     
     m_outgoingPackets.push_back(SpecificPacketPair(sessionId, packet));
+    
+}
+void IcyServer::sendExcept(IcyPacket* packet, IcyProtocol::SessionId sessionId) {
+    // Do not queue if there is nobody to send it to
+    {
+        std::lock_guard<std::mutex> lock(m_vacant_mutex);
+        if(m_vacant) {
+            return;
+        }
+    }
+    
+    m_outgoingExceptionPackets.push_back(SpecificPacketPair(sessionId, packet));
     
 }
 void IcyServer::send(IcyPacket* packet) {
