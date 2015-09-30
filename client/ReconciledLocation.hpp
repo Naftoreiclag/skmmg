@@ -61,10 +61,13 @@ public:
     // Request that the x and z values change to
     void requestSet(float x, float z);
     
+    // Set x and y values without sending a request
+    void authoritativeSet(float x, float z);
+    
     float getX() const;
     float getZ() const;
     
-    void handlePacket(IcyPacketReconciledLocationUpdate* packet);
+    void handlePacket(const IcyPacketReconciledLocationUpdate* packet);
     
     void tick();
 };

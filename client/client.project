@@ -54,6 +54,8 @@
       <File Name="Entity.hpp"/>
       <File Name="PlayerEntity.hpp"/>
       <File Name="PlayerEntity.cpp"/>
+      <File Name="LocalPlayerEntity.hpp"/>
+      <File Name="LocalPlayerEntity.cpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="utility"/>
     <File Name="ReconciledLocation.hpp"/>
@@ -101,7 +103,7 @@
       <ResourceCompiler Options=""/>
     </GlobalSettings>
     <Configuration Name="Debug" CompilerType="MinGW ( gcc.exe (x86_64-posix-seh-rev0, Built by MinGW-W64 project) 5.1.0 )" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
-      <Compiler Options="-g;-O0;-Wall;-std=c++11;-mthreads;-fmessage-length=0;-fexceptions;-fident" C_Options="-g;-O0;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+      <Compiler Options="-g;-O0;-w;-std=c++11;-Wall;-mthreads;-fmessage-length=0;-fexceptions;-fident" C_Options="-g;-O0;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
         <IncludePath Value="."/>
         <IncludePath Value="../common"/>
         <IncludePath Value="../library/mingw-w64/SFML-2.3.1/include"/>

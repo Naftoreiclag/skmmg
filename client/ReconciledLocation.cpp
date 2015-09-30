@@ -34,8 +34,13 @@ void ReconciledLocation::requestSet(float x, float z) {
     m_idle = false;
 }
 
+void ReconciledLocation::authoritativeSet(float x, float z) {
+    m_x = x;
+    m_z = z;
+}
+
 // Handle packet
-void ReconciledLocation::handlePacket(IcyPacketReconciledLocationUpdate* packet) {
+void ReconciledLocation::handlePacket(const IcyPacketReconciledLocationUpdate* packet) {
     
     // When the update has been found
     bool found = false;
