@@ -68,8 +68,15 @@ Player* World::getPlayer(const IcyProtocol::SessionId& sessionId) const {
 
 
 void World::tick(float tps) {
+    for(PlayerContainer::const_iterator it = m_players.begin(); it != m_players.end(); ++ it) {
+        Player* player = *it;
+        
+        if(player->m_updatePacket) {
+            m_server->send(player->m_updatePacket);
+            player->m_updatePacket = nullptr;
+        }
+    }
     
-    // Do something here
 }
 
 }

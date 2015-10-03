@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
     std::mutex siestaMutex;
     bool siestaNotify = false;
     
-    // Begin thread
+    // Begin thread (also begin really obvious comments)
     std::thread clientThread(&IcyServer::startConnectionSustainingLoop, &server, std::ref(siestaCond), std::ref(siestaMutex), std::ref(siestaNotify));
     
     // World
@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
         float tps = tpsTimer.getElapsedTime().asSeconds();
         tpsTimer.restart();
         
-        // Get messages from the server
+        // Get internal messages
         {
             IcyServer::Message data;
             bool isData = server.receive(data);

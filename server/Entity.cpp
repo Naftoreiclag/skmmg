@@ -4,7 +4,8 @@ namespace skm
 {
 
 Entity::Entity(const Handle& handle)
-: m_handle(handle) {
+: m_handle(handle)
+, m_updatePacket(nullptr) {
 }
 
 Entity::~Entity() {

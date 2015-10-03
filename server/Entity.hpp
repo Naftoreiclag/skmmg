@@ -5,12 +5,16 @@
 #include "SFML/System.hpp"
 #include "EntityProtocol.hpp"
 
+#include "IcyPacketEntityUpdate.hpp"
+
 namespace skm
 {
 
 class Entity {
 public:
     Vec3f m_location;
+    
+    IcyPacketEntityUpdate* m_updatePacket;
     
 public:
     typedef EntityProtocol::Handle Handle;

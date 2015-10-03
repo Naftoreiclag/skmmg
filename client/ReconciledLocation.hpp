@@ -55,10 +55,10 @@ public:
     ReconciledLocation(IcyClient& client);
     ~ReconciledLocation();
     
-    // Hint that there will be a long break in the requests, so queue all movement and send a final request immediately
+    // Hint that there will be a long break in the requests (such as when the player releases a key), so queue all movement and send a final request immediately
     void hintEndOfRequests();
     
-    // Request that the x and z values change to
+    // Request server to change the x and z values change to this, while pretending that the request was already declared successful (It should eventually be)
     void requestSet(float x, float z);
     
     // Set x and y values without sending a request

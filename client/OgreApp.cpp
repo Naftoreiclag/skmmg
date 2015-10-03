@@ -114,7 +114,6 @@ void OgreApp::run() {
             numFrames = 0;
             std::cout << "\tAverage: " << (totalFrames / numPrints) << std::endl;
             oneSecond.restart();
-            //std::cout << reconLoc.getX() << "\t" << reconLoc.getZ() << std::endl;
         }
         else {
             ++ numFrames;
@@ -153,7 +152,8 @@ void OgreApp::run() {
                     break;
                 }
                 case IcyPacket::s_protocol_reconciledLocationUpdate: {
-                    IcyPacketReconciledLocationUpdate* reconLocUpdate = (IcyPacketReconciledLocationUpdate*) data;
+                    IcyPacketReconciledLocationUpdate* upd = (IcyPacketReconciledLocationUpdate*) data;
+                    world.reconLocUpdate(upd);
                     //reconLoc.handlePacket(reconLocUpdate);
                     break;
                 }

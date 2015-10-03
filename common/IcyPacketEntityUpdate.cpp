@@ -5,7 +5,7 @@ namespace skm
 
 IcyPacketEntityUpdate::IcyPacketEntityUpdate() {
 }
-IcyPacketEntityUpdate::IcyPacketEntityUpdate(Entity::Handle handle)
+IcyPacketEntityUpdate::IcyPacketEntityUpdate(EntityProtocol::Handle handle)
 : m_handle(handle) {
 }
 

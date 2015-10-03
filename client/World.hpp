@@ -6,7 +6,7 @@
 #include "OgreSceneManager.h"
 
 #include "Entity.hpp"
-#include "PlayerEntity.hpp"
+#include "LocalPlayerEntity.hpp"
 
 #include "IcyPacketEntitySpawn.hpp"
 #include "IcyPacketEntityUpdate.hpp"
@@ -31,9 +31,7 @@ public:
     
     IcyClient& m_client;
     
-    Entity::Handle m_localPlayerHandle;
-    PlayerEntity* m_localPlayer;
-    ReconciledLocation m_reconLoc;
+    LocalPlayerEntity* m_localPlayer;
     
     void playerJoin(const IcyPacketPlayerJoin* data);
     void reconLocUpdate(const IcyPacketReconciledLocationUpdate* data);

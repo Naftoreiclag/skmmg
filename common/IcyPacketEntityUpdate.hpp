@@ -3,17 +3,18 @@
 
 #include <string>
 #include "IcyPacket.hpp"
-#include "Entity.hpp"
+#include "EntityProtocol.hpp"
+#include "Vec3f.hpp"
 
 namespace skm
 {
 
 class IcyPacketEntityUpdate : public IcyPacket {
 public:
-    Entity::Handle m_handle;
+    EntityProtocol::Handle m_handle;
 
     IcyPacketEntityUpdate();
-    IcyPacketEntityUpdate(Entity::Handle handle);
+    IcyPacketEntityUpdate(EntityProtocol::Handle handle);
     virtual ~IcyPacketEntityUpdate();
     
     bool m_exists = true;

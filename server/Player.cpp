@@ -25,17 +25,25 @@ IcyPacketReconciledLocationUpdate* Player::handlePacket(const IcyPacketReconcile
         // ???
     }
     
-    m_location.x = packet->x;
-    m_location.z = packet->z;
+    Vec3f newLoc = m_location;
+    newLoc.x = packet->x;
+    newLoc.z = packet->z;
     
-    if(m_location.x > 30) {
-        m_location.x = 0;
+    // Placeholder physics
+    if(newLoc.x > 30) {
+        newLoc.x = 30;
         
         std::cout << "range" << std::endl;
     }
     
-    m_reconLocSeq = packet->sequence;
+    if(newLoc != m_location) {
+        if(!m_updatePacket) {
+            m_updatePacket = new IcyPacketEntityUpdate();
+        }
+        m_updatePacket->setLoc(m_location);
+    }
     
+    m_reconLocSeq = packet->sequence;
     return new IcyPacketReconciledLocationUpdate(m_reconLocSeq, m_location.x, m_location.z);
 }
 
