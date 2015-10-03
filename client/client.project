@@ -57,9 +57,10 @@
       <File Name="LocalPlayerEntity.hpp"/>
       <File Name="LocalPlayerEntity.cpp"/>
     </VirtualDirectory>
-    <VirtualDirectory Name="utility"/>
-    <File Name="ReconciledLocation.hpp"/>
-    <File Name="ReconciledLocation.cpp"/>
+    <VirtualDirectory Name="utility">
+      <File Name="ReconciledLocation.cpp"/>
+      <File Name="ReconciledLocation.hpp"/>
+    </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="src-common">
     <VirtualDirectory Name="networking">
@@ -69,7 +70,6 @@
       <File Name="../common/IcyPacketChat.hpp"/>
       <File Name="../common/IcyPacketHeartbeat.cpp"/>
       <File Name="../common/IcyPacketHeartbeat.hpp"/>
-      <File Name="../common/IcyProtocol.hpp"/>
       <File Name="../common/IcySession.cpp"/>
       <File Name="../common/IcySession.hpp"/>
       <File Name="../common/IcyPacketPlayerJoin.cpp"/>
@@ -88,9 +88,14 @@
     <VirtualDirectory Name="threading">
       <File Name="../common/ThreadQueue.hpp"/>
     </VirtualDirectory>
-    <File Name="../common/Vec3f.cpp"/>
-    <File Name="../common/Vec3f.hpp"/>
-    <File Name="../common/EntityProtocol.hpp"/>
+    <VirtualDirectory Name="utility">
+      <File Name="../common/Vec3f.cpp"/>
+      <File Name="../common/Vec3f.hpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="magic-numbers">
+      <File Name="../common/EntityProtocol.hpp"/>
+      <File Name="../common/IcyProtocol.hpp"/>
+    </VirtualDirectory>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
