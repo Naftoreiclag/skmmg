@@ -20,6 +20,7 @@ public:
     
     // Equals
     bool operator==(const Vec3f& v);
+    bool operator!=(const Vec3f& v);
     
     // Scaling
     Vec3f operator*(float s);

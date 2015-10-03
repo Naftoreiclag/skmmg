@@ -29,6 +29,9 @@ Vec3f::~Vec3f() {
 bool Vec3f::operator==(const Vec3f& v1) {
     return v1.x == x && v1.y == y && v1.z == z;
 }
+bool Vec3f::operator!=(const Vec3f& v1) {
+    return !operator==(v1);
+}
 
 // Scaling
 Vec3f Vec3f::operator*(float s) {
